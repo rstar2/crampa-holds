@@ -31,9 +31,12 @@ var routes = {
 	views: importRoutes('./views'),
 };
 
+
 // Setup Route Bindings
 exports = module.exports = function (app) {
 	// Views
+	app.get('/', routes.views.index);
+	app.get('/', routes.views.index);
 	app.get('/', routes.views.index);
 	app.get('/blog/:category?', routes.views.blog);
 	app.get('/blog/post/:post', routes.views.post);
@@ -43,4 +46,9 @@ exports = module.exports = function (app) {
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
 
+	app.get('/shop', routes.views.shop.index);
+	app.get('/shop/category/:category', routes.views.shop.category);
+	app.get('/shop/product/:product', routes.views.shop.product);
+	// app.get('/shop/cart', routes.views.shop.cart);
+	// app.get('/shop/checkout', middleware.requireUser, routes.views.shop.checkout);
 };
