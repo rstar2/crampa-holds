@@ -60,10 +60,10 @@ Enquiry.schema.methods.sendNotificationEmail = function (callback) {
 		}).send({
 			to: admins,
 			from: {
-				name: 'Carma Holds',
-				email: 'contact@carma-holds.com',
+				name: 'Crampa Holds',
+				email: 'contact@crampaclimb.com',
 			},
-			subject: 'New Enquiry for Carma Holds',
+			subject: 'New Enquiry for Crampa Holds',
 			enquiry: enquiry,
 			brand: brand,
 			layout: false,

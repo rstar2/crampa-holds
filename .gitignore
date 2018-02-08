@@ -29,3 +29,6 @@ node_modules
 
 # Ignore .DS_Store files on OS X
 .DS_Store
+
+# Ignore the generated CSS from the LESS files
+public/styles/site.min.css

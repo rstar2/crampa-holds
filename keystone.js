@@ -11,8 +11,8 @@ var handlebars = require('express-handlebars');
 // and documentation.
 
 keystone.init({
-	'name': 'Carma Holds',
-	'brand': 'Carma Holds',
+	'name': 'Crampa Holds',
+	'brand': 'Crampa Holds',
 
 	'less': 'public',
 	'static': 'public',
