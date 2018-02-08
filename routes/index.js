@@ -51,4 +51,10 @@ exports = module.exports = function (app) {
 	app.get('/shop/product/:product', routes.views.shop.product);
 	// app.get('/shop/cart', routes.views.shop.cart);
 	// app.get('/shop/checkout', middleware.requireUser, routes.views.shop.checkout);
+
+	// using express.Router()
+	// var myRouter = keystone.createRouter(); // shorthand for require('express').Router
+	// myRouter.get('/', (req, res) => res.send('hello router'));
+	// myRouter.get('/sub', (req, res) => res.send('hello router sub'));
+	// app.use('/router', myRouter);
 };

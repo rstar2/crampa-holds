@@ -28,7 +28,12 @@ User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
 
 
 /**
- * Registration
+ * These will be the columns shown in Keystone's Admin UI when listing users.
+ * If not set - only the user's name will be visible
  */
 User.defaultColumns = 'name, email, isAdmin';
+
+/**
+ * Registration
+ */
 User.register();
