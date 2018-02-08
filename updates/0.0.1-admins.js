@@ -9,7 +9,7 @@
 
 exports.create = {
 	User: [
-		{ 'name.first': 'Admin', 'name.last': 'User', 'email': 'crampa.climb@gmail.com', 'password': '***', 'isAdmin': true },
+		{ 'name.first': 'Admin', 'name.last': 'User', 'email': 'admin@admin.com', 'password': 'admin', 'isAdmin': true },
 	],
 };
 

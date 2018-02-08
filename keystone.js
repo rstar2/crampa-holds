@@ -36,6 +36,13 @@ keystone.init({
 	'user model': 'User',
 });
 
+if (process.env.NODE_ENV === 'production') {
+	// requires "npm install connect-mongo --save"
+	// TODO:'connect-mongo' requires MongoDB >= 3.0
+	console.log('Production mode - Use session store - MongoStore');
+	keystone.set('session store', 'connect-mongo');
+}
+
 // Load your project's Models
 keystone.import('models');
 
@@ -67,12 +74,12 @@ keystone.set('nav', {
 
 if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
 	console.log('----------------------------------------'
-	+ '\nWARNING: MISSING MAILGUN CREDENTIALS'
-	+ '\n----------------------------------------'
-	+ '\nYou have opted into email sending but have not provided'
-	+ '\nmailgun credentials. Attempts to send will fail.'
-	+ '\n\nCreate a mailgun account and add the credentials to the .env file to'
-	+ '\nset up your mailgun integration');
+		+ '\nWARNING: MISSING MAILGUN CREDENTIALS'
+		+ '\n----------------------------------------'
+		+ '\nYou have opted into email sending but have not provided'
+		+ '\nmailgun credentials. Attempts to send will fail.'
+		+ '\n\nCreate a mailgun account and add the credentials to the .env file to'
+		+ '\nset up your mailgun integration');
 }
 
 
