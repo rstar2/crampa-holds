@@ -38,7 +38,6 @@ keystone.init({
 
 if (process.env.NODE_ENV === 'production') {
 	// requires "npm install connect-mongo --save"
-	// TODO:'connect-mongo' requires MongoDB >= 3.0
 	console.log('Production mode - Use session store - MongoStore');
 	keystone.set('session store', 'connect-mongo');
 }

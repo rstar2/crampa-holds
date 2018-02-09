@@ -66,14 +66,20 @@ exports.initErrorHandlers = function (req, res, next) {
 			err: err,
 			errorTitle: title,
 			errorMsg: message,
-		}, { layout: false });
+
+			// this is for express-handlebars to set that we don't want the default layout
+			layout: false,
+		});
 	};
 
 	res.notfound = function (title, message) {
 		res.status(404).render('errors/404', {
 			errorTitle: title,
 			errorMsg: message,
-		}, { layout: false });
+
+			// this is for express-handlebars to set that we don't want the default layout
+			layout: false,
+		});
 	};
 
 	next();
