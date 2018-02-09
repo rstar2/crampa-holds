@@ -7,6 +7,8 @@ var Types = keystone.Field.Types;
  */
 
 var Post = new keystone.List('Post', {
+	// name - the field that contains the name of the item, for display in the Admin UI.
+	// so when mapped to 'title' the 'title' will be showed as name displayed in the Admin UI.
 	map: { name: 'title' },
 	autokey: { path: 'slug', from: 'title', unique: true },
 });

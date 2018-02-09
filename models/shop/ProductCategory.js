@@ -6,7 +6,7 @@ var keystone = require('keystone');
  */
 
 var ProductCategory = new keystone.List('ProductCategory', {
-	autokey: { from: 'name', path: 'key', unique: true },
+	autokey: { path: 'slug', from: 'name', unique: true },
 });
 
 ProductCategory.add({
