@@ -22,9 +22,12 @@ User.schema.virtual('canAccessKeystone').get(function () {
 
 
 /**
- * Relationships
+ * Relationships. They are used only in the Admin UI for displaying a reference relation.
+ * Relationship definitions are optional; if you leave them out,
+ * the relationships simply won't be displayed in the Admin UI from
+ * the other side of the relationship. The relationship field will still work as expected.
  */
-User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
+User.relationship({ path: 'posts', ref: 'Post', refPath: 'author' });
 
 
 /**

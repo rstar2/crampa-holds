@@ -7,23 +7,32 @@ var Types = keystone.Field.Types;
  */
 
 var Product = new keystone.List('Product', {
-	map: { name: 'title' },
-	autokey: { path: 'slug', from: 'title', unique: true },
+	autokey: { path: 'slug', from: 'name', unique: true },
 });
 
 Product.add({
-	title: { type: String, required: true },
+	name: { type: String, required: true },
+	price: { type: Number, required: true, initial: true },
 	state: { type: Types.Select, options: 'draft, published, archived', default: 'draft', index: true },
-	author: { type: Types.Relationship, ref: 'User', index: true },
-	publishedDate: { type: Types.Date, index: true, dependsOn: { state: 'published' } },
+	publishedDate: { type: Types.Date, index: true, dependsOn: { state: 'published' }, default: Date.now },
 	image: { type: Types.CloudinaryImage },
-	content: {
-		brief: { type: Types.Html, wysiwyg: true, height: 150 },
-		extended: { type: Types.Html, wysiwyg: true, height: 400 },
-	},
+	description: { type: Types.Markdown, wysiwyg: true, height: 150 },
 	categories: { type: Types.Relationship, ref: 'ProductCategory', many: true },
+	quantity: { type: Number },
+	canBeBought: { type: Boolean, default: true },
 });
 
+Product.schema.methods.isPublished = function () {
+	return this.state === 'published';
+};
 
-Product.defaultColumns = 'title, state|20%, author|20%, publishedDate|20%';
+// Product.schema.pre('save', function (next) {
+// 	if (this.isModified('state') && this.isPublished() && !this.publishedAt) {
+// 		this.publishedAt = new Date();
+// 	}
+// 	next();
+// });
+
+Product.defaultSort = '-publishedDate';
+Product.defaultColumns = 'name, state, publishedDate, canBeBought';
 Product.register();
