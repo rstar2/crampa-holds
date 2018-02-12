@@ -10,6 +10,26 @@ var handlebars = require('express-handlebars');
 // See http://keystonejs.com/guide/config for available options
 // and documentation.
 
+
+const hbs = handlebars.create({
+	layoutsDir: 'templates/views/layouts',
+	partialsDir: 'templates/views/partials',
+	defaultLayout: 'default',
+	helpers: new require('./templates/views/helpers')(),
+	extname: '.hbs',
+});
+
+// add support for sections in templates:
+// Usage:
+//     In template.hbs :
+//          {{{_sections.header}}}
+//
+//     In post.hbs :
+//          {{#section 'header'}}
+//             <h1>This is my Header Content</h1>
+//	        {{/section}}
+require('express-handlebars-sections')(hbs);
+
 keystone.init({
 	'name': 'Crampa Holds',
 	'brand': 'Crampa Holds',
@@ -20,13 +40,7 @@ keystone.init({
 	'views': 'templates/views',
 	'view engine': '.hbs',
 
-	'custom engine': handlebars.create({
-		layoutsDir: 'templates/views/layouts',
-		partialsDir: 'templates/views/partials',
-		defaultLayout: 'default',
-		helpers: new require('./templates/views/helpers')(),
-		extname: '.hbs',
-	}).engine,
+	'custom engine': hbs.engine,
 
 	'emails': 'templates/emails',
 
@@ -35,6 +49,7 @@ keystone.init({
 	'auth': true,
 	'user model': 'User',
 });
+
 
 if (process.env.NODE_ENV === 'production') {
 	// requires "npm install connect-mongo --save"

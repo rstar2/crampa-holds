@@ -25,7 +25,13 @@
 	</div>
 </div>
 
-<script>
+{{!-- {{#section 'header_css'}}
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+{{/section}} --}}
+
+{{!-- This sections allows templates to define custom JS here --}}
+{{#section 'body_js'}}
+    <script>
 	jQuery(function ($) {
 		var comments = $('#comments');
 		var input = $('.comment-field-input');
@@ -51,3 +57,5 @@
 		});
 	});
 </script>
+{{/section}}
+

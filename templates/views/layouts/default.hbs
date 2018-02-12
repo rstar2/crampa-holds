@@ -19,6 +19,12 @@
 			<script src="//cdn.jsdelivr.net/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
+
+        {{!-- This section allows templates to define custom CSS here --}}
+		{{{_sections.header_css}}}
+        {{!-- This section allows templates to define custom JS here --}}
+		{{{_sections.header_js}}}
+
 	</head>
 	<body>
 		<div id="header">
@@ -101,5 +107,8 @@
 		--}}
 		<script src="/js/bootstrap/bootstrap-3.3.5.min.js"></script>
 		{{{isAdminEditorJS user}}}
+
+        {{!-- This section allows templates to add custom JS here --}}
+		{{{_sections.body_js}}}
 	</body>
 </html>
