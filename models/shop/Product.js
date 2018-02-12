@@ -1,12 +1,12 @@
-var keystone = require('keystone');
-var Types = keystone.Field.Types;
+const keystone = require('keystone');
+const Types = keystone.Field.Types;
 
 /**
  * Product Model
  * ==========
  */
 
-var Product = new keystone.List('Product', {
+const Product = new keystone.List('Product', {
 	autokey: { path: 'slug', from: 'name', unique: true },
 });
 

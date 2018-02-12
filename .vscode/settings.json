@@ -1,5 +1,10 @@
 {
     "cSpell.words": [
-        "autokey"
+        "autokey",
+        "nocreate",
+        "noedit",
+        "keystonejs",
+        "cloudinary",
+        "mailgun"
     ]
 }

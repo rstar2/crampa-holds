@@ -1,12 +1,12 @@
-var keystone = require('keystone');
-var Types = keystone.Field.Types;
+const keystone = require('keystone');
+const Types = keystone.Field.Types;
 
 /**
  * Order Model
  * =============
  */
 
-var Order = new keystone.List('Order', {
+const Order = new keystone.List('Order', {
 	nocreate: true,
 	// noedit: true,
 });

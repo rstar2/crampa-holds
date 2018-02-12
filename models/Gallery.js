@@ -8,6 +8,11 @@ var Types = keystone.Field.Types;
 
 var Gallery = new keystone.List('Gallery', {
 	autokey: { path: 'slug', from: 'name', unique: true },
+
+	// This adds a hidden field to the schema which is sortOrder, which is a number.
+	// Keystone updates the sortOrder whenever an item is dragged in the admin UI,
+	// changing all necessary items to correct the sortOrder.
+	sortable: true,
 });
 
 Gallery.add({

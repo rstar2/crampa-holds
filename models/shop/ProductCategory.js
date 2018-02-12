@@ -1,11 +1,11 @@
-var keystone = require('keystone');
+const keystone = require('keystone');
 
 /**
  * ProductCategory Model
  * ==================
  */
 
-var ProductCategory = new keystone.List('ProductCategory', {
+const ProductCategory = new keystone.List('ProductCategory', {
 	autokey: { path: 'slug', from: 'name', unique: true },
 });
 

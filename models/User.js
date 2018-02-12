@@ -20,6 +20,11 @@ User.schema.virtual('canAccessKeystone').get(function () {
 	return this.isAdmin;
 });
 
+User.schema.methods.markActive = function () {
+	this.lastActiveOn = new Date();
+	return this;
+};
+
 
 /**
  * Relationships. They are used only in the Admin UI for displaying a reference relation.
@@ -28,6 +33,8 @@ User.schema.virtual('canAccessKeystone').get(function () {
  * the other side of the relationship. The relationship field will still work as expected.
  */
 User.relationship({ path: 'posts', ref: 'Post', refPath: 'author' });
+
+User.relationship({ path: 'comments', ref: 'PostComment', refPath: 'author' });
 
 
 /**
