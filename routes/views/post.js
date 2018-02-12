@@ -58,6 +58,10 @@ exports = module.exports = function (req, res) {
 				if (err) return res.err(err);
 				if (!comments) return res.notfound('Post comments not found');
 				locals.data.comments = comments;
+				locals.data.comments = [
+					{ content: '1', id: 'id1', author: { id: '5a7da2e481c4e8070048d7e0', name: { full: 'Rumen Neshev' } } },
+					{ content: '2', id: 'id2', author: { id: '123125', name: { full: 'Other' } } },
+				];
 				next();
 			});
 	});

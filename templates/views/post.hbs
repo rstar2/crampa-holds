@@ -17,8 +17,8 @@
 				</div>
 				<hr>
 				<div>
-					<form id="comments" action="">Comments Form</form>
-					comments-thread
+					{{>comment-form}}
+					{{> comments comments=data.comments }}
 				</div>
 			</article>
 		</div>
