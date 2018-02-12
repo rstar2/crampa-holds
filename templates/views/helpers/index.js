@@ -326,5 +326,8 @@ module.exports = function () {
 		return obj._[underscoreMethod].format();
 	};
 
+
+	_.assign(_helpers, require('./custom'));
+
 	return _helpers;
 };
