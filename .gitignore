@@ -31,4 +31,8 @@ node_modules
 .DS_Store
 
 # Ignore the generated CSS from the LESS files
+public/styles/site.css
 public/styles/site.min.css
+public/styles/site.css.map
+public/styles/site.min.css.map
+

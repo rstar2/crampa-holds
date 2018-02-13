@@ -50,11 +50,23 @@ keystone.init({
 	'user model': 'User',
 });
 
-
-if (process.env.NODE_ENV === 'production') {
-	// requires "npm install connect-mongo --save"
-	console.log('Production mode - Use session store - MongoStore');
-	keystone.set('session store', 'connect-mongo');
+const env = keystone.get('env');
+switch (env) {
+	case 'production':
+		// requires "npm install connect-mongo --save"
+		console.log('Production mode - Use session store - MongoStore');
+		keystone.set('session store', 'connect-mongo');
+		break;
+	case 'development':
+		keystone.set('less options', {
+			debug: true,
+			render: {
+				sourceMap: {
+					sourceMapFileInline: true,
+				},
+			},
+		});
+		break;
 }
 
 // Load your project's Models

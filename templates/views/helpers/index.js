@@ -143,10 +143,10 @@ module.exports = function () {
 	};
 
 	// Used to generate the link for the admin edit post button
-	_helpers.adminEditableUrl = function (user, options) {
+	_helpers.adminEditableUrl = function (user, id) {
 		var rtn = keystone.app.locals.editable(user, {
 			list: 'Post',
-			id: options,
+			id: id,
 		});
 		return rtn;
 	};
