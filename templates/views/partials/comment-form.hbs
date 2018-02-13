@@ -1,2 +1,21 @@
-Comments Form
-<form id="comments" action=""></form>
+<form method="post" style="margin-bottom: 40px; margin-top: 40px;">
+	<input type="hidden" name="action" value="comment.create">
+	<div class="media">
+		<div class="pull-left">
+			<img class="avatar" src="http://placehold.it/80x80" alt="" width="80" height="80">
+		</div>
+		<div class="media-body">
+			{{#if user }}
+				<textarea class="form-control" name="content" placeholder="Leave a comment..." style="margin-bottom: 10px; min-height: 80px; resize: vertical;"></textarea>
+				<button class="btn btn-primary" type="submit">Comment</button>
+			{{else}}
+				<textarea class="form-control" name="content" placeholder="Please sign in to comment" disabled="disabled" style="margin-bottom: 10px; min-height: 80px; resize: vertical;"></textarea>
+				<ul class="list-inline">
+					<li>
+						<a class="btn btn-sm btn-primary" href="/keystone/signin">Sign in to Comment</a>
+					</li>
+				</ul>
+			{{/if}}
+		</div>
+	</div>
+</form>

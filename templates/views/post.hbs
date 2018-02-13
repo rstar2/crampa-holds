@@ -5,29 +5,31 @@
 				<p><a href="/blog">&larr; back to the blog</a></p>
 				<hr>
 				<header>
-					<h1>{{data.post.title}}</h1>
+					<h1>{{post.title}}</h1>
 					<h5>
-						{{{categoryList data.post.categories prefix="Posted in "}}}
-						{{#if author.name.first}}by {{author.name.first}}{{/if}}
+						{{{categoryList post.categories prefix="Posted in "}}}
+						{{#if post.author.name.first}}by {{post.author.name.first}}{{/if}}
 					</h5>
 				</header>
-				<div class="post">
-					{{#if data.post.image}}<img src="{{{cloudinaryUrl data.post.image width=750 height=450 crop='fit' }}}" class="img-responsive">{{/if}}
-					{{{data.post.content.extended}}}
+					<div class="post">
+					{{#if post.image}}<img src="{{{cloudinaryUrl post.image width=750 height=450 crop='fit' }}}" class="img-responsive">{{/if}}
+					{{{post.content.extended}}}
 				</div>
 				<hr>
 				<div>
 					{{>comment-form}}
-					{{> comments comments=data.comments }}
+					{{>comments}}
 				</div>
 			</article>
 		</div>
 	</div>
 </div>
 
-{{!-- {{#section 'header_css'}}
+{{!-- 
+{{#section 'header_css'}}
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-{{/section}} --}}
+{{/section}} 
+--}}
 
 {{!-- This sections allows templates to define custom JS here --}}
 {{#section 'body_js'}}

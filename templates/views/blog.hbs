@@ -4,9 +4,9 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-8 col-md-9">
-			<h4 class="text-weight-normal">Showing {{ data.posts.results.length}} post.</h4>
+			<h4 class="text-weight-normal">Showing {{ posts.results.length}} post.</h4>
 			<div class="blog">
-				{{# each data.posts.results}}
+				{{# each posts.results}}
 				<div data-ks-editable="{{#if ../user}}{{adminEditableUrl ../../user _id}}{{/if}}" class="post">
 					<h2><a href="{{postUrl slug}}">{{{title}}}</a></h2>
 					<p class="lead text-muted">{{{categoryList categories prefix="Posted in "}}}
@@ -22,9 +22,11 @@
 		<div class="col-sm-4 col-md-3">
 			<h2>Categories</h2>
 			<div style="margin-top: 70px;" class="list-group">
-				<a href="/blog" class="active list-group-item">All Categories</a>
-				{{# each data.categories }}
-				<a href="{{categoryUrl slug}}" class="false list-group-item">{{name}}</a>
+				<a href="/blog" class="{{ifx category '' 'active'}} list-group-item">All Categories</a>
+				{{# each categories }}
+				<a href="{{categoryUrl slug}}" class="{{ifx (isSameCategory ../category id) 'active' ''}} list-group-item">{{name}}
+					<span class="badge pull-right">{{postCount}}</span>
+				</a>
 				{{/each}}
 			</div>
 		</div>

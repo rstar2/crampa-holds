@@ -58,5 +58,22 @@ module.exports = {
 		return !!(user && user.id === userId);
 	},
 
+	/**
+	 * Usage:
+	 * {{isSameCategory category '123456789'}}
+	 *
+	 *
+	 * {{ifx (isSameCategory category '123456789') 'active' ''}}
+	 *
+	 * {{#if (isSameCategory category '12345') }}
+     *    True
+     * {{else}}
+     *    False
+     * {{/if}}
+	 */
+	isSameCategory: function (category, categoryId) {
+		return !!(category && category.id === categoryId);
+	},
+
 
 };

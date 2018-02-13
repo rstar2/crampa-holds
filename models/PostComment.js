@@ -13,7 +13,7 @@ const PostComment = new keystone.List('PostComment', {
 PostComment.add({
 	author: { type: Types.Relationship, initial: true, ref: 'User', index: true },
 	post: { type: Types.Relationship, initial: true, ref: 'Post', index: true },
-	commentState: { type: Types.Select, options: ['published', 'archived'], default: 'published', index: true },
+	state: { type: Types.Select, options: ['published', 'archived'], default: 'published', index: true },
 	publishedOn: { type: Types.Date, default: Date.now, noedit: true, index: true },
 });
 
@@ -23,7 +23,7 @@ PostComment.add('Content', {
 
 PostComment.schema.pre('save', function (next) {
 	this.wasNew = this.isNew;
-	if (!this.isModified('publishedOn') && this.isModified('commentState') && this.commentState === 'published') {
+	if (!this.isModified('publishedOn') && this.isModified('state') && this.state === 'published') {
 		this.publishedOn = new Date();
 	}
 	next();
@@ -42,5 +42,5 @@ PostComment.schema.post('save', function () {
 });
 
 PostComment.track = true;
-PostComment.defaultColumns = 'author, post, publishedOn, commentState';
+PostComment.defaultColumns = 'author, post, publishedOn, state';
 PostComment.register();

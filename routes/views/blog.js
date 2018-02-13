@@ -8,47 +8,43 @@ exports = module.exports = function (req, res) {
 
 	// Init locals
 	locals.section = 'blog';
-	locals.filters = {
-		category: req.params.category,
-	};
-	locals.data = {
-		posts: [],
-		categories: [],
-	};
 
 	// Load all categories
 	view.on('init', function (next) {
 
-		keystone.list('PostCategory').model.find().sort('name').exec(function (err, results) {
+		keystone.list('PostCategory').model.find().sort('name')
+			.exec(function (err, categories) {
 
-			if (err || !results.length) {
-				return next(err);
-			}
+				if (err || !categories.length) {
+					return next(err);
+				}
 
-			locals.data.categories = results;
+				locals.categories = categories;
 
-			// Load the counts for each category
-			async.each(locals.data.categories, function (category, next) {
+				// Load the counts for each category
+				async.each(locals.categories, function (category, next) {
 
-				keystone.list('Post').model.count().where('categories').in([category.id]).exec(function (err, count) {
-					category.postCount = count;
+					keystone.list('Post').model.count().where('categories').in([category.id])
+						.exec(function (err, count) {
+							category.postCount = count;
+							next(err);
+						});
+
+				}, function (err) {
 					next(err);
 				});
-
-			}, function (err) {
-				next(err);
 			});
-		});
 	});
 
 	// Load the current category filter
 	view.on('init', function (next) {
 
 		if (req.params.category) {
-			keystone.list('PostCategory').model.findOne({ key: locals.filters.category }).exec(function (err, result) {
-				locals.data.category = result;
-				next(err);
-			});
+			keystone.list('PostCategory').model.findOne({ slug: req.params.category })
+				.exec(function (err, category) {
+					locals.category = category;
+					next(err);
+				});
 		} else {
 			next();
 		}
@@ -68,12 +64,12 @@ exports = module.exports = function (req, res) {
 			.sort('-publishedDate')
 			.populate('author categories');
 
-		if (locals.data.category) {
-			q.where('categories').in([locals.data.category]);
+		if (locals.category) {
+			q.where('categories').in([locals.category]);
 		}
 
 		q.exec(function (err, results) {
-			locals.data.posts = results;
+			locals.posts = results;
 			next(err);
 		});
 	});

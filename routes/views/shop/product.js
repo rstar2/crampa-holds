@@ -6,41 +6,38 @@ exports = module.exports = function (req, res) {
 	var locals = res.locals;
 
 	// Set locals
-	locals.section = 'blog';
-	locals.filters = {
-		post: req.params.post,
-	};
-	locals.data = {
-		posts: [],
-	};
+	locals.section = 'shop';
 
-	// Load the current post
+	// Load the current product
 	view.on('init', function (next) {
 
-		var q = keystone.list('Post').model.findOne({
+		keystone.list('Product').model.findOne({
 			state: 'published',
-			slug: locals.filters.post,
-		}).populate('author categories');
-
-		q.exec(function (err, result) {
-			locals.data.post = result;
-			next(err);
-		});
+			slug: req.params.product,
+		})
+			.populate('author categories')
+			.exec(function (err, product) {
+				locals.product = product;
+				next(err);
+			});
 
 	});
 
-	// Load other posts
+	// Load other products
 	view.on('init', function (next) {
 
-		var q = keystone.list('Post').model.find().where('state', 'published').sort('-publishedDate').populate('author').limit('4');
-
-		q.exec(function (err, results) {
-			locals.data.posts = results;
-			next(err);
-		});
+		keystone.list('Product').model.find()
+			.where('state', 'published')
+			.sort('-publishedDate')
+			.populate('author')
+			.limit('4')
+			.exec(function (err, products) {
+				locals.products = products;
+				next(err);
+			});
 
 	});
 
 	// Render the view
-	view.render('post');
+	view.render('product');
 };

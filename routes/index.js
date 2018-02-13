@@ -54,10 +54,8 @@ var routes = {
 exports = module.exports = function (app) {
 	// Views
 	app.get('/', routes.views.index);
-	app.get('/', routes.views.index);
-	app.get('/', routes.views.index);
 	app.get('/blog/:category?', routes.views.blog);
-	app.get('/blog/post/:post', routes.views.post);
+	app.all('/blog/post/:post', routes.views.post);
 	app.get('/gallery', routes.views.gallery);
 	app.all('/contact', routes.views.contact);
 
@@ -65,7 +63,6 @@ exports = module.exports = function (app) {
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
 
 	app.get('/shop', routes.views.shop.index);
-	app.get('/shop/category/:category', routes.views.shop.category);
 	app.get('/shop/product/:product', routes.views.shop.product);
 	// app.get('/shop/cart', routes.views.shop.cart);
 	// app.get('/shop/checkout', middleware.requireUser, routes.views.shop.checkout);

@@ -7,23 +7,18 @@ exports = module.exports = function (req, res) {
 
 	// Set locals
 	locals.section = 'blog';
-	locals.filters = {
-		post: req.params.post,
-	};
-	locals.data = {
-		posts: [],
-	};
+	locals.validationErrors = {};
 
 	// Load the current post
 	view.on('init', function (next) {
 
 		keystone.list('Post').model.findOne({
 			state: 'published',
-			slug: locals.filters.post,
+			slug: req.params.post,
 		})
 			.populate('author categories')
-			.exec(function (err, result) {
-				locals.data.post = result;
+			.exec(function (err, post) {
+				locals.post = post;
 				next(err);
 			});
 
@@ -37,8 +32,8 @@ exports = module.exports = function (req, res) {
 			.sort('-publishedDate')
 			.populate('author')
 			.limit('4')
-			.exec(function (err, results) {
-				locals.data.posts = results;
+			.exec(function (err, posts) {
+				locals.posts = posts;
 				next(err);
 			});
 
@@ -48,22 +43,23 @@ exports = module.exports = function (req, res) {
 
 	// Load comments on the Post
 	view.on('init', function (next) {
+
 		keystone.list('PostComment').model.find()
-			.where('post', locals.data.post)
-			.where('commentState', 'published')
+			// .where('post', locals.post.id)
+			// .where('post', locals.post._id)
+			// are the same as :
+			.where('post', locals.post) // it will use the _id (as ObjectID type)
+			.where('state', 'published')
 			.where('author').ne(null)
-			.populate('author', 'name photo')
+			.populate('author', 'name')
 			.sort('-publishedOn')
 			.exec(function (err, comments) {
 				if (err) return res.err(err);
 				if (!comments) return res.notfound('Post comments not found');
-				locals.data.comments = comments;
-				locals.data.comments = [
-					{ content: '1', id: 'id1', author: { id: '5a7da2e481c4e8070048d7e0', name: { full: 'Rumen Neshev' } } },
-					{ content: '2', id: 'id2', author: { id: '123125', name: { full: 'Other' } } },
-				];
+				locals.comments = comments;
 				next();
 			});
+
 	});
 
 	// Create a Comment
@@ -74,14 +70,12 @@ exports = module.exports = function (req, res) {
 			return next();
 		}
 
-		// TODO: check this
-		var newComment = new keystone.list('PostComment').model({
-			state: 'published',
-			post: locals.data.post.id,
+		const newComment = new (keystone.list('PostComment').model)({
+			post: locals.post.id,
 			author: locals.user.id,
 		});
 
-		var updater = newComment.getUpdateHandler(req);
+		const updater = newComment.getUpdateHandler(req);
 
 		updater.process(req.body, {
 			fields: 'content',
@@ -89,7 +83,7 @@ exports = module.exports = function (req, res) {
 			logErrors: true,
 		}, function (err) {
 			if (err) {
-				validationErrors = err.errors;
+				locals.validationErrors = err.errors;
 			} else {
 				req.flash('success', 'Your comment was added.');
 				return res.redirect('/blog/post/' + locals.post.slug + '#comment-id-' + newComment.id);
@@ -107,11 +101,11 @@ exports = module.exports = function (req, res) {
 			return next();
 		}
 
-		// TODO: check this
 		keystone.list('PostComment').model.findOne({
 			_id: req.query.comment,
-			post: locals.data.post.id,
+			post: locals.post.id,
 		})
+			.populate('author', 'id')
 			.exec(function (err, comment) {
 				if (err) {
 					if (err.name === 'CastError') {
@@ -124,19 +118,21 @@ exports = module.exports = function (req, res) {
 					req.flash('error', 'The comment ' + req.query.comment + ' could not be found.');
 					return next();
 				}
-				if (comment.author !== req.user.id) {
+				if (comment.author.id !== req.user.id) {
 					req.flash('error', 'Sorry, you must be the author of a comment to delete it.');
 					return next();
 				}
 
 				// removed comments are actually "archived"
-				comment.commentState = 'archived';
+				comment.state = 'archived';
 				comment.save(function (err) {
 					if (err) return res.err(err);
+
 					req.flash('success', 'Your comment has been deleted.');
 					return res.redirect('/blog/post/' + locals.post.slug);
 				});
 			});
+
 	});
 
 

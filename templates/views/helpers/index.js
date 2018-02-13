@@ -95,13 +95,13 @@ module.exports = function () {
 		var suffix = _.isString(options.hash.suffix) ? options.hash.suffix : '';
 		var output = '';
 
-		function createTagList (tags) {
+		function createTagList(tags) {
 			var tagNames = _.map(tags, 'name');
 
 			if (autolink) {
 				return _.map(tags, function (tag) {
 					return linkTemplate({
-						url: ('/blog/' + tag.key),
+						url: ('/blog/' + tag.slug),
 						text: _.escape(tag.name),
 					});
 				}).join(separator);
@@ -291,21 +291,27 @@ module.exports = function () {
 	_helpers.flashMessages = function (messages) {
 		var output = '';
 		for (var i = 0; i < messages.length; i++) {
-
-			if (messages[i].title) {
-				output += '<h4>' + messages[i].title + '</h4>';
-			}
-
-			if (messages[i].detail) {
-				output += '<p>' + messages[i].detail + '</p>';
-			}
-
-			if (messages[i].list) {
+			const message = messages[i];
+			if (_.isString(message)) {
 				output += '<ul>';
-				for (var ctr = 0; ctr < messages[i].list.length; ctr++) {
-					output += '<li>' + messages[i].list[ctr] + '</li>';
-				}
+				output += '<li>' + message + '</li>';
 				output += '</ul>';
+			} else {
+				if (message.title) {
+					output += '<h4>' + message.title + '</h4>';
+				}
+
+				if (message.detail) {
+					output += '<p>' + message.detail + '</p>';
+				}
+
+				if (message.list) {
+					output += '<ul>';
+					for (var ctr = 0; ctr < message.list.length; ctr++) {
+						output += '<li>' + message.list[ctr] + '</li>';
+					}
+					output += '</ul>';
+				}
 			}
 		}
 		return new hbs.SafeString(output);

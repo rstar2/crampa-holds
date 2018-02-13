@@ -4,16 +4,14 @@
 	{{#if comments}}
 	    <h3 class="text-success">Comments</h3>
 	    <hr/>
-		<ul class="comments"></ul>
-
+		<ul class="comments">
 	    {{#each comments}}
 	    	{{#if author}}
 				<li class="clearfix">
-					<img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
+					<img src="http://placehold.it/80x80" class="avatar" alt="">
 				    <div id="comment-id-{{id}}" class="comment">
 				  		<p class="meta">Dec 18, 2014 {{author.name.full}} says :
-							  {{!-- #if user && user.id === id --}}
-							{{#if true }}
+							{{#if (isSameUser ../user author.id) }}
 						  		<i class="pull-right"><a href="?action=comment.remove&comment={{id}}"><small>Delete</small></a></i>
 						  	{{/if}}
 					  	</p>
