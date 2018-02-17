@@ -1,12 +1,14 @@
+const path = require('path');
+
 // Simulate config options from your production environment by
-// customising the .env file in your project's root folder.
+// customizing the .env file in your project's root folder.
 require('dotenv').config();
 
 // Require keystone
-var keystone = require('keystone');
-var handlebars = require('express-handlebars');
+const keystone = require('keystone');
+const handlebars = require('express-handlebars');
 
-// Initialise Keystone with your project's configuration.
+// Initialize Keystone with your project's configuration.
 // See http://keystonejs.com/guide/config for available options
 // and documentation.
 
@@ -53,16 +55,20 @@ keystone.init({
 const env = keystone.get('env');
 switch (env) {
 	case 'production':
+		// store the session in the Mongo DB, not in memory
 		// requires "npm install connect-mongo --save"
 		console.log('Production mode - Use session store - MongoStore');
 		keystone.set('session store', 'connect-mongo');
 		break;
 	case 'development':
+		// generate source maps for the Less compiled files
 		keystone.set('less options', {
 			debug: true,
 			render: {
 				sourceMap: {
 					sourceMapFileInline: true,
+					// sourceMapRootpath: 'root/less/',
+					sourceMapBasepath: path.resolve(__dirname, 'public', 'styles'),
 				},
 			},
 		});
@@ -95,7 +101,7 @@ keystone.set('nav', {
 	shop: ['products', 'product-categories', 'orders'],
 });
 
-// Start Keystone to connect to your database and initialise the web server
+// Start Keystone to connect to your database and initialize the web server
 
 
 if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
