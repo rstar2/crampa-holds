@@ -1,46 +1,4 @@
-
-
-const helpers = {
-
-	/**
-	 * Usage:
-	 * {{ifx (is env '==' 'production') '.min' ''}}
-	 */
-	is: function (a, operator, b) {
-		var bool = false;
-		switch (operator) {
-			case '===':
-				bool = a === b;
-				break;
-			case '!==':
-				bool = a !== b;
-				break;
-			case '==':
-				// eslint-disable-next-line 
-				bool = a == b;
-				break;
-			case '!=':
-				// eslint-disable-next-line 
-				bool = a != b;
-				break;
-			case '>':
-				bool = a > b;
-				break;
-			case '>=':
-				bool = a >= b;
-				break;
-			case '<':
-				bool = a < b;
-				break;
-			case '<=':
-				bool = a <= b;
-				break;
-			default:
-				throw new Error('Unknown operator ' + operator);
-		}
-		return bool;
-	},
-
+module.exports = {
 	/**
 	 * Usage:
 	 * {{#iff name '==' 'Foo'}}
@@ -52,7 +10,24 @@ const helpers = {
 	 * {{else}} block is optional
 	 */
 	iff: function (a, operator, b, options) {
-		const bool = helpers.is(a, operator, b);
+		var bool = false;
+		switch (operator) {
+			case '==':
+				// eslint-disable-next-line 
+				bool = a == b;
+				break;
+			case '===':
+				bool = a === b;
+				break;
+			case '>':
+				bool = a > b;
+				break;
+			case '<':
+				bool = a < b;
+				break;
+			default:
+				throw new Error('Unknown operator ' + operator);
+		}
 
 		if (bool) {
 			return options.fn(this);
@@ -100,6 +75,5 @@ const helpers = {
 		return !!(category && category.id === categoryId);
 	},
 
-};
 
-module.exports = helpers;
+};

@@ -36,8 +36,8 @@ keystone.init({
 	'name': 'Crampa Holds',
 	'brand': 'Crampa Holds',
 
-	// 'less': 'public',
-	// 'static': 'public',
+	'less': 'public',
+	'static': 'public',
 	'favicon': 'public/favicon.ico',
 	'views': 'templates/views',
 	'view engine': '.hbs',
