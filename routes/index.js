@@ -27,6 +27,23 @@ keystone.pre('routes', middleware.initLocals);
 keystone.pre('routes', middleware.initErrorHandlers);
 keystone.pre('render', middleware.flashMessages);
 
+// Custom Less and Static middleware as
+// I'll add 'quickthumb' support and because
+// I'd like all statics to be under the '/public' route
+keystone.set('pre:static', function (app) {
+	const root = 'public';
+	const rootExpanded = keystone.expandPath(root);
+
+	// Note the Less middleware must be always before the static one
+	app.use('/' + root, require('less-middleware')(rootExpanded, keystone.get('less options') || {}));
+
+	// Note the Quickthumb middleware must be always before the static one
+	// Usage: <img src="/public/images/image.gif?dim=80x40" />
+	app.use('/' + root, require('quickthumb').static(rootExpanded));
+
+	app.use('/' + root, keystone.express.static(rootExpanded, keystone.get('static options') || {}));
+});
+
 // Handle 404 errors
 keystone.set('404', function (req, res, next) {
 	// this is defined in middleware.initErrorHandlers

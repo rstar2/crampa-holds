@@ -36,8 +36,11 @@ keystone.init({
 	'name': 'Crampa Holds',
 	'brand': 'Crampa Holds',
 
-	'less': 'public',
-	'static': 'public',
+	// These will be handled custom in routes/index.js
+	// 'less': 'public',
+	// 'static': 'public',
+
+
 	'favicon': 'public/favicon.ico',
 	'views': 'templates/views',
 	'view engine': '.hbs',
@@ -86,6 +89,10 @@ keystone.set('locals', {
 	env: keystone.get('env'),
 	utils: keystone.utils,
 	editable: keystone.content.editable,
+	ga: {
+		property: process.env.GOOGLE_ANALYTICS_PROPERTY,
+		domain: process.env.GOOGLE_ANALYTICS_DOMAIN,
+	},
 });
 
 // Load your project's Routes
