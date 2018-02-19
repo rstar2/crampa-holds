@@ -1,10 +1,12 @@
 {
     "cSpell.words": [
         "autokey",
+        "cloudinary",
+        "fileupload",
+        "keystonejs",
+        "mailgun",
         "nocreate",
         "noedit",
-        "keystonejs",
-        "cloudinary",
-        "mailgun"
+        "originalname"
     ]
 }

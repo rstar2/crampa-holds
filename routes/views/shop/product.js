@@ -39,5 +39,5 @@ exports = module.exports = function (req, res) {
 	});
 
 	// Render the view
-	view.render('product');
+	view.render('shop/product');
 };
