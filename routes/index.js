@@ -75,14 +75,22 @@ exports = module.exports = function (app) {
 	// app.use('/router', myRouter);
 
 	const apiProtected = [
-		keystone.middleware.api, // attach res.apiResponse() ...  methods
+		// attach res.apiResponse() ...  methods
+		keystone.middleware.api,
+
 		// allow registered users to API - return error if not
+		middleware.requireUserAPI,
+
+		// return proper CORS headers so that the client should accept the response
+		keystone.middleware.cors,
+
 		// restrict CORS API (e.g. validate the request) - return json error if CORS is set and not met
-		keystone.middleware.cors, // return proper CORS headers so that the client should accept the response
+		middleware.validateCorsAPI,
 	];
 
 	// All API routes are protected
-	app.all('/api', ...apiProtected);
+	// app.all.apply(app, [])
+	app.all('/api/**', ...apiProtected);
 
 	// API File Upload Route
 	app.get('/api/fileupload/list', routes.api.fileupload.list);

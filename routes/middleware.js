@@ -7,11 +7,11 @@
  * you have more middleware you may want to group it as separate
  * modules in your project's /lib directory.
  */
-var _ = require('lodash');
+const _ = require('lodash');
 
 
 /**
-	Initialises the standard view locals
+	Initializes the standard view locals
 
 	The included layout depends on the navLinks array to generate
 	the navigation in the header, you may wish to change this array
@@ -40,7 +40,8 @@ exports.flashMessages = function (req, res, next) {
 		warning: req.flash('warning'),
 		error: req.flash('error'),
 	};
-	res.locals.messages = _.some(flashMessages, function (msgs) { return msgs.length; }) ? flashMessages : false;
+	res.locals.messages = _.some(flashMessages, function (messages) {
+		return messages.length; }) ? flashMessages : false;
 	next();
 };
 
@@ -52,6 +53,47 @@ exports.requireUser = function (req, res, next) {
 	if (!req.user) {
 		req.flash('error', 'Please sign in to access this page.');
 		res.redirect('/keystone/signin');
+	} else {
+		next();
+	}
+};
+
+/**
+	Prevents people from accessing protected API when they're not signed in
+ */
+exports.requireUserAPI = function (req, res, next) {
+	if (!req.user) {
+		res.apiNotAllowed(null, 'Please sign in to access this page.');
+	} else {
+		next();
+	}
+};
+
+/**
+	Prevents people from accessing protected API when they're not signed in
+ */
+exports.validateCorsAPI = function (req, res, next) {
+	// Check if this is API call is allowed
+	// this has to be done before the real work middleware is hit
+	// and after the core keystone,middleware.cors that sets the CORS headers
+	// according to the settings
+
+	// TODO:
+	var isAllowed = true;
+	// var origin = keystone.get('cors allow origin');
+	// if (origin) {
+	// 	res.header('Access-Control-Allow-Origin', origin === true ? '*' : origin);
+	// }
+
+	// if (keystone.get('cors allow methods') !== false) {
+	// 	res.header('Access-Control-Allow-Methods', keystone.get('cors allow methods') || 'GET,PUT,POST,DELETE,OPTIONS');
+	// }
+	// if (keystone.get('cors allow headers') !== false) {
+	// 	res.header('Access-Control-Allow-Headers', keystone.get('cors allow headers') || 'Content-Type, Authorization');
+	// }
+
+	if (!isAllowed) {
+		res.apiNotAllowed(null, 'CORS is not allowed');
 	} else {
 		next();
 	}
