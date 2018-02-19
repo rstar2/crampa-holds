@@ -47,6 +47,7 @@ keystone.set('500', function (err, req, res, next) {
 // Import Route Controllers
 var routes = {
 	views: importRoutes('./views'),
+	api: importRoutes('./api'),
 };
 
 
@@ -72,4 +73,21 @@ exports = module.exports = function (app) {
 	// myRouter.get('/', (req, res) => res.send('hello router'));
 	// myRouter.get('/sub', (req, res) => res.send('hello router sub'));
 	// app.use('/router', myRouter);
+
+	const apiProtected = [
+		keystone.middleware.api, // attach res.apiResponse() ...  methods
+		// allow registered users to API - return error if not
+		// restrict CORS API (e.g. validate the request) - return json error if CORS is set and not met
+		keystone.middleware.cors, // return proper CORS headers so that the client should accept the response
+	];
+
+	// All API routes are protected
+	app.all('/api', ...apiProtected);
+
+	// API File Upload Route
+	app.get('/api/fileupload/list', routes.api.fileupload.list);
+	app.get('/api/fileupload/:id', routes.api.fileupload.get);
+	app.all('/api/fileupload/:id/update', routes.api.fileupload.update);
+	app.all('/api/fileupload/create', routes.api.fileupload.create);
+	app.get('/api/fileupload/:id/remove', routes.api.fileupload.remove);
 };
