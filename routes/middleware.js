@@ -51,19 +51,8 @@ exports.flashMessages = function (req, res, next) {
  */
 exports.requireUser = function (req, res, next) {
 	if (!req.user) {
-		req.flash('error', 'Please sign in to access this page.');
+		// req.flash('error', 'Please sign in to access this page.');
 		res.redirect('/keystone/signin');
-	} else {
-		next();
-	}
-};
-
-/**
-	Prevents people from accessing protected API when they're not signed in
- */
-exports.requireUserAPI = function (req, res, next) {
-	if (!req.user) {
-		res.apiNotAllowed(null, 'Please sign in to access this page.');
 	} else {
 		next();
 	}

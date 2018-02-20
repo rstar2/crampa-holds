@@ -1,9 +1,9 @@
-var keystone = require('keystone');
+const keystone = require('keystone');
 
 exports = module.exports = function (req, res) {
 
-	var view = new keystone.View(req, res);
-	var locals = res.locals;
+	const view = new keystone.View(req, res);
+	const locals = res.locals;
 
 	// Set locals
 	locals.section = 'shop';
@@ -15,7 +15,7 @@ exports = module.exports = function (req, res) {
 			state: 'published',
 			slug: req.params.product,
 		})
-			.populate('author categories')
+			.populate('categories')
 			.exec(function (err, product) {
 				locals.product = product;
 				next(err);
@@ -29,7 +29,6 @@ exports = module.exports = function (req, res) {
 		keystone.list('Product').model.find()
 			.where('state', 'published')
 			.sort('-publishedDate')
-			.populate('author')
 			.limit('4')
 			.exec(function (err, products) {
 				locals.products = products;

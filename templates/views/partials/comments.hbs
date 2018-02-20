@@ -11,7 +11,7 @@
 					<img src="http://placehold.it/80x80" class="avatar" alt="">
 				    <div id="comment-id-{{id}}" class="comment">
 				  		<p class="meta">Dec 18, 2014 {{author.name.full}} says :
-							{{#if (isSameUser ../user author.id) }}
+							{{#if (isSame ../user author.id) }}
 						  		<i class="pull-right"><a href="?action=comment.remove&comment={{id}}"><small>Delete</small></a></i>
 						  	{{/if}}
 					  	</p>

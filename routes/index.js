@@ -84,8 +84,9 @@ exports = module.exports = function (app) {
 
 	app.get('/shop', routes.views.shop.index);
 	app.get('/shop/product/:product', routes.views.shop.product);
-	// app.get('/shop/cart', routes.views.shop.cart);
-	// app.get('/shop/checkout', middleware.requireUser, routes.views.shop.checkout);
+	app.get('/shop/cart', routes.views.shop.cart);
+	// use the core keystone.session.keystoneAuth middleware as it supports 'from' url and JSON response
+	app.all('/shop/checkout', keystone.session.keystoneAuth, routes.views.shop.checkout);
 
 	// using express.Router()
 	// var myRouter = keystone.createRouter(); // shorthand for require('express').Router
@@ -98,7 +99,7 @@ exports = module.exports = function (app) {
 		keystone.middleware.api,
 
 		// allow registered users to API - return error if not
-		middleware.requireUserAPI,
+		keystone.session.keystoneAuth,
 
 		// return proper CORS headers so that the client should accept the response
 		keystone.middleware.cors,

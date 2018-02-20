@@ -198,7 +198,7 @@ module.exports = function () {
 
 	// might be a ghost helper
 	// used for pagination urls on blog
-	_helpers.pageUrl = function (pageNumber, options) {
+	_helpers.blogPageUrl = function (pageNumber, options) {
 		return '/blog?page=' + pageNumber;
 	};
 
@@ -209,7 +209,7 @@ module.exports = function () {
 
 	// ### Pagination Helpers
 	// These are helpers used in rendering a pagination system for content
-	// Mostly generalized and with a small adjust to `_helper.pageUrl` could be universal for content types
+	// Mostly generalized and with a small adjust to `_helper.blogPageUrl` could be universal for content types
 
 	/*
 	* expecting the data.posts context or an object literal that has `previous` and `next` properties
@@ -247,7 +247,7 @@ module.exports = function () {
 			}
 
 			// get the pageUrl using the integer value
-			var pageUrl = _helpers.pageUrl(page);
+			var pageUrl = _helpers.blogPageUrl(page);
 			// wrapup the html
 			html += '<li' + liClass + '>' + linkTemplate({ url: pageUrl, text: pageText }) + '</li>\n';
 		});
@@ -260,7 +260,7 @@ module.exports = function () {
 		if (previousPage === false) {
 			previousPage = 1;
 		}
-		return _helpers.pageUrl(previousPage);
+		return _helpers.blogPageUrl(previousPage);
 	};
 
 	// special helper to ensure that we always have a valid next page url set
@@ -269,7 +269,7 @@ module.exports = function () {
 		if (nextPage === false) {
 			nextPage = totalPages;
 		}
-		return _helpers.pageUrl(nextPage);
+		return _helpers.blogPageUrl(nextPage);
 	};
 
 

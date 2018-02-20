@@ -1,10 +1,10 @@
-var keystone = require('keystone');
-var async = require('async');
+const keystone = require('keystone');
+const async = require('async');
 
 exports = module.exports = function (req, res) {
 
-	var view = new keystone.View(req, res);
-	var locals = res.locals;
+	const view = new keystone.View(req, res);
+	const locals = res.locals;
 
 	// Init locals
 	locals.section = 'blog';
@@ -26,7 +26,7 @@ exports = module.exports = function (req, res) {
 
 					keystone.list('Post').model.count().where('categories').in([category.id])
 						.exec(function (err, count) {
-							category.postCount = count;
+							category.count = count;
 							next(err);
 						});
 
@@ -53,7 +53,7 @@ exports = module.exports = function (req, res) {
 	// Load the posts
 	view.on('init', function (next) {
 
-		var q = keystone.list('Post').paginate({
+		const q = keystone.list('Post').paginate({
 			page: req.query.page || 1,
 			perPage: 10,
 			maxPages: 10,

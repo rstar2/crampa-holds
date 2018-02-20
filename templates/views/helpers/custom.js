@@ -70,36 +70,40 @@ const helpers = {
 	},
 
 	/**
-	 * Usage:
-	 * {{isSameUser user '123456789'}}
+	 * Checks if an object's ID is the same as the passed.
+	 * The passed object must have 'id' property.
 	 *
-	 * {{#if (isSameUser user '12345') }}
+	 * Usage:
+	 *
+	 * {{isSame user '123456789'}}
+	 * {{ifx (isSame category '123456789') 'active' ''}}
+	 *
+	 * {{#if (isSame user '12345') }}
      *    True
      * {{else}}
      *    False
      * {{/if}}
 	 */
-	isSameUser: function (user, userId) {
-		return !!(user && user.id === userId);
+	isSame: function (obj, id) {
+		return !!(obj && (obj === id || obj.id === id));
 	},
 
-	/**
-	 * Usage:
-	 * {{isSameCategory category '123456789'}}
-	 *
-	 *
-	 * {{ifx (isSameCategory category '123456789') 'active' ''}}
-	 *
-	 * {{#if (isSameCategory category '12345') }}
-     *    True
-     * {{else}}
-     *    False
-     * {{/if}}
-	 */
-	isSameCategory: function (category, categoryId) {
-		return !!(category && category.id === categoryId);
+	pageUrl: function (postSlug) {
+		return createUrl('/page', postSlug);
+	},
+
+	shopUrl: function () {
+		return `/shop`;
+	},
+
+	productUrl: function (productSlug) {
+		return createUrl(`${helpers.shopUrl()}/product`, productSlug);
 	},
 
 };
+
+function createUrl (base, slug) {
+	return slug ? `${base}/${slug}` : `${base}`;
+}
 
 module.exports = helpers;

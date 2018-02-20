@@ -33,20 +33,30 @@ const localFileStorage = new keystone.Storage({
 });
 
 const Product = new keystone.List('Product', {
-	autokey: { path: 'slug', from: 'name', unique: true },
+	map: { name: 'title' },
+	autokey: { path: 'slug', from: 'title', unique: true },
 });
 
 Product.add({
-	name: { type: String, required: true },
+	title: { type: String, required: true },
 	price: { type: Number, required: true, initial: true },
 	state: { type: Types.Select, options: 'draft, published, archived', default: 'draft', index: true },
 	publishedDate: { type: Types.Date, index: true, dependsOn: { state: 'published' }, default: Date.now },
 	image: { type: Types.CloudinaryImage },
-	file: { type: Types.File, storage: localFileStorage },
-	description: { type: Types.Markdown, wysiwyg: true, height: 150 },
+	description: {
+		brief: { type: Types.Markdown, wysiwyg: true, height: 150 },
+		extended: { type: Types.Markdown, wysiwyg: true, height: 400 },
+	},
 	categories: { type: Types.Relationship, ref: 'ProductCategory', many: true },
 	quantity: { type: Number },
 	canBeBought: { type: Boolean, default: true },
+
+	// TODO: still testing Local Storage
+	file: { type: Types.File, storage: localFileStorage },
+});
+
+Product.schema.virtual('description.full').get(function () {
+	return this.description.extended.html ? this.description.extended : this.description.brief;
 });
 
 Product.schema.methods.isPublished = function () {
