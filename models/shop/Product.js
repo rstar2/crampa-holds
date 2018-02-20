@@ -6,7 +6,7 @@ const Types = keystone.Field.Types;
  * ==========
  */
 
-var localFileStorage = new keystone.Storage({
+const localFileStorage = new keystone.Storage({
 	adapter: keystone.Storage.Adapters.FS,
 	fs: {
 		path: 'uploads/files/products', // required; path where the files should be stored

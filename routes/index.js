@@ -18,9 +18,9 @@
  * http://expressjs.com/api.html#app.VERB
  */
 
-var keystone = require('keystone');
-var middleware = require('./middleware');
-var importRoutes = keystone.importer(__dirname);
+const keystone = require('keystone');
+const middleware = require('./middleware');
+const importRoutes = keystone.importer(__dirname);
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -52,7 +52,7 @@ keystone.set('404', function (req, res, next) {
 
 // Handle other errors
 keystone.set('500', function (err, req, res, next) {
-	var title, message;
+	let title, message;
 	if (err instanceof Error) {
 		message = err.message;
 		err = err.stack;
@@ -62,7 +62,7 @@ keystone.set('500', function (err, req, res, next) {
 });
 
 // Import Route Controllers
-var routes = {
+const routes = {
 	views: importRoutes('./views'),
 	api: importRoutes('./api'),
 };
@@ -76,6 +76,8 @@ exports = module.exports = function (app) {
 	app.all('/blog/post/:post', routes.views.post);
 	app.get('/gallery', routes.views.gallery);
 	app.all('/contact', routes.views.contact);
+
+	app.get('/page/:page?', routes.views.page);
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);

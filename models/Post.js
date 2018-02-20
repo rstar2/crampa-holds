@@ -1,12 +1,12 @@
-var keystone = require('keystone');
-var Types = keystone.Field.Types;
+const keystone = require('keystone');
+const Types = keystone.Field.Types;
 
 /**
  * Post Model
  * ==========
  */
 
-var Post = new keystone.List('Post', {
+const Post = new keystone.List('Post', {
 	// name - the field that contains the name of the item, for display in the Admin UI.
 	// so when mapped to 'title' the 'title' will be showed as name displayed in the Admin UI.
 	map: { name: 'title' },

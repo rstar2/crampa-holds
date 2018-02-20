@@ -34,7 +34,7 @@ exports.initLocals = function (req, res, next) {
 	Fetches and clears the flashMessages before a view is rendered
 */
 exports.flashMessages = function (req, res, next) {
-	var flashMessages = {
+	let flashMessages = {
 		info: req.flash('info'),
 		success: req.flash('success'),
 		warning: req.flash('warning'),
@@ -79,7 +79,7 @@ exports.validateCorsAPI = function (req, res, next) {
 	// according to the settings
 
 	// TODO:
-	var isAllowed = true;
+	let isAllowed = true;
 	// var origin = keystone.get('cors allow origin');
 	// if (origin) {
 	// 	res.header('Access-Control-Allow-Origin', origin === true ? '*' : origin);

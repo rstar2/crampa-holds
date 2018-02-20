@@ -1,12 +1,12 @@
-var keystone = require('keystone');
-var Types = keystone.Field.Types;
+const keystone = require('keystone');
+const Types = keystone.Field.Types;
 
 /**
  * Gallery Model
  * =============
  */
 
-var Gallery = new keystone.List('Gallery', {
+const Gallery = new keystone.List('Gallery', {
 	autokey: { path: 'slug', from: 'name', unique: true },
 
 	// This adds a hidden field to the schema which is sortOrder, which is a number.

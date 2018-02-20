@@ -11,7 +11,7 @@
 						{{#if post.author.name.first}}by {{post.author.name.first}}{{/if}}
 					</h5>
 				</header>
-					<div class="post">
+				<div class="post">
 					{{#if post.image}}<img src="{{{cloudinaryUrl post.image width=750 height=450 crop='fit' }}}" class="img-responsive">{{/if}}
 					{{{post.content.extended}}}
 				</div>
