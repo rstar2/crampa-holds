@@ -25,7 +25,9 @@ exports.initLocals = function (req, res, next) {
 		{ label: 'Contact', key: 'contact', href: '/contact' },
 		{ label: 'Shop', key: 'shop', href: '/shop' },
 	];
+	// expose the user (if any) and the session to the views
 	res.locals.user = req.user;
+	res.locals.session = req.session;
 	next();
 };
 

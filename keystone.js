@@ -62,8 +62,22 @@ switch (env) {
 		// requires "npm install connect-mongo --save"
 		console.log('Production mode - Use session store - MongoStore');
 		keystone.set('session store', 'connect-mongo');
+
+		// see https://github.com/expressjs/session for more session options
+		keystone.set('session options', {
+			cookie: {
+				maxAge: 180 * 60 * 1000, // 3 hours
+			},
+		});
 		break;
 	case 'development':
+		// see https://github.com/expressjs/session for more session options
+		keystone.set('session options', {
+			cookie: {
+				maxAge: 3 * 60 * 1000, // 3 minutes
+			},
+		});
+
 		// generate source maps for the Less compiled files
 		keystone.set('less options', {
 			debug: true,

@@ -16,7 +16,10 @@
 					Price is {{{product.price}}}
 				</div>
 			</article>
-			<a>Add to cart</a>
+			<a href="?action=product.add&productId={{product.id}}">Add to cart</a>
+		</div>
+		<div>
+			Cart : {{session.cart}}
 		</div>
 	</div>
 </div>
