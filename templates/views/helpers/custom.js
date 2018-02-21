@@ -5,7 +5,7 @@ const helpers = {
 	 * {{ifx (is env '==' 'production') '.min' ''}}
 	 */
 	is: function (a, operator, b) {
-		var bool = false;
+		let bool = false;
 		switch (operator) {
 			case '===':
 				bool = a === b;

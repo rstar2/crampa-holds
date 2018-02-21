@@ -31,14 +31,14 @@
 								<li><a href="/shop/cart?action=product.remove&id={{@key}}&qty=all">Remove All</a></li>
 							</ul>
 						</div>
-						
+
 						<span class="badge">Quantity: {{qty}}</span>
 						<span class="label label-success pull-right">${{ totalPrice product.price qty }}</span>
-					</div>
+					</li>
 				{{/each}}
-			    </div>
+			    </ul>
 
-				<button type="button" class="btn btn-success">Checkout</button>
+				<a href="/shop/checkout" type="button" class="btn btn-success">Checkout</a>
 
 				{{else}}
 				<header>
