@@ -45,10 +45,16 @@ exports = module.exports = function (req, res) {
 	view.on('init', function (next) {
 
 		keystone.list('PostComment').model.find()
-			// .where('post', locals.post.id)
 			// .where('post', locals.post._id)
-			// are the same as :
-			.where('post', locals.post) // it will use the _id (as ObjectID type)
+
+			// Mongoose assigns each of your schemas an id virtual getter by default
+			// which returns the documents _id field cast to a string, or in the case of ObjectIds, its hexString.
+			// .where('post', locals.post.id)
+
+			// .where('post', locals.post) // it will use the _id (as ObjectID type)
+			// are all the same
+
+			.where('post', locals.post)
 			.where('state', 'published')
 			.where('author').ne(null)
 			.populate('author', 'name')

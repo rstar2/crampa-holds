@@ -7,19 +7,16 @@
 				<header>
 					<h1>{{product.title}}</h1>
 				</header>
-				<div class="post">
+				<div class="product">
 					{{#if page.image}}<img src="{{{cloudinaryUrl page.image width=750 height=450 crop='fit' }}}" class="img-responsive">{{/if}}
 					{{{product.description.full.html}}}
 				</div>
 
-				<div class="post">
+				<div class="product-price">
 					Price is {{{product.price}}}
 				</div>
+				<a href="/shop/cart?action=product.add&id={{product.id}}">Add to cart</a>
 			</article>
-			<a href="?action=product.add&productId={{product.id}}">Add to cart</a>
-		</div>
-		<div>
-			Cart : {{session.cart}}
 		</div>
 	</div>
 </div>

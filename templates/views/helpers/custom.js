@@ -1,5 +1,3 @@
-
-
 const helpers = {
 
 	/**
@@ -100,6 +98,9 @@ const helpers = {
 		return createUrl(`${helpers.shopUrl()}/product`, productSlug);
 	},
 
+	totalPrice: function (price, qty) {
+		return price * qty;
+	},
 };
 
 function createUrl (base, slug) {

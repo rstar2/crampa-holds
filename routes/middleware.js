@@ -24,6 +24,10 @@ exports.initLocals = function (req, res, next) {
 		{ label: 'Gallery', key: 'gallery', href: '/gallery' },
 		{ label: 'Contact', key: 'contact', href: '/contact' },
 		{ label: 'Shop', key: 'shop', href: '/shop' },
+		{
+			label: 'Cart', key: 'shopping-cart', href: '/shop/cart',
+			icon: 'shopping-cart', isRight: true,
+		},
 	];
 	// expose the user (if any) and the session to the views
 	res.locals.user = req.user;
@@ -43,10 +47,20 @@ exports.flashMessages = function (req, res, next) {
 		error: req.flash('error'),
 	};
 	res.locals.messages = _.some(flashMessages, function (messages) {
-		return messages.length; }) ? flashMessages : false;
+		return messages.length;
+	}) ? flashMessages : false;
 	next();
 };
 
+/**
+	Don't cache the content.
+	Maybe it's useful for some kind of pages but for dynamic site generally it's not
+*/
+exports.cacheControl = function (req, res, next) {
+	// Add 'no-store' - otherwise Chrome Back Button will still serve cached version
+	res.setHeader('Cache-Control', 'no-cache, no-store');
+	next();
+};
 
 /**
 	Prevents people from accessing protected pages when they're not signed in

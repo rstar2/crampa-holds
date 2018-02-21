@@ -40,13 +40,28 @@
 						</div>
 						<div class="collapse navbar-collapse">
 							<ul class="nav navbar-nav navbar-left">
-									{{# each navLinks}}
+								{{#each navLinks}}
+									{{#unless isRight}}
 									<li {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
 										<a href="{{ href }}">{{ label }}</a>
 									</li>
+									{{/unless}}
 								{{/each}}
 							</ul>
 							<ul class="nav navbar-nav navbar-right">
+								{{#each navLinks}}
+									{{#if isRight}}
+									<li {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
+										{{!-- Handle the shopping cart differently as it has a badge--}}
+										{{#ifeq key 'shopping-cart'}}
+										{{> shopping-cart session=../session}}
+										{{else}}
+										<a href="{{ href }}">{{ label }}</a>
+										{{/ifeq}}
+									</li>
+									{{/if}}
+								{{/each}}
+
 								{{#if user}}
 								<li><a href="/keystone/signout">Sign Out</a></li>
 								{{else}}
@@ -92,7 +107,7 @@
 		</div>
 		<div class="container">
 			<div id="footer">
-				<p>Powered by <a href="http://keystonejs.com" target="_blank">KeystoneJS</a>.</p>
+				<p>Designed By Rumen Neshev. Powered by <a href="http://keystonejs.com" target="_blank">KeystoneJS</a>.</p>
 			</div>
 		</div>
 		{{!--

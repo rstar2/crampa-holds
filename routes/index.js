@@ -26,6 +26,7 @@ const importRoutes = keystone.importer(__dirname);
 keystone.pre('routes', middleware.initLocals);
 keystone.pre('routes', middleware.initErrorHandlers);
 keystone.pre('render', middleware.flashMessages);
+keystone.pre('render', middleware.cacheControl);
 
 // Custom Less and Static middleware as
 // I'll add 'quickthumb' support and because
@@ -84,7 +85,7 @@ exports = module.exports = function (app) {
 
 	app.get('/shop', routes.views.shop.index);
 	app.get('/shop/product/:product', routes.views.shop.product);
-	app.all('/shop/cart', routes.views.shop.cart);
+	app.get('/shop/cart', routes.views.shop.cart);
 	// use the core keystone.session.keystoneAuth middleware as it supports 'from' url and JSON response
 	app.all('/shop/checkout', keystone.session.keystoneAuth, routes.views.shop.checkout);
 

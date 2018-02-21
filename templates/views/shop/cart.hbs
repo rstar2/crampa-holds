@@ -1,1 +1,52 @@
-Cart
+<div class="container">
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+
+			<article>
+				<p><a href="{{shopUrl}}">&larr; back to Shop</a></p>
+				<hr>
+				
+				{{#if session.cart}}
+
+				<header>
+					<h1>Shopping cart</h1>
+					<h3>Total products : {{session.cart.totalQty}}</h3>
+					<h3>Total Price : {{session.cart.totalPrice}}</h3>
+				</header>
+
+				<hr>
+
+				<ul class="list-group cart">
+				{{# each session.cart.items}}
+					<li class="list-group-item product">
+						<strong><a href="{{productUrl product.slug}}">{{{product.title}}}</a></strong>
+						
+						<div class="btn-group pull-right dropdown">
+							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+								 Action
+								 <span class="caret"></span>
+							 </button>
+  							<ul class="dropdown-menu">
+								<li><a href="/shop/cart?action=product.remove&id={{@key}}">Remove 1</a></li>
+								<li><a href="/shop/cart?action=product.remove&id={{@key}}&qty=all">Remove All</a></li>
+							</ul>
+						</div>
+						
+						<span class="badge">Quantity: {{qty}}</span>
+						<span class="label label-success pull-right">${{ totalPrice product.price qty }}</span>
+					</div>
+				{{/each}}
+			    </div>
+
+				<button type="button" class="btn btn-success">Checkout</button>
+
+				{{else}}
+				<header>
+					<h1>Empty Shopping cart</h1>
+				</header>
+				{{/if}}
+			</article>
+			
+		</div>
+	</div>
+</div>
