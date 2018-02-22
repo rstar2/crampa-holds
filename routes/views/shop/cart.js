@@ -1,3 +1,4 @@
+const debug = require('debug')('app:routes:views:shop:cart');
 const keystone = require('keystone');
 const Cart = require('../../../lib/models/shop/Cart');
 
@@ -20,6 +21,12 @@ function _cartUpdate (req, isDel, callback) {
 					} else {
 						cart.add(product, quantity);
 					}
+
+					if (debug.enabled) {
+						// debug('Cart is updated [%o]', cart);
+						debug(`Cart is updated - ${cart}`);
+					}
+
 					// update the cart in the session
 					// Note - it needs to be serialized so we have to pass plain objects
 					if (cart.isEmpty()) {
