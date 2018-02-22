@@ -10,6 +10,7 @@
       "keystonejs",
       "larr",
       "mailgun",
+      "middlewares",
       "nocreate",
       "noedit",
       "originalname",

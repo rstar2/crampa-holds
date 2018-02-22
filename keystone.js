@@ -28,8 +28,10 @@ const hbs = handlebars.create({
 	helpers: require('./templates/views/helpers')(),
 	extname: '.hbs',
 });
+// expose the Handlebars instance
+keystone.hbs = hbs;
 
-// add support for sections in templates:
+// add support for sections in Handlebars templates:
 // Usage:
 //     In template.hbs :
 //          {{{_sections.header}}}
@@ -47,7 +49,6 @@ keystone.init({
 	// These will be handled custom in routes/index.js
 	// 'less': 'public',
 	// 'static': 'public',
-
 
 	'favicon': 'public/favicon.ico',
 	'views': 'templates/views',

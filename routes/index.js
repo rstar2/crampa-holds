@@ -20,7 +20,11 @@
 
 const keystone = require('keystone');
 const middleware = require('./middleware');
-const importRoutes = keystone.importer(__dirname);
+
+// import/require all the files in the 'lib/init' directory and call them
+// Note, each one of them must export a function with argument 'keystone'
+const middlewaresFns = keystone.import('lib/middlewares');
+Object.keys(middlewaresFns).forEach(key => middlewaresFns[key](keystone));
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -63,6 +67,7 @@ keystone.set('500', function (err, req, res, next) {
 });
 
 // Import Route Controllers
+const importRoutes = keystone.importer(__dirname);
 const routes = {
 	views: importRoutes('./views'),
 	api: importRoutes('./api'),
