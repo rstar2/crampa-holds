@@ -1,7 +1,5 @@
 const keystone = require('keystone');
-
-const Cart = require('../../../lib/shop/Cart');
-
+const Cart = require('../../../lib/models/shop/Cart');
 
 function _cartUpdate (req, isDel, callback) {
 	const quantity = req.query.qty || 1;

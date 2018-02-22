@@ -1,4 +1,12 @@
-const path = require('path');
+if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+	console.log('----------------------------------------'
+		+ '\nWARNING: MISSING MAILGUN CREDENTIALS'
+		+ '\n----------------------------------------'
+		+ '\nYou have opted into email sending but have not provided'
+		+ '\nmailgun credentials. Attempts to send will fail.'
+		+ '\n\nCreate a mailgun account and add the credentials to the .env file to'
+		+ '\nset up your mailgun integration');
+}
 
 // Simulate config options from your production environment by
 // customizing the .env file in your project's root folder.
@@ -55,43 +63,6 @@ keystone.init({
 	'user model': 'User',
 });
 
-const env = keystone.get('env');
-switch (env) {
-	case 'production':
-		// store the session in the Mongo DB, not in memory
-		// requires "npm install connect-mongo --save"
-		console.log('Production mode - Use session store - MongoStore');
-		keystone.set('session store', 'connect-mongo');
-
-		// see https://github.com/expressjs/session for more session options
-		keystone.set('session options', {
-			cookie: {
-				maxAge: 180 * 60 * 1000, // 3 hours
-			},
-		});
-		break;
-	case 'development':
-		// see https://github.com/expressjs/session for more session options
-		keystone.set('session options', {
-			cookie: {
-				maxAge: 3 * 60 * 1000, // 3 minutes
-			},
-		});
-
-		// generate source maps for the Less compiled files
-		keystone.set('less options', {
-			debug: true,
-			render: {
-				sourceMap: {
-					sourceMapFileInline: true,
-					// sourceMapRootpath: 'root/less/',
-					sourceMapBasepath: path.resolve(__dirname, 'public', 'styles'),
-				},
-			},
-		});
-		break;
-}
-
 // Load your project's Models
 keystone.import('models');
 
@@ -123,18 +94,10 @@ keystone.set('nav', {
 	// users: 'users',
 });
 
+// import/require all the files in the 'lib/init' directory and call them
+// Note, each one of them must export a function with argument 'keystone'
+const initFunctions = keystone.import('lib/init');
+Object.keys(initFunctions).forEach(key => initFunctions[key](keystone));
+
 // Start Keystone to connect to your database and initialize the web server
-
-
-if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
-	console.log('----------------------------------------'
-		+ '\nWARNING: MISSING MAILGUN CREDENTIALS'
-		+ '\n----------------------------------------'
-		+ '\nYou have opted into email sending but have not provided'
-		+ '\nmailgun credentials. Attempts to send will fail.'
-		+ '\n\nCreate a mailgun account and add the credentials to the .env file to'
-		+ '\nset up your mailgun integration');
-}
-
-
 keystone.start();

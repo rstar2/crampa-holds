@@ -86,8 +86,9 @@ exports = module.exports = function (app) {
 	app.get('/shop', routes.views.shop.index);
 	app.get('/shop/product/:product', routes.views.shop.product);
 	app.get('/shop/cart', routes.views.shop.cart);
-	// use the core keystone.session.keystoneAuth middleware as it supports 'from' url and JSON response
-	app.all('/shop/checkout', keystone.session.keystoneAuth, routes.views.shop.checkout);
+	app.get('/shop/checkout', routes.views.shop.checkout);
+	// use the core keystone.session.keystoneAuth middleware as it supports both HTML and JSON response
+	app.post('/shop/checkout', keystone.session.keystoneAuth, routes.views.shop.checkout);
 
 	// using express.Router()
 	// var myRouter = keystone.createRouter(); // shorthand for require('express').Router
