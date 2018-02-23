@@ -61,13 +61,17 @@ function cartUpdate (req, res, next, isDel = false) {
 			// next();
 
 			// this will redirect to the current page without the query
-			res.redirect(req.path); // in this case the '/shop/cart'
+			// res.redirect(req.path); // in this case the '/shop/cart'
 
 			// this will redirect to the cart
 			// res.redirect('/shop/cart'); // explicitly set if the routes for add/remove are different from listing
 
 			// this will redirect back to the place this request is coming
 			// res.redirect(req.headers.referer);
+
+			// A back redirection redirects the request back to the referer,
+			// defaulting to / when the referer is missing
+			res.redirect('back');
 		}
 	});
 }

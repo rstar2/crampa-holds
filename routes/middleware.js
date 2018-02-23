@@ -9,7 +9,6 @@
  */
 const _ = require('lodash');
 
-
 /**
 	Initializes the standard view locals
 
@@ -19,13 +18,13 @@ const _ = require('lodash');
 */
 exports.initLocals = function (req, res, next) {
 	res.locals.navLinks = [
-		{ label: 'Home', key: 'home', href: '/' },
-		{ label: 'Blog', key: 'blog', href: '/blog' },
-		{ label: 'Gallery', key: 'gallery', href: '/gallery' },
-		{ label: 'Contact', key: 'contact', href: '/contact' },
-		{ label: 'Shop', key: 'shop', href: '/shop' },
+		{ label: req.__('Home'), key: 'home', href: '/' },
+		{ label: req.__('Blog'), key: 'blog', href: '/blog' },
+		{ label: req.__('Gallery'), key: 'gallery', href: '/gallery' },
+		{ label: req.__('Contact'), key: 'contact', href: '/contact' },
+		{ label: req.__('Shop'), key: 'shop', href: '/shop' },
 		{
-			label: 'Cart', key: 'shopping-cart', href: '/shop/cart',
+			label: req.__('Cart'), key: 'shopping-cart', href: '/shop/cart',
 			icon: 'shopping-cart', isRight: true,
 		},
 	];

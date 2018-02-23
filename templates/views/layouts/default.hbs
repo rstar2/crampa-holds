@@ -7,6 +7,9 @@
 		<title>Crampa Holds</title>
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 		<link href="/public/styles/site{{ifx (is env '==' 'production') '.min' ''}}.css" rel="stylesheet">
+		
+		{{!-- http://usrz.github.io/bootstrap-languages/ --}}
+		<link href="/public/styles/lib/languages.min.css" rel="stylesheet">
 
 		{{!-- This file provides the default styling for the KeystoneJS Content Editor
 			- only renders when user is logged in and admin--}}
@@ -67,7 +70,11 @@
 								{{else}}
 								<li><a href="/keystone/signin">Sign In</a></li>
 								{{/if}}
+
+								{{> locale-change}}
 							</ul>
+
+							
 						</div>
 					</div>
 				</div>

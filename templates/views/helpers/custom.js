@@ -101,6 +101,14 @@ const helpers = {
 	totalPrice: function (price, qty) {
 		return price * qty;
 	},
+
+	toLowerCase: function (str) {
+		return ('' + str).toLowerCase();
+	},
+
+	toUpperCase: function (str) {
+		return ('' + str).toUpperCase();
+	},
 };
 
 function createUrl (base, slug) {
