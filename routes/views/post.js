@@ -83,10 +83,12 @@ exports = module.exports = function (req, res) {
 
 		const updater = newComment.getUpdateHandler(req);
 
+		// this internally will call newComment.updateItem() which in turn will
+		// pass the data through the Keystone validators and finally call Mongoose save()
 		updater.process(req.body, {
-			fields: 'content',
-			flashErrors: true,
-			logErrors: true,
+			fields: 'content', // update only the 'content' field
+			flashErrors: true, // if error - create and add a flash message
+			logErrors: true,   // if error - log it
 		}, function (err) {
 			if (err) {
 				locals.validationErrors = err.errors;

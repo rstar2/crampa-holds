@@ -62,52 +62,60 @@ exports.cacheControl = function (req, res, next) {
 };
 
 /**
-	Prevents people from accessing protected pages when they're not signed in
+	Prevents people from accessing protected pages when they're not signed in.
+	Also protects protected API endpoints.
  */
-exports.requireUser = function (req, res, next) {
-	if (!req.user) {
-		// req.flash('error', 'Please sign in to access this page.');
-		res.redirect('/keystone/signin');
-	} else {
+exports.requireAuth = function (keystone) {
+	return function (req, res, next) {
+		if (!req.user || !req.user.canAccessKeystone) {
+			if (-1 || req.headers.accept.indexOf('application/json')) {
+				return req.user
+					? res.status(403).json({ error: 'not authorized' })
+					: res.status(401).json({ error: 'not signed in' });
+			}
+			const regex = new RegExp('^\/' + keystone.get('admin path') + '\/?$', 'i');
+			const from = regex.test(req.originalUrl) ? '' : '?from=' + req.originalUrl;
+			req.flash('error', 'Please sign in to access this page.');
+			return res.redirect(keystone.get('signin url') + from);
+		}
 		next();
-	}
+	};
 };
 
 /**
 	Prevents people from accessing protected API when they're not signed in
  */
-exports.validateCorsAPI = function (req, res, next) {
-	// Check if this is API call is allowed
-	// this has to be done before the real work middleware is hit
-	// and after the core keystone,middleware.cors that sets the CORS headers
-	// according to the settings
+exports.validateCorsAPI = function (keystone) {
+	return function (req, res, next) {
+		// Check if this is API call is allowed
+		// this has to be done before the real work middleware is hit
+		// and after the core keystone,middleware.cors that sets the CORS headers
+		// according to the settings
 
-	// TODO:
-	let isAllowed = true;
-	// var origin = keystone.get('cors allow origin');
-	// if (origin) {
-	// 	res.header('Access-Control-Allow-Origin', origin === true ? '*' : origin);
-	// }
 
-	// if (keystone.get('cors allow methods') !== false) {
-	// 	res.header('Access-Control-Allow-Methods', keystone.get('cors allow methods') || 'GET,PUT,POST,DELETE,OPTIONS');
-	// }
-	// if (keystone.get('cors allow headers') !== false) {
-	// 	res.header('Access-Control-Allow-Headers', keystone.get('cors allow headers') || 'Content-Type, Authorization');
-	// }
+		const origin = keystone.get('cors allow origin');
+		let isAllowed = (origin === true || origin === req.host);
 
-	if (!isAllowed) {
-		res.apiNotAllowed(null, 'CORS is not allowed');
-	} else {
-		next();
-	}
+		// TODO: could validate the method and headers also if needed
+		// if (keystone.get('cors allow methods') !== false) {
+		// 	res.header('Access-Control-Allow-Methods', keystone.get('cors allow methods') || 'GET,PUT,POST,DELETE,OPTIONS');
+		// }
+		// if (keystone.get('cors allow headers') !== false) {
+		// 	res.header('Access-Control-Allow-Headers', keystone.get('cors allow headers') || 'Content-Type, Authorization');
+		// }
+
+		if (!isAllowed) {
+			res.apiNotAllowed(null, 'CORS is not allowed');
+		} else {
+			next();
+		}
+	};
 };
 
 /**
     Inits the error handler functions into `res`
 */
 exports.initErrorHandlers = function (req, res, next) {
-
 	res.err = function (err, title, message) {
 		res.status(500).render('errors/500', {
 			err: err,

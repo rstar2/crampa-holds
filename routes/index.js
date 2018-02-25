@@ -68,44 +68,38 @@ exports = module.exports = function (app) {
 
 	app.get('/page/:page?', routes.views.page);
 
-	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
-	// app.get('/protected', middleware.requireUser, routes.views.protected);
+	// NOTE: To protect a route so that only admins can see it, use the requireAuth middleware:
+	// app.get('/protected', middleware.requireAuth(keystone), routes.views.protected);
 
 	app.get('/shop', routes.views.shop.index);
 	app.get('/shop/product/:product', routes.views.shop.product);
 	app.get('/shop/cart', routes.views.shop.cart);
 	app.get('/shop/checkout', routes.views.shop.checkout);
-	// use the core keystone.session.keystoneAuth middleware as it supports both HTML and JSON response
-	app.post('/shop/checkout', keystone.session.keystoneAuth, routes.views.shop.checkout);
+	app.post('/shop/checkout', middleware.requireAuth(keystone), routes.views.shop.checkout);
 
 	// using express.Router()
-	// var myRouter = keystone.createRouter(); // shorthand for require('express').Router
+	// var myRouter = 
 	// myRouter.get('/', (req, res) => res.send('hello router'));
 	// myRouter.get('/sub', (req, res) => res.send('hello router sub'));
-	// app.use('/router', myRouter);
+	// 
 
 	const apiProtected = [
 		// attach res.apiResponse() ...  methods
 		keystone.middleware.api,
 
 		// allow registered users to API - return error if not
-		keystone.session.keystoneAuth,
+		// middleware.requireAuth(keystone),
+
+		// restrict CORS API (e.g. validate the request) - return json error if CORS is set and not met
+		middleware.validateCorsAPI(keystone),
 
 		// return proper CORS headers so that the client should accept the response
 		keystone.middleware.cors,
-
-		// restrict CORS API (e.g. validate the request) - return json error if CORS is set and not met
-		middleware.validateCorsAPI,
 	];
 
-	// All API routes are protected
-	// app.all.apply(app, [])
+	// All API routes are protected and/or should allow CORS
 	app.all('/api/**', ...apiProtected);
 
-	// API File Upload Route
-	app.get('/api/fileupload/list', routes.api.fileupload.list);
-	app.get('/api/fileupload/:id', routes.api.fileupload.get);
-	app.all('/api/fileupload/:id/update', routes.api.fileupload.update);
-	app.all('/api/fileupload/create', routes.api.fileupload.create);
-	app.get('/api/fileupload/:id/remove', routes.api.fileupload.remove);
+	app.use('/api/fileupload', routes.api.fileupload);
+
 };

@@ -59,15 +59,16 @@
 				url: baseUrl + '/api/fileupload/create',
 				data: newFile,
 				cache: false,
+				dataType: 'json',
 				contentType: false,
 				processData: false,
 				type: 'POST'
 			})
 				.done(function (data) {
-					//Dev Note: KeystoneAPI only allows file and image uploads with the file itself. Any extra metadata will have to
-					//be uploaded/updated with a second call.
+					//Dev Note: KeystoneAPI only allows file and image uploads with the file itself.
+					// Any extra metadata will have to be uploaded/updated with a second call.
 
-					//debugger;
+					// debugger;
 					console.log('File upload succeeded! ID: ' + data.file_upload._id);
 
 					//Fill out the file metadata information
@@ -77,18 +78,18 @@
 
 					//Update the file with the information above.
 					$.get(baseUrl + '/api/fileupload/' + data.file_upload._id + '/update', data.file_upload, function (data) {
-						//debugger;
+						// debugger;
 
 						console.log('File information updated.');
 
 						//Add the uploaded file to the uploaded file list.
-						$('#file_list').append('<li><a href="' + data.collection.url + '" download>' + data.collection.name + '</a></li>');
+						$('#file_list').append('<li><a href="' + data.file_upload.url + '" download>' + data.file_upload.file.filename + '</a></li>');
 
 					})
 
 						//If the metadata update fails:
 						.fail(function (jqXHR, textStatus) {
-							debugger;
+							// debugger;
 
 							console.error('The file metadata was not updated. Here is the error message from the server:');
 							console.error('Server status: ' + jqXHR.status);

@@ -11,11 +11,21 @@ const FileUpload = new keystone.List('FileUpload', {
 	track: true,
 });
 
+// The nested schema is based on the schema provided by the Storage Adapter,
+// which for the FS adapter defaults to:
+// {
+// 	filename: String,
+// 	size: Number,
+// 	mimetype: String,
+// 	path: String,
+// 	originalname: String,
+// 	url: String,
+// }
 const localStorage = new keystone.Storage({
 	adapter: keystone.Storage.Adapters.FS,
 	fs: {
 		path: keystone.expandPath('uploads/files'),
-		//publicPath: '/uploads/files',
+		publicPath: '/uploads/files',
 	},
 	schema: {
 		path: true,
@@ -26,10 +36,7 @@ const localStorage = new keystone.Storage({
 
 FileUpload.add({
 	name: { type: Types.Key, index: true },
-	file: {
-		type: Types.File,
-		storage: localStorage,
-	},
+	file: { type: Types.File, storage: localStorage },
 	category: { type: String },
 	priorityId: { type: String },
 });
