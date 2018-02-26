@@ -8,6 +8,9 @@
 	<title>Crampa Holds - Admin</title>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
+	<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
+	<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+
 	{{!-- This section allows templates to define custom CSS here --}}
 	{{{_sections.header_css}}}
     {{!-- This section allows templates to define custom JS here --}}
@@ -18,17 +21,9 @@
 	{{{body}}}
 
 
-	{{!--
-		//- jQuery 1.11.3 is included by default, and required by both Bootstrap
-		//- and the KeystoneJS Content Editor. If you are not targeting IE8,
-		//- you can upgrade to 2.1.4 (also bundled) for better performance.
-	--}}
-	<script src="/public/js/jquery/jquery-1.11.3.min.js"></script>
-	{{!--
-		//- Customize which Bootstrap javascript files are served by including
-		//- them specifically here, instead of bootstrap-3.3.5.min.js
-	--}}
-	<script src="/public/js/bootstrap/bootstrap-3.3.5.min.js"></script>
+	<script src="//unpkg.com/vue"></script>
+	<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+	<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
 	{{!-- This section allows templates to add custom JS here --}}
 	{{{_sections.body_js}}}
