@@ -46,10 +46,6 @@ keystone.init({
 	'name': 'Crampa Holds',
 	'brand': 'Crampa Holds',
 
-	// These will be handled custom in routes/index.js
-	// 'less': 'public',
-	// 'static': 'public',
-
 	'favicon': 'public/favicon.ico',
 	'views': 'templates/views',
 	'view engine': '.hbs',

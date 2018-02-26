@@ -6,32 +6,6 @@ const Types = keystone.Field.Types;
  * ==========
  */
 
-const localFileStorage = new keystone.Storage({
-	adapter: keystone.Storage.Adapters.FS,
-	fs: {
-		path: 'uploads/files/products', // required; path where the files should be stored
-		//publicPath: '/uploads/files/products', // path where files will be served
-	},
-	// generateFilename: function (file, i, callback) {
-	// 	callback(null, file.extension);
-	// },
-
-	// By default only the 'filename', 'mimetype' and 'size' as added to the model schema
-	// to explicitly enable the others we have to specify them:
-	// e.g. by default: schema == {
-	// 	size: true,
-	// 	mimetype: true,
-	// 	path: false,
-	// 	originalname: false,
-	// 	url: false,
-	//  }
-	schema: {
-		path: true,
-		originalname: true,
-		url: true,
-	},
-});
-
 const Product = new keystone.List('Product', {
 	map: { name: 'title' },
 	autokey: { path: 'slug', from: 'title', unique: true },
@@ -43,6 +17,7 @@ Product.add({
 	state: { type: Types.Select, options: 'draft, published, archived', default: 'draft', index: true },
 	publishedDate: { type: Types.Date, index: true, dependsOn: { state: 'published' }, default: Date.now },
 	image: { type: Types.CloudinaryImage },
+	images: { type: Types.CloudinaryImages },
 	description: {
 		brief: { type: Types.Markdown, wysiwyg: true, height: 150 },
 		extended: { type: Types.Markdown, wysiwyg: true, height: 400 },
@@ -50,9 +25,6 @@ Product.add({
 	categories: { type: Types.Relationship, ref: 'ProductCategory', many: true },
 	quantity: { type: Number },
 	canBeBought: { type: Boolean, default: true },
-
-	// TODO: still testing Local Storage
-	file: { type: Types.File, storage: localFileStorage },
 });
 
 Product.schema.virtual('description.full').get(function () {

@@ -77,18 +77,15 @@ exports = module.exports = function (app) {
 	app.get('/shop/checkout', routes.views.shop.checkout);
 	app.post('/shop/checkout', middleware.requireAuth(keystone), routes.views.shop.checkout);
 
-	// using express.Router()
-	// var myRouter = 
-	// myRouter.get('/', (req, res) => res.send('hello router'));
-	// myRouter.get('/sub', (req, res) => res.send('hello router sub'));
-	// 
+	// attach a custom Admin page - for uploading files and etc...
+	app.get('/admin/fileupload', routes.views.admin.fileupload);
 
 	const apiProtected = [
 		// attach res.apiResponse() ...  methods
 		keystone.middleware.api,
 
 		// allow registered users to API - return error if not
-		// middleware.requireAuth(keystone),
+		middleware.requireAuth(keystone),
 
 		// restrict CORS API (e.g. validate the request) - return json error if CORS is set and not met
 		middleware.validateCorsAPI(keystone),

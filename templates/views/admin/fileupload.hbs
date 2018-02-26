@@ -1,0 +1,94 @@
+<h1>Upload a new file</h1>
+<form>
+	<div>
+		<input type="file" id="file_upload" />
+		<br>
+		<label for="file_name">Give the file a name:
+			<input type="text" name="file_name" id="file_name" />
+		</label>
+	</div>
+	<br>
+
+	<div>
+		<center>
+			<input type="button" value="Upload" onclick="uploadFile()">
+		</center>
+	</div>
+</form>
+<hr>
+<div>
+	<h2>Uploaded File List:</h2>
+	<ul id="file_list">
+	</ul>
+</div>
+
+
+{{#section 'body_js'}}
+<script type="text/javascript">
+	$(document).ready(function () {
+        // load all current file-uploads
+		jQuery.ajax({
+			url: '/api/fileupload/list',
+			cache: false,
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+		})
+			.done(function (data) {
+				var items = data.items;
+				console.log('List file-uploads succeeded! - currently: ' + items.length);
+				items.forEach(function(item) {addToList(item);});
+			})
+			.fail(function (jqXHR, textStatus) {
+				alert('Failed to connect to the server!');
+			});
+
+	});
+
+	function addToList(item) {
+		$('#file_list').prepend('<li>' +
+			'<a href="' + item.file.url + '" download>' + item.name + '</a>' +
+			' - <a href="/api/fileupload/' + item.id + '/remove">Delete</a>' +
+			'</li>');
+	}
+
+	function uploadFile() {
+		var selectedFile = $('#file_upload').get(0).files[0];
+
+		//Error handling
+		if (selectedFile == undefined)
+			alert('You did not select a file!');
+
+		//Create the FormData data object and append the file to it.
+		var data = new FormData();
+		// This is the raw file that was selected
+		data.append('file_upload', selectedFile);
+		// This is the name of the FileUpload
+		data.append('name', $('#file_name').val());
+
+		jQuery.ajax({
+			url: '/api/fileupload/create',
+			data: data,
+			cache: false,
+			dataType: 'json',
+			contentType: false,
+			processData: false,
+			type: 'POST'
+		})
+			.done(function (data) {
+				var item = data.item;
+				console.log('File upload succeeded! ID: ' + item.id);
+
+				addToList(item);
+			})
+			.fail(function (jqXHR, textStatus) {
+				console.error('The file was not uploaded to the server. Here is the error message from the server:');
+				console.error('Server status: ' + jqXHR.status);
+				console.error('Server message: ' + jqXHR.statusText);
+
+				alert('Failed to connect to the server!');
+			});
+
+	}
+</script>
+{{/section}}

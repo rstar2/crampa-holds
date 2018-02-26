@@ -11,22 +11,27 @@ const FileUpload = new keystone.List('FileUpload', {
 	track: true,
 });
 
-// The nested schema is based on the schema provided by the Storage Adapter,
-// which for the FS adapter defaults to:
-// {
-// 	filename: String,
-// 	size: Number,
-// 	mimetype: String,
-// 	path: String,
-// 	originalname: String,
-// 	url: String,
-// }
 const localStorage = new keystone.Storage({
 	adapter: keystone.Storage.Adapters.FS,
 	fs: {
-		path: keystone.expandPath('uploads/files'),
-		publicPath: '/uploads/files',
+		path: 'uploads/files', // required; path where the files should be stored
+		publicPath: '/uploads/files/', // path where files will be served from
+		// the final 'url' property of the file will be generated from this and the filename
 	},
+	// generateFilename: function (file, i, callback) {
+	// 	callback(null, file.extension);
+	// },
+
+	// By default only the 'filename', 'mimetype' and 'size' as added to the model schema
+	// to explicitly enable the others we have to specify them:
+	// e.g. by default: schema == {
+	// 	filename: String,
+	// 	size: true,
+	// 	mimetype: true,
+	// 	path: false,
+	// 	originalname: false,
+	// 	url: false,
+	//  }
 	schema: {
 		path: true,
 		originalname: true,
@@ -38,7 +43,17 @@ FileUpload.add({
 	name: { type: Types.Key, index: true },
 	file: { type: Types.File, storage: localStorage },
 	category: { type: String },
-	priorityId: { type: String },
+});
+
+FileUpload.schema.pre('save', function (next) {
+	// if no category is set - like empty string - then delete the whole field in the DB
+	if (!this.category) {
+		// setting it to 'undefined' will delete it from the document
+		// Note - setting it 'null' will save it as NULL
+		this.category = undefined;
+	}
+
+	next();
 });
 
 FileUpload.defaultColumns = 'name';
