@@ -1,47 +1,62 @@
 <div id="app">
-	<div id="app-upload">
-		<p> ${ message } </p>
-		<h1>Upload a new file</h1>
-		<form>
-			<div>
-				<input type="file" id="file_upload" />
-				<br>
-				<label for="file_name">Give the file a name:
-					<input type="text" name="file_name" id="file_name" />
-				</label>
-			</div>
-			<br>
-
-			<div>
-				<center>
-					<input type="button" value="Upload" onclick="uploadFile()">
-				</center>
-			</div>
-		</form>
-		<hr>
-	</div>
-
-	<div id="app-list">
-		<h2>Uploaded File List:</h2>
-		<ul>
-		</ul>
-	</div>
+	<upload-item v-bind:item="newItem"></upload-item>
+	<upload-list v-bind:items="items"></upload-list>
 </div>
 
 
 {{#section 'body_js'}}
 <script type="text/javascript">
 
+Vue.component('upload-item', {
+  props: ['item'],
+  template: `<div>
+		<p> \{{ item.file_name }} </p>
+		<h1>Upload a new file</h1>
+		<form>
+			<div>
+				<input type="file" id="file_upload" />
+				<br>
+				<label for="file_name">Give the file a name:</label>
+				<input type="text" name="file_name" v-model="item.file_name" />
+			</div>
+			<br>
+
+			<div>
+				<button type="button" v-on:click="uploadFile">Upload</button>
+			</div>
+		</form>
+		<hr>
+	</div>`,
+  methods: {
+	  uploadFile: function(e) {
+
+	  }
+  }
+});
+
+Vue.component('upload-list', {
+  template: 
+    `<div>
+		<h2>Uploaded File List:</h2>
+		<ul>
+		</ul>
+	</div>`
+})
+
 // https://vuejs.org/v2/guide/ 
 // https://www.smashingmagazine.com/2018/02/jquery-vue-javascript/ 
 // https://vuejsdevelopers.com/2017/09/17/vue-js-avoid-dom-templates/ 
 new Vue({
   el: '#app',
-    delimiters: ['${', '}'],
   data: {
-    message: 'Hello Vue.js!'
-  }
+	  newItem: {
+		  file_name: 'File1'
+	  },
+	  items : []
+  },
 });
+
+///////////////////////////////////
 
 	{{!-- 
 	$(document).ready(function () {
