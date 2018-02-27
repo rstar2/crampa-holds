@@ -20,9 +20,15 @@
 <body>
 	{{{body}}}
 
+	{{!-- TODO: Use a build system (babelify/vuefy/browserify/watchify) to generate the client JS --}}
 
+	{{!-- Polyfill  for the Promise and Fetch APIs --}}
+	<script src="/public/js/polyfill/promise.js"></script>
+	<script src="/public/js/polyfill/fetch.js"></script>
+
+	<script src="//unpkg.com/lodash"></script>
 	<script src="//unpkg.com/vue"></script>
-	<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+	{{!-- <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script> --}}
 	<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
 	{{!-- This section allows templates to add custom JS here --}}

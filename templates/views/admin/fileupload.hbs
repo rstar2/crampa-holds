@@ -1,5 +1,5 @@
 <div id="app">
-	<upload-item v-bind:item="newItem"></upload-item>
+	<upload-item></upload-item>
 	<upload-list v-bind:items="items"></upload-list>
 </div>
 
@@ -7,122 +7,140 @@
 {{#section 'body_js'}}
 <script type="text/javascript">
 
-Vue.component('upload-item', {
-  props: ['item'],
-  template: `<div>
-		<p> \{{ item.file_name }} </p>
+	Vue.component('upload-item', {
+		template: `<div>
 		<h1>Upload a new file</h1>
 		<form>
 			<div>
-				<input type="file" id="file_upload" />
+				<input type="file" v-on:change.prevent="$event.target.files.length ? file = $event.target.files[0] : null" />
 				<br>
 				<label for="file_name">Give the file a name:</label>
-				<input type="text" name="file_name" v-model="item.file_name" />
+				<input type="text" name="file_name" v-model.trim="name" />
 			</div>
 			<br>
-
 			<div>
-				<button type="button" v-on:click="uploadFile">Upload</button>
+				<button type="button" v-on:click.prevent="onUpload" v-bind:disabled="!file">Upload</button>
 			</div>
 		</form>
 		<hr>
-	</div>`,
-  methods: {
-	  uploadFile: function(e) {
+		</div>`,
+		data() {
+			return {
+				name: "Example name",
+				file: null
+			}
+		},
+		methods: {
+			onUpload() {
+				var data = new FormData();
+				// This is the raw file that was selected
+				data.append('file', this.file);
+				// This is the name of the FileUpload
+				data.append('name', this.name);
 
-	  }
-  }
-});
+				fetch('/api/fileupload/create', {
+					method: 'POST',
+					body: data,
+					credentials: 'same-origin',
+					cache: 'no-cache',
+				})
+					.then(r => {
+						if (!r.ok) return Promise.reject('failed');
+						return r.json();
+					})
+					.then(data => {
+						var item = data.item;
 
-Vue.component('upload-list', {
-  template: 
-    `<div>
-		<h2>Uploaded File List:</h2>
-		<ul>
-		</ul>
-	</div>`
-})
-
-// https://vuejs.org/v2/guide/ 
-// https://www.smashingmagazine.com/2018/02/jquery-vue-javascript/ 
-// https://vuejsdevelopers.com/2017/09/17/vue-js-avoid-dom-templates/ 
-new Vue({
-  el: '#app',
-  data: {
-	  newItem: {
-		  file_name: 'File1'
-	  },
-	  items : []
-  },
-});
-
-///////////////////////////////////
-
-	{{!-- 
-	$(document).ready(function () {
-        // load all current file-uploads
-		jQuery.ajax({
-			url: '/api/fileupload/list',
-			cache: false,
-			dataType: 'json',
-			contentType: false,
-			processData: false,
-		})
-			.done(function (data) {
-				var items = data.items;
-				console.log('List file-uploads succeeded! - currently: ' + items.length);
-				items.forEach(function(item) {addToList(item);});
-			})
-			.fail(function (jqXHR, textStatus) {
-				alert('Failed to connect to the server!');
-			});
-
+						// TODO: add to list
+						//this.addToList(item);
+					})
+					.catch(err => {
+						alert('Failed to add new file-upload - ' + error);
+					});
+			}
+		}
 	});
 
-	function addToList(item) {
-		$('#file_list').prepend('<li>' +
-			'<a href="' + item.file.url + '" download>' + item.name + '</a>' +
-			' - <a href="/api/fileupload/' + item.id + '/remove">Delete</a>' +
-			'</li>');
-	}
+	Vue.component('upload-list-item', {
+  		props: ['item'],
+  		template: `<li>
+				<a v-bind:href="item.file.url" download>\{{ item.name }}</a>
+			     - <a href="" v-on:click.prevent="onRemove(item.id)">Delete</a>
+			</li>`,
+		methods: {
+			onRemove(id) {
+				fetch(`/api/fileupload/${id}/remove`, {
+					credentials: 'same-origin',
+					cache: 'no-cache',
+				})
+					.then(r => {
+						if (!r.ok) return Promise.reject('failed');
+						return r.json();
+					})
+					.then(data => {
+						var success = !!data.success;
+						if (!success) {
+							return Promise.reject('failed');
+						}
+						
+						// TODO: remove from list
+						// this.removeFromList(item)
+					})
+					.catch(function (error) {
+						alert('Failed to remove file-upload - ' + error);
+					});
+			}
+		}
+	});
 
-	function uploadFile() {
-		var selectedFile = $('#file_upload').get(0).files[0];
-
-		//Error handling
-		if (selectedFile == undefined)
-			alert('You did not select a file!');
-
-		//Create the FormData data object and append the file to it.
-		var data = new FormData();
-		// This is the raw file that was selected
-		data.append('file_upload', selectedFile);
-		// This is the name of the FileUpload
-		data.append('name', $('#file_name').val());
-
-		jQuery.ajax({
-			url: '/api/fileupload/create',
-			data: data,
-			cache: false,
-			dataType: 'json',
-			contentType: false,
-			processData: false,
-			type: 'POST'
-		})
-			.done(function (data) {
-				var item = data.item;
-				console.log('File upload succeeded! ID: ' + item.id);
-
-				addToList(item);
+	Vue.component('upload-list', {
+		template:`<div>
+		<h2>Uploaded File List:</h2>
+		<ul>
+			<upload-list-item v-for="item of items" v-bind:item="item"></upload-list-item>
+		</ul>
+		</div>`,
+		data() {
+			return {
+				items: []
+			}
+		},
+		methods: {
+			addToList(item) {
+				this.items.push(item);
+				
+				// TODO: immutable ?
+				//this.items = [...this.items, item];
+			},
+			removeFromList(item) {
+				// TODO:
+			}
+		},
+		mounted() {
+			// load all current file-uploads
+			fetch('/api/fileupload/list', {
+				credentials: 'same-origin',
+				cache: 'no-cache',
 			})
-			.fail(function (jqXHR, textStatus) {
-				console.error('The file was not uploaded to the server. Here is the error message from the server:');
-				console.error('Server status: ' + jqXHR.status);
-				console.error('Server message: ' + jqXHR.statusText);
+				.then(r => {
+					if (!r.ok) return Promise.reject('failed');
+					return r.json();
+				})
+				.then(data => {
+					var items = data.items;
+					items.forEach(item => this.addToList(item));
+				})
+				.catch(function (error) {
+					alert('Failed to list file-uploads - ' + error);
+				});
+		}
+	});
 
-				alert('Failed to connect to the server!');
-			}); 
-	}
-	--}}
+	// https://vuejs.org/v2/guide/ 
+	// https://www.smashingmagazine.com/2018/02/jquery-vue-javascript/ 
+	new Vue({
+		el: '#app',
+	});
+
 </script>
 {{/section}}
