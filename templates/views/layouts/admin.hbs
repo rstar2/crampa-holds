@@ -12,15 +12,68 @@
 	<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
 
 	{{!-- This section allows templates to define custom CSS here --}}
-	{{{_sections.header_css}}}
+	{{{_sections.head_css}}}
     {{!-- This section allows templates to define custom JS here --}}
-	{{{_sections.header_js}}}
+	{{{_sections.head_js}}}
 </head>
 
 <body>
+	<div id="header">
+		<div class="container">
+				<div role="navigation" class="navbar navbar-default">
+					<div class="container-fluid">
+						<div class="navbar-header">
+							<button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+							</button>
+							<a href="/" class="navbar-brand">Crampa Holds</a>
+						</div>
+						<div class="collapse navbar-collapse">
+							<ul class="nav navbar-nav navbar-left">
+								{{#each navLinks}}
+									{{#unless isRight}}
+									<li {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
+										<a href="{{ href }}">{{ label }}</a>
+									</li>
+									{{/unless}}
+								{{/each}}
+							</ul>
+							<ul class="nav navbar-nav navbar-right">
+								{{#each navLinks}}
+									{{#if isRight}}
+									<li {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
+										{{!-- Handle the shopping cart differently as it has a badge--}}
+										{{#ifeq key 'shopping-cart'}}
+										{{> shopping-cart session=../session}}
+										{{else}}
+										<a href="{{ href }}">{{ label }}</a>
+										{{/ifeq}}
+									</li>
+									{{/if}}
+								{{/each}}
+
+								{{#if user}}
+								<li><a href="/keystone/signout">Sign Out</a></li>
+								{{else}}
+								<li><a href="/keystone/signin">Sign In</a></li>
+								{{/if}}
+
+								{{> locale-change}}
+							</ul>
+
+							
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+
+	<div id="body">
+		
 	{{{body}}}
 
-	{{!-- TODO: Use a build system (babelify/vuefy/browserify/watchify) to generate the client JS --}}
+	</div>
 
 	{{!-- Polyfill  for the Promise and Fetch APIs --}}
 	<script src="/public/js/polyfill/promise.js"></script>

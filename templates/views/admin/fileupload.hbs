@@ -1,29 +1,41 @@
+
 <div id="app">
 	<upload-item></upload-item>
-	<upload-list v-bind:items="items"></upload-list>
+	<upload-list></upload-list>
 </div>
 
 
 {{#section 'body_js'}}
 <script type="text/javascript">
 
+	// TODO: Use Bootstrap for Vue
+
+    // TODO: Use a build system (babelify/vuefy/browserify/watchify) to generate/bundle the client JS
+
+	// TODO: Use this EventBus Use Vuex/Redux or simple global state
+	let bus = new Vue();
+
+	// TODO: Add Vue transition animations
+
 	Vue.component('upload-item', {
-		template: `<div>
-		<h1>Upload a new file</h1>
-		<form>
-			<div>
-				<input type="file" v-on:change.prevent="$event.target.files.length ? file = $event.target.files[0] : null" />
+		template: `
+		<div>
+			<h1>Upload a new file</h1>
+			<form>
+				<div>
+					<input type="file" v-on:change.prevent="$event.target.files.length ? file = $event.target.files[0] : null" />
+					<br>
+					<label for="file_name">Give the file a name:</label>
+					<input type="text" name="file_name" v-model.trim="name" />
+				</div>
 				<br>
-				<label for="file_name">Give the file a name:</label>
-				<input type="text" name="file_name" v-model.trim="name" />
-			</div>
-			<br>
-			<div>
-				<button type="button" v-on:click.prevent="onUpload" v-bind:disabled="!file">Upload</button>
-			</div>
-		</form>
-		<hr>
-		</div>`,
+				<div>
+					<button type="button" v-on:click.prevent="onUpload" v-bind:disabled="!file">Upload</button>
+				</div>
+			</form>
+			<hr>
+		</div>
+		`,
 		data() {
 			return {
 				name: "Example name",
@@ -51,8 +63,9 @@
 					.then(data => {
 						var item = data.item;
 
-						// TODO: add to list
-						//this.addToList(item);
+						// add to list - the components are not child/parent
+						// so a bus can be used (or Vuex/redux if necessary)
+						bus.$emit("upload-list:add", item);
 					})
 					.catch(err => {
 						alert('Failed to add new file-upload - ' + error);
@@ -63,13 +76,15 @@
 
 	Vue.component('upload-list-item', {
   		props: ['item'],
-  		template: `<li>
+  		template: `
+			<li enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
 				<a v-bind:href="item.file.url" download>\{{ item.name }}</a>
-			     - <a href="" v-on:click.prevent="onRemove(item.id)">Delete</a>
-			</li>`,
+			     - <a href="" v-on:click.prevent="onRemove(item)">Delete</a>
+			</li>
+			`,
 		methods: {
-			onRemove(id) {
-				fetch(`/api/fileupload/${id}/remove`, {
+			onRemove(item) {
+				fetch(`/api/fileupload/${item.id}/remove`, {
 					credentials: 'same-origin',
 					cache: 'no-cache',
 				})
@@ -83,8 +98,8 @@
 							return Promise.reject('failed');
 						}
 						
-						// TODO: remove from list
-						// this.removeFromList(item)
+						// remove from list
+						this.$emit("upload-list:remove", item);
 					})
 					.catch(function (error) {
 						alert('Failed to remove file-upload - ' + error);
@@ -94,12 +109,20 @@
 	});
 
 	Vue.component('upload-list', {
-		template:`<div>
-		<h2>Uploaded File List:</h2>
-		<ul>
-			<upload-list-item v-for="item of items" v-bind:item="item"></upload-list-item>
-		</ul>
-		</div>`,
+		template:`
+		<div>
+			<h2>Uploaded File List:</h2>
+			<ul>
+				<transition appear appear-active-class="animated tada">
+					<upload-list-item
+					v-for="item of items" 
+					v-bind:item="item" 
+					v-on:upload-list:remove="removeFromList">
+				</upload-list-item>
+				</transition>
+			</ul>
+		</div>
+		`,
 		data() {
 			return {
 				items: []
@@ -107,16 +130,28 @@
 		},
 		methods: {
 			addToList(item) {
-				this.items.push(item);
+				// mutate
+				this.items.unshift(item);
 				
-				// TODO: immutable ?
-				//this.items = [...this.items, item];
+				// immutable ?
+				//this.items = [item, ...this.items];
 			},
 			removeFromList(item) {
-				// TODO:
+				// mutate
+				const index = this.items.indexOf(item);
+    			if (index !== -1) {
+        			this.items.splice(index, 1);
+    			}
+
+				// immutable ?
+				//this.items = this.items.filter(el => el !== item);
 			}
 		},
 		mounted() {
+			bus.$on("upload-list:add", item => {
+				this.addToList(item);
+			});
+
 			// load all current file-uploads
 			fetch('/api/fileupload/list', {
 				credentials: 'same-origin',
@@ -143,4 +178,8 @@
 	});
 
 </script>
+{{/section}}
+
+{{#section 'head_css'}}
+<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
 {{/section}}
