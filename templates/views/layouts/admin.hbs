@@ -18,8 +18,10 @@
 </head>
 
 <body>
-	<div id="header">
-		<div class="container">
+	<div id="b">
+		<div id="header">
+			{{!-- TODO: Use Bootstrap for Vue --}}
+			<b-container>
 				<div role="navigation" class="navbar navbar-default">
 					<div class="container-fluid">
 						<div class="navbar-header">
@@ -52,28 +54,26 @@
 									</li>
 									{{/if}}
 								{{/each}}
-
+	
 								{{#if user}}
 								<li><a href="/keystone/signout">Sign Out</a></li>
 								{{else}}
 								<li><a href="/keystone/signin">Sign In</a></li>
 								{{/if}}
-
+	
 								{{> locale-change}}
 							</ul>
-
-							
 						</div>
 					</div>
 				</div>
+			</b-container>
+		</div>
+
+		<div id="body">
+			{{{body}}}
 		</div>
 	</div>
-
-	<div id="body">
-		
-	{{{body}}}
-
-	</div>
+	
 
 	{{!-- Polyfill  for the Promise and Fetch APIs --}}
 	<script src="/public/js/polyfill/promise.js"></script>
@@ -83,6 +83,10 @@
 	<script src="//unpkg.com/vue"></script>
 	{{!-- <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script> --}}
 	<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
+	<script type="text/javascript">
+		new Vue({el: '#b'});
+	</script>
 
 	{{!-- This section allows templates to add custom JS here --}}
 	{{{_sections.body_js}}}

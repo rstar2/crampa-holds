@@ -1,6 +1,9 @@
 
+<b-alert show>File Uploads</b-alert>
+
 <div id="app">
 	<upload-item></upload-item>
+	<hr>
 	<upload-list></upload-list>
 </div>
 
@@ -8,33 +11,26 @@
 {{#section 'body_js'}}
 <script type="text/javascript">
 
-	// TODO: Use Bootstrap for Vue
-
     // TODO: Use a build system (babelify/vuefy/browserify/watchify) to generate/bundle the client JS
 
-	// TODO: Use this EventBus Use Vuex/Redux or simple global state
-	let bus = new Vue();
-
-	// TODO: Add Vue transition animations
+	// TODO: Use this EventBus or Vuex/Redux store or simple global state
+	const bus = new Vue();
 
 	Vue.component('upload-item', {
 		template: `
-		<div>
+		<b-container>
 			<h1>Upload a new file</h1>
 			<form>
 				<div>
-					<input type="file" v-on:change.prevent="$event.target.files.length ? file = $event.target.files[0] : null" />
-					<br>
-					<label for="file_name">Give the file a name:</label>
-					<input type="text" name="file_name" v-model.trim="name" />
+					<!-- Accept all image formats by IANA media type wildcard-->
+					<b-form-file v-model="file" accept="image/*" placeholder="Choose a file..." class="mb-2"></b-form-file>	
+					<b-form-input v-model.trim="name" type="text" placeholder="Enter your name"></b-form-input>
 				</div>
-				<br>
 				<div>
-					<button type="button" v-on:click.prevent="onUpload" v-bind:disabled="!file">Upload</button>
+					<b-button variant="success" v-on:click.prevent="onUpload" v-bind:disabled="!file">Upload</b-button>
 				</div>
 			</form>
-			<hr>
-		</div>
+		</b-container>
 		`,
 		data() {
 			return {
@@ -44,7 +40,7 @@
 		},
 		methods: {
 			onUpload() {
-				var data = new FormData();
+				const data = new FormData();
 				// This is the raw file that was selected
 				data.append('file', this.file);
 				// This is the name of the FileUpload
@@ -61,7 +57,7 @@
 						return r.json();
 					})
 					.then(data => {
-						var item = data.item;
+						const item = data.item;
 
 						// add to list - the components are not child/parent
 						// so a bus can be used (or Vuex/redux if necessary)
@@ -74,77 +70,44 @@
 		}
 	});
 
-	Vue.component('upload-list-item', {
-  		props: ['item'],
-  		template: `
-			<li enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
-				<a v-bind:href="item.file.url" download>\{{ item.name }}</a>
-			     - <a href="" v-on:click.prevent="onRemove(item)">Delete</a>
-			</li>
-			`,
-		methods: {
-			onRemove(item) {
-				fetch(`/api/fileupload/${item.id}/remove`, {
-					credentials: 'same-origin',
-					cache: 'no-cache',
-				})
-					.then(r => {
-						if (!r.ok) return Promise.reject('failed');
-						return r.json();
-					})
-					.then(data => {
-						var success = !!data.success;
-						if (!success) {
-							return Promise.reject('failed');
-						}
-						
-						// remove from list
-						this.$emit("upload-list:remove", item);
-					})
-					.catch(function (error) {
-						alert('Failed to remove file-upload - ' + error);
-					});
-			}
-		}
-	});
-
 	Vue.component('upload-list', {
 		template:`
-		<div>
+		<b-container>
 			<h2>Uploaded File List:</h2>
-			<ul>
-				<transition appear appear-active-class="animated tada">
-					<upload-list-item
+			<b-list-group>
+				<upload-list-item
 					v-for="item of items" 
-					v-bind:item="item" 
-					v-on:upload-list:remove="removeFromList">
+					v-bind:item="item"
+					v-bind:key="item.id" 
+					v-on:upload-list:remove="removeFromList"
+					v-bind:animate="loaded">
 				</upload-list-item>
-				</transition>
-			</ul>
-		</div>
+			</b-list-group>
+		</b-container>
 		`,
 		data() {
 			return {
-				items: []
+				items: [],
+				loaded: false
 			}
 		},
 		methods: {
 			addToList(item) {
 				// mutate
-				this.items.unshift(item);
+				//this.items.unshift(item);
 				
 				// immutable ?
-				//this.items = [item, ...this.items];
+				this.items = [item, ...this.items];
 			},
 			removeFromList(item) {
 				// mutate
-				const index = this.items.indexOf(item);
-    			if (index !== -1) {
-        			this.items.splice(index, 1);
-    			}
+				//const index = this.items.indexOf(item);
+    			//if (index !== -1) {
+        		//	this.items.splice(index, 1);
+    			//}
 
 				// immutable ?
-				//this.items = this.items.filter(el => el !== item);
+				this.items = this.items.filter(el => el !== item);
 			}
 		},
 		mounted() {
@@ -162,8 +125,11 @@
 					return r.json();
 				})
 				.then(data => {
-					var items = data.items;
+					const items = data.items;
 					items.forEach(item => this.addToList(item));
+
+					// this will allow later animation
+					this.$nextTick(() => this.loaded = true);
 				})
 				.catch(function (error) {
 					alert('Failed to list file-uploads - ' + error);
@@ -171,8 +137,45 @@
 		}
 	});
 
-	// https://vuejs.org/v2/guide/ 
-	// https://www.smashingmagazine.com/2018/02/jquery-vue-javascript/ 
+	Vue.component('upload-list-item', {
+  		template: `
+			<transition v-bind:css="animate" enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
+			<b-list-group-item>
+				<a v-bind:href="item.file.url" download>\{{ item.name }}</a>
+			     - <a href="" v-on:click.prevent="onRemove(item)">Delete</a>
+			</b-list-group-item>
+			</transition>
+			`,   // appear appear-active-class="animated tada" 
+		props: {
+			'item' : {},
+			'animate' : {type: Boolean, default: false}
+		},
+		methods: {
+			onRemove(item) {
+				fetch(`/api/fileupload/${item.id}/remove`, {
+					credentials: 'same-origin',
+					cache: 'no-cache',
+				})
+					.then(r => {
+						if (!r.ok) return Promise.reject('failed');
+						return r.json();
+					})
+					.then(data => {
+						const success = data.success === true;
+						if (!success) {
+							return Promise.reject('failed');
+						}
+						
+						// remove from list
+						this.$emit("upload-list:remove", item);
+					})
+					.catch(function (error) {
+						alert('Failed to remove file-upload - ' + error);
+					});
+			}
+		}
+	});
+
 	new Vue({
 		el: '#app',
 	});
