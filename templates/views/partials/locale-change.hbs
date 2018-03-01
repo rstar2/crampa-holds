@@ -1,11 +1,11 @@
-<li class="locales dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+<b-nav-item-dropdown right="{{right}}">
+	<!-- Using button-content slot -->
+	<template slot="button-content">
 		<span class="lang-sm" lang="{{locale}}"></span>{{!--  {{toUpperCase locale}} --}}
 		<span class="caret"></span>
-	</a>
-	<ul class="dropdown-menu" role="menu">
-		{{#each getLocales}}
-			<li><a href="/locales/{{this}}"><span class="lang-sm" lang="{{this}}"></span> {{toUpperCase this}} </a></li>
-		{{/each}}
-	</ul>
-</li>
+	</template>
+
+	{{#each getLocales}}
+		<b-dropdown-item href="/locales/{{this}}"><span class="lang-sm" lang="{{this}}"></span> {{toUpperCase this}}</b-dropdown-item>
+	{{/each}}
+</b-nav-item-dropdown>

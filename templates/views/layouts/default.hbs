@@ -6,7 +6,16 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>Crampa Holds</title>
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-		<link href="/public/styles/site{{ifx (is env '==' 'production') '.min' ''}}.css" rel="stylesheet">
+
+		{{!-- Load the Site styles - Bootstrap and custom ones --}}
+		{{!-- <link href="/public/styles/site{{ifx (is env '==' 'production') '.min' ''}}.css" rel="stylesheet"> --}}
+
+		{{!-- TODO: Get Bootstrap 4 and BootstrapVue locally and access them with '/public/styles/xxx'
+		      The Less/Sass middleware will compile them 
+		 --}}
+		<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
+		<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+
 		
 		{{!-- http://usrz.github.io/bootstrap-languages/ --}}
 		<link href="/public/styles/lib/languages.min.css" rel="stylesheet">
@@ -30,104 +39,119 @@
 
 	</head>
 	<body>
-		<div id="header">
-			<div class="container">
-				<div role="navigation" class="navbar navbar-default">
-					<div class="container-fluid">
-						<div class="navbar-header">
-							<button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-							</button>
-							<a href="/" class="navbar-brand">Crampa Holds</a>
-						</div>
-						<div class="collapse navbar-collapse">
-							<ul class="nav navbar-nav navbar-left">
-								{{#each navLinks}}
-									{{#unless isRight}}
-									<li {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
-										<a href="{{ href }}">{{ label }}</a>
-									</li>
-									{{/unless}}
-								{{/each}}
-							</ul>
-							<ul class="nav navbar-nav navbar-right">
-								{{#each navLinks}}
-									{{#if isRight}}
-									<li {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
-										{{!-- Handle the shopping cart differently as it has a badge--}}
-										{{#ifeq key 'shopping-cart'}}
-										{{> shopping-cart session=../session}}
-										{{else}}
-										<a href="{{ href }}">{{ label }}</a>
-										{{/ifeq}}
-									</li>
-									{{/if}}
-								{{/each}}
+		<div id="b">
 
-								{{#if user}}
-								<li><a href="/keystone/signout">Sign Out</a></li>
+			<div id="header">
+				<b-navbar toggleable="md" type="dark" variant="info">
+				<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+				<b-navbar-brand href="/">Crampa Holds</b-navbar-brand>
+			
+				<b-collapse is-nav id="nav_collapse">
+					<b-navbar-nav>
+						{{#each navLinks}}
+							{{#unless isRight}}
+								<b-nav-item href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>{{ label }}</b-nav-item>
+							{{/unless}}
+						{{/each}}
+					</b-navbar-nav>
+			
+					<!-- Right aligned nav items -->
+					<b-navbar-nav class="ml-auto">
+
+						{{#each navLinks}}
+							{{#if isRight}}
+								{{#ifeq key 'shopping-cart'}}
+									{{!-- Handle the shopping cart differently as it has a badge--}}
+									{{> shopping-cart session=../session}}
 								{{else}}
-								<li><a href="/keystone/signin">Sign In</a></li>
-								{{/if}}
+									<b-nav-item href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>{{ label }}</b-nav-item>
+								{{/ifeq}}
+							{{/if}}
+						{{/each}}
+									
+						<b-nav-item-dropdown right text="User">
+							{{#if user}}
+								{{!-- <b-dropdown-item href="/keystone/profile">Profile</b-dropdown-item> --}}
+								<b-dropdown-item href="/keystone/signout">Sign Out</b-dropdown-item>
+							{{else}}
+								<b-dropdown-item href="/keystone/signin">Sign In</b-dropdown-item>
+							{{/if}}
+						</b-nav-item-dropdown>
 
-								{{> locale-change}}
-							</ul>
-
-							
-						</div>
-					</div>
-				</div>
+						{{> locale-change right=true}}
+					</b-navbar-nav>
+			
+				</b-collapse>
+				</b-navbar>
 			</div>
-		</div>
-		<div id="body">
-			<!--
-				Flash messages allow you to display once-off status messages to users, e.g. form
-				validation errors, success messages, etc
-			-->
-			{{#if messages}}
-			<div id="flash-messages" class="container">
-				{{#if messages.info}}
-				<div class="alert alert-info">
+
+			<div id="body">
+				<!--
+					Flash messages allow you to display once-off status messages to users, e.g. form
+					validation errors, success messages, etc
+				-->
+				{{#if messages}}
+				<b-container id="flash-messages" class="my-3">
+					{{#if messages.info}}
+					<b-alert show dismissible>
 						{{{flashMessages messages.info}}}
-				</div>
-				{{/if}}
-				{{#if messages.success}}
-				<div class="alert alert-success">
+					</b-alert>
+					{{/if}}
+
+					{{#if messages.success}}
+					<b-alert show variant="success" dismissible>
 						{{{flashMessages messages.success}}}
-				</div>
-				{{/if}}
-				{{#if messages.warning}}
-				<div class="alert alert-warning">
+					</b-alert>
+					{{/if}}
+
+					{{#if messages.warning}}
+					<b-alert show variant="warning">
 						{{{flashMessages messages.warning}}}
-				</div>
-				{{/if}}
-				{{#if messages.error}}
-				<div class="alert alert-danger">
+					</b-alert>
+					{{/if}}
+
+					{{#if messages.error}}
+					<b-alert show variant="danger">
 						{{{flashMessages messages.error}}}
-				</div>
+					</b-alert>
+					{{/if}}
+				</b-container>
 				{{/if}}
+
+				<!-- The content block should contain the body of your template's content-->
+				{{{body}}}
 			</div>
-			{{/if}}
-			<!-- The content block should contain the body of your template's content-->
-			{{{body}}}
-		</div>
-		<div class="container">
+
 			<div id="footer">
-				<p>Designed By Rumen Neshev. Powered by <a href="http://keystonejs.com" target="_blank">KeystoneJS</a>.</p>
+				<b-container>
+					<p>Designed By Rumen Neshev. Powered by <a href="http://keystonejs.com" target="_blank">KeystoneJS</a>.</p>
+				</b-container>
 			</div>
+	
 		</div>
 		{{!--
 			//- jQuery 1.11.3 is included by default, and required by both Bootstrap
 			//- and the KeystoneJS Content Editor. If you are not targeting IE8,
 			//- you can upgrade to 2.1.4 (also bundled) for better performance.
 		--}}
-		<script src="/public/js/jquery/jquery-1.11.3.min.js"></script>
+		{{!-- <script src="/public/js/jquery/jquery-1.11.3.min.js"></script> --}}
 		{{!--
 			//- Customize which Bootstrap javascript files are served by including
 			//- them specifically here, instead of bootstrap-3.3.5.min.js
 		--}}
-		<script src="/public/js/bootstrap/bootstrap-3.3.5.min.js"></script>
+		{{!-- <script src="/public/js/bootstrap/bootstrap-3.3.5.min.js"></script> --}}
+
+		{{!-- Use Vue and BootstrapVue --}}
+		<script src="//unpkg.com/lodash"></script>
+		<script src="//unpkg.com/vue"></script>
+		<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+		<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+		
+		<script type="text/javascript">
+			new Vue({el: '#b'});
+		</script>
+
+
 		{{{isAdminEditorJS user}}}
 
         {{!-- This section allows templates to add custom JS here --}}

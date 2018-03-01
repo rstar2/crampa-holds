@@ -1,4 +1,5 @@
-<a href="{{ href }}">
+<b-nav-item href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
 	<i class="glyphicon glyphicon-shopping-cart">{{ label }}</i>
 	<span class="badge">{{ session.cart.totalQty }}</span>
-</a>
+</b-nav-item>
+								
