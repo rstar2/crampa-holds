@@ -1,4 +1,4 @@
-<b-nav-item-dropdown right="{{right}}">
+<b-nav-item-dropdown {{ifx right 'right' ''}}>
 	<!-- Using button-content slot -->
 	<template slot="button-content">
 		<span class="lang-sm" lang="{{locale}}"></span>{{!--  {{toUpperCase locale}} --}}

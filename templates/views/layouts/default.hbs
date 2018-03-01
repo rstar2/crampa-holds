@@ -37,14 +37,35 @@
         {{!-- This section allows templates to define custom JS here --}}
 		{{{_sections.head_js}}}
 
-		{{!-- TODO: Add spinner why VueJS is compiling bootstrapping --}}
 		<style>
   			[v-cloak] {
     			display: none;
   			}
 		</style>
+
+		<script type="text/javascript">
+			function __loading(value) {
+				var loading = document.getElementById("loading")
+				if (loading) {
+					console.log("Loading", value);
+					if (value === false) {
+						loading.parentElement.remove();
+					} else if (value === true) {
+						loading.style.width = "30%";
+					} else if (value instanceof Number || typeof value === "number") {
+						loading.style.width = value + "%";
+					}
+				}
+			}
+		</script>
 	</head>
 	<body>
+		<!-- Add a simple Bootstrap loading-progress - no need for any fancy plugins/libraries -->
+		<div class="progress" style="height: 3px; width: 100%; z-index: 100;">
+  			<div id="loading" class="progress-bar" role="progressbar"></div>
+		</div>
+		<script type="text/javascript">__loading(true);</script>
+
 		<div id="b" v-cloak>
 
 			<div id="header">
@@ -135,6 +156,8 @@
 			</div>
 	
 		</div>
+		<script type="text/javascript">__loading(40);</script>
+
 		{{!--
 			//- jQuery 1.11.3 is included by default, and required by both Bootstrap
 			//- and the KeystoneJS Content Editor. If you are not targeting IE8,
@@ -147,22 +170,39 @@
 		--}}
 		{{!-- <script src="/public/js/bootstrap/bootstrap-3.3.5.min.js"></script> --}}
 
+
 		{{!-- Use Vue and BootstrapVue --}}
 		<script src="//unpkg.com/lodash"></script>
+		<script type="text/javascript">__loading(50);</script>
 		<script src="//unpkg.com/vue"></script>
+		<script type="text/javascript">__loading(60);</script>
 		<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+		<script type="text/javascript">__loading(70);</script>
 		<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-		
-		<script type="text/javascript">
-			new Vue({el: '#b'});
-		</script>
+		<script type="text/javascript">__loading(80);</script>
 
+		<script type="text/javascript">
+			new Vue({
+				el: '#b',
+				mounted() {
+				},
+				created() {
+				}
+			});
+		</script>
+		<script type="text/javascript">__loading(85);</script>
 
 		{{{isAdminEditorJS user}}}
+
+		<script type="text/javascript">__loading(90);</script>
 
         {{!-- This section allows templates to add custom JS here --}}
 		{{{_sections.body_js}}}
 
+		<script type="text/javascript">__loading(95);</script>
+
 		{{> google-analytics}}
+
+		<script type="text/javascript">__loading(false);</script>
 	</body>
 </html>
