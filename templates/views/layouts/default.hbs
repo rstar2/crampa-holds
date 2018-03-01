@@ -37,9 +37,15 @@
         {{!-- This section allows templates to define custom JS here --}}
 		{{{_sections.head_js}}}
 
+		{{!-- TODO: Add spinner why VueJS is compiling bootstrapping --}}
+		<style>
+  			[v-cloak] {
+    			display: none;
+  			}
+		</style>
 	</head>
 	<body>
-		<div id="b">
+		<div id="b" v-cloak>
 
 			<div id="header">
 				<b-navbar toggleable="md" type="dark" variant="info">
