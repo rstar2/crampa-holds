@@ -8,17 +8,23 @@
 	<title>Crampa Holds - Admin</title>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
-	<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
-	<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+	{{!-- Load the Site styles - Bootstrap and custom ones --}}
+	<link href="/public/styles/build.boot.css" rel="stylesheet">
 
 	{{!-- This section allows templates to define custom CSS here --}}
 	{{{_sections.head_css}}}
     {{!-- This section allows templates to define custom JS here --}}
 	{{{_sections.head_js}}}
+
+	<style>
+  		[v-cloak] {
+    		display: none;
+  		}
+	</style>
 </head>
 
 <body>
-	<div id="b">
+	<div id="app-main" v-cloak>
 		<div id="header">
 			<b-navbar toggleable="md" type="dark" variant="info">
 				<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
@@ -26,33 +32,11 @@
 			
 				<b-collapse is-nav id="nav_collapse">
 					<b-navbar-nav>
-						{{#each navLinks}}
-							{{#unless isRight}}
-								<b-nav-item href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>{{ label }}</b-nav-item>
-							{{/unless}}
-						{{/each}}
 					</b-navbar-nav>
 			
 					<!-- Right aligned nav items -->
 					<b-navbar-nav class="ml-auto">
-									
-						<b-nav-item-dropdown text="Lang" right>
-							<b-dropdown-item href="#">EN</b-dropdown-item>
-							<b-dropdown-item href="#">ES</b-dropdown-item>
-							<b-dropdown-item href="#">RU</b-dropdown-item>
-							<b-dropdown-item href="#">FA</b-dropdown-item>
-						</b-nav-item-dropdown>
-			
-						<b-nav-item-dropdown right>
-							<!-- Using button-content slot -->
-							<template slot="button-content">
-								<em>User</em>
-							</template>
-							<b-dropdown-item href="#">Profile</b-dropdown-item>
-							<b-dropdown-item href="#">Signout</b-dropdown-item>
-						</b-nav-item-dropdown>
 					</b-navbar-nav>
-			
 				</b-collapse>
 			</b-navbar>
 		</div>
@@ -61,20 +45,9 @@
 			{{{body}}}
 		</div>
 	</div>
-	
 
-	<script src="//unpkg.com/lodash"></script>
-	<script src="//unpkg.com/vue"></script>
-	<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
-	<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-
-	{{!-- Polyfill  for the Promise and Fetch APIs --}}
-	{{!-- <script src="/public/js/polyfill/promise.js"></script> --}}
-	<script src="/public/js/polyfill/fetch.js"></script>
-
-	<script type="text/javascript">
-		new Vue({el: '#b'});
-	</script>
+	<script src="/public/js/build.vendor.js"></script>
+	<script src="/public/js/build.boot.js"></script>
 
 	{{!-- This section allows templates to add custom JS here --}}
 	{{{_sections.body_js}}}

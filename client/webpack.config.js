@@ -1,18 +1,23 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// TODO: Add copy plugin to copy all needed assets ?
 // TODO: Add multiple build files (multiple entries - this is not a real SPA)
 // TODO: Add commons-chunk extract
 // TODO: Add vendor extract
+// TODO: Add Less/Sass
 
 module.exports = {
-	entry: './src/main.js',
+	entry: {
+		boot: './src/boot.js',
+		admin_fileupload: './src/admin/fileupload.js',
+	},
 	output: {
 		path: path.resolve(__dirname, '../public/js'),
 		publicPath: '/public/js',
-		filename: 'build.js',
+		filename: 'build.[name].js',
+		chunkFilename: 'chunk.[id].[chunkhash].js',
 	},
 	module: {
 		rules: [
@@ -69,7 +74,37 @@ module.exports = {
 	performance: {
 		hints: false,
 	},
-	plugins: [new ExtractTextPlugin('../styles/build.css')],
+	plugins: [
+		// split vendor js into its own file
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'vendor',
+			minChunks: function (module, count) {
+				// any required modules inside node_modules are extracted to vendor
+				return (
+					module.resource &&
+					/\.js$/.test(module.resource) &&
+					module.resource.indexOf(
+						path.join(__dirname, './node_modules')
+					) === 0
+				);
+			},
+		}),
+
+		// extract css into its own file
+		new ExtractTextPlugin({
+			// filename: utils.assetsPath('css/[name].[contenthash].css')
+			filename: '../styles/build.[name].css',
+		}),
+
+		// copy custom static files
+		new CopyWebpackPlugin([
+			{
+				from: path.resolve(__dirname, './src/static'),
+				to: '../',
+				ignore: ['.*'],   //ignore dot-files like .gitkeep
+			},
+		]),
+	],
 	devtool: '#eval-source-map',
 };
 

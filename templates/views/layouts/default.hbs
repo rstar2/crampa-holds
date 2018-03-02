@@ -8,7 +8,7 @@
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
 		{{!-- Load the Site styles - Bootstrap and custom ones --}}
-		<link href="/public/styles/build{{ifx (is env '==' 'production') '.min' ''}}.css" rel="stylesheet">
+		<link href="/public/styles/build.boot.css" rel="stylesheet">
 		
 		{{!-- http://usrz.github.io/bootstrap-languages/ --}}
 		<link href="/public/styles/lib/languages.min.css" rel="stylesheet">
@@ -59,49 +59,47 @@
 		</div>
 		<script type="text/javascript">__loading(true);</script>
 
-		<div id="app" >
+		<div id="app-main" v-cloak>
 
 			<div id="header">
 				<b-navbar toggleable="md" type="dark" variant="info">
-				<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-				<b-navbar-brand href="/">Crampa Holds</b-navbar-brand>
-			
-				<b-collapse is-nav id="nav_collapse">
-					<b-navbar-nav>
-						{{#each navLinks}}
-							{{#unless isRight}}
-								<b-nav-item href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>{{ label }}</b-nav-item>
-							{{/unless}}
-						{{/each}}
-					</b-navbar-nav>
-			
-					<!-- Right aligned nav items -->
-					<b-navbar-nav class="ml-auto">
+					<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+					<b-navbar-brand href="/">Crampa Holds</b-navbar-brand>
 
-						{{#each navLinks}}
-							{{#if isRight}}
-								{{#ifeq key 'shopping-cart'}}
-									{{!-- Handle the shopping cart differently as it has a badge--}}
-									{{> shopping-cart session=../session}}
-								{{else}}
+					<b-collapse is-nav id="nav_collapse">
+						<b-navbar-nav>
+							{{#each navLinks}}
+								{{#unless isRight}}
 									<b-nav-item href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>{{ label }}</b-nav-item>
-								{{/ifeq}}
-							{{/if}}
-						{{/each}}
-									
-						<b-nav-item-dropdown right text="User">
-							{{#if user}}
-								{{!-- <b-dropdown-item href="/keystone/profile">Profile</b-dropdown-item> --}}
-								<b-dropdown-item href="/keystone/signout">Sign Out</b-dropdown-item>
-							{{else}}
-								<b-dropdown-item href="/keystone/signin">Sign In</b-dropdown-item>
-							{{/if}}
-						</b-nav-item-dropdown>
+								{{/unless}}
+							{{/each}}
+						</b-navbar-nav>
 
-						{{> locale-change right=true}}
-					</b-navbar-nav>
-			
-				</b-collapse>
+						<!-- Right aligned nav items -->
+						<b-navbar-nav class="ml-auto">
+							{{#each navLinks}}
+								{{#if isRight}}
+									{{#ifeq key 'shopping-cart'}}
+										{{!-- Handle the shopping cart differently as it has a badge--}}
+										{{> shopping-cart session=../session}}
+									{{else}}
+										<b-nav-item href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>{{ label }}</b-nav-item>
+									{{/ifeq}}
+								{{/if}}
+							{{/each}}
+									
+							<b-nav-item-dropdown right text="User">
+								{{#if user}}
+									{{!-- <b-dropdown-item href="/keystone/profile">Profile</b-dropdown-item> --}}
+									<b-dropdown-item href="/keystone/signout">Sign Out</b-dropdown-item>
+								{{else}}
+									<b-dropdown-item href="/keystone/signin">Sign In</b-dropdown-item>
+								{{/if}}
+							</b-nav-item-dropdown>
+
+							{{> locale-change right=true}}
+						</b-navbar-nav>
+					</b-collapse>
 				</b-navbar>
 			</div>
 
@@ -151,8 +149,10 @@
 		</div>
 		<script type="text/javascript">__loading(40);</script>
 
-		<script src="/public/js/build.js"></script>
+		<script src="/public/js/build.vendor.js"></script>
 		<script type="text/javascript">__loading(80);</script>
+		<script src="/public/js/build.boot.js"></script>
+		<script type="text/javascript">__loading(85);</script>
 
 		{{{isAdminEditorJS user}}}
 
