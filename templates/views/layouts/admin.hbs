@@ -9,7 +9,7 @@
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
 	{{!-- Load the Site styles - Bootstrap and custom ones --}}
-	<link href="/public/styles/build.boot.css" rel="stylesheet">
+	<link href="/public/styles/build.boot.css?v={{version}}" rel="stylesheet">
 
 	{{!-- This section allows templates to define custom CSS here --}}
 	{{{_sections.head_css}}}
@@ -24,7 +24,7 @@
 </head>
 
 <body>
-	<div id="app-main" v-cloak>
+	<div id="app-boot" v-cloak>
 		<div id="header">
 			<b-navbar toggleable="md" type="dark" variant="info">
 				<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
@@ -33,9 +33,16 @@
 				<b-collapse is-nav id="nav_collapse">
 					<b-navbar-nav>
 					</b-navbar-nav>
-			
+				
 					<!-- Right aligned nav items -->
 					<b-navbar-nav class="ml-auto">
+						<b-nav-item-dropdown right text="User">
+							{{#if user}} 
+							<b-dropdown-item href="/keystone/signout">Sign Out</b-dropdown-item>
+							{{else}}
+							<b-dropdown-item href="/keystone/signin">Sign In</b-dropdown-item>
+							{{/if}}
+						</b-nav-item-dropdown>
 					</b-navbar-nav>
 				</b-collapse>
 			</b-navbar>
@@ -46,8 +53,8 @@
 		</div>
 	</div>
 
-	<script src="/public/js/build.vendor.js"></script>
-	<script src="/public/js/build.boot.js"></script>
+	<script src="/public/js/build.vendor.js?v={{version}}"></script>
+	<script src="/public/js/build.boot.js?v={{version}}"></script>
 
 	{{!-- This section allows templates to add custom JS here --}}
 	{{{_sections.body_js}}}

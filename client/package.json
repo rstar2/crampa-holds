@@ -1,15 +1,16 @@
 {
   "name": "client",
-  "description": "A Vue.js project",
+  "description": "A Vue.js client project",
   "version": "1.0.0",
   "author": "Rumen Neshev <rstar2@abv.bg>",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack --watch --hot",
+    "dev": "cross-env NODE_ENV=development webpack --watch",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "animate.css": "^3.6.1",
     "bootstrap": "^4.0.0",
     "bootstrap-vue": "^2.0.0-rc.1",
     "copy-webpack-plugin": "^4.5.0",

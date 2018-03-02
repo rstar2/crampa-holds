@@ -2,10 +2,10 @@
 <div id="app-admin-fileupload">
 </div>
 
-{{#section 'body_js'}}
-	<script src="/public/js/build.admin_fileupload.js"></script>
+{{#section 'head_css'}}
+	<link href="/public/styles/build.admin_fileupload.css?v={{version}}" rel="stylesheet">
 {{/section}}
 
-{{#section 'head_css'}}
-	<link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+{{#section 'body_js'}}
+	<script src="/public/js/build.admin_fileupload.js?v={{version}}"></script>
 {{/section}}

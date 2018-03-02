@@ -8,7 +8,7 @@
 		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
 		{{!-- Load the Site styles - Bootstrap and custom ones --}}
-		<link href="/public/styles/build.boot.css" rel="stylesheet">
+		<link href="/public/styles/build.boot.css?v={{version}}" rel="stylesheet">
 		
 		{{!-- http://usrz.github.io/bootstrap-languages/ --}}
 		<link href="/public/styles/lib/languages.min.css" rel="stylesheet">
@@ -59,7 +59,7 @@
 		</div>
 		<script type="text/javascript">__loading(true);</script>
 
-		<div id="app-main" v-cloak>
+		<div id="app-boot" v-cloak>
 
 			<div id="header">
 				<b-navbar toggleable="md" type="dark" variant="info">
@@ -149,9 +149,9 @@
 		</div>
 		<script type="text/javascript">__loading(40);</script>
 
-		<script src="/public/js/build.vendor.js"></script>
+		<script src="/public/js/build.vendor.js?v={{version}}"></script>
 		<script type="text/javascript">__loading(80);</script>
-		<script src="/public/js/build.boot.js"></script>
+		<script src="/public/js/build.boot.js?v={{version}}"></script>
 		<script type="text/javascript">__loading(85);</script>
 
 		{{{isAdminEditorJS user}}}

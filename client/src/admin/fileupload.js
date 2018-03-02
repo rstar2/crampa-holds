@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import App from './FileUpload.vue';
 
+import 'animate.css';
+
 const bus = new Vue();
 
 Vue.component('upload-item', {
