@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// TODO: Add multiple build files (multiple entries - this is not a real SPA)
 // TODO: Add commons-chunk extract
 // TODO: Add vendor extract
 // TODO: Add Less/Sass
@@ -92,14 +91,13 @@ module.exports = {
 
 		// extract css into its own file
 		new ExtractTextPlugin({
-			// filename: utils.assetsPath('css/[name].[contenthash].css')
 			filename: '../styles/build.[name].css',
 		}),
 
 		// copy custom static files
 		new CopyWebpackPlugin([
 			{
-				from: path.resolve(__dirname, './src/static'),
+				from: path.resolve(__dirname, './static'),
 				to: '../',
 				ignore: ['.*'],   //ignore dot-files like .gitkeep
 			},
