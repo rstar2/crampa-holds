@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = {
+const options = {
 	entry: {
 		boot: './src/boot.js',
 		site: './src/site/index.less',
@@ -82,6 +82,22 @@ module.exports = {
 		hints: false,
 	},
 	plugins: [
+		// extract the 'boot' entry, the one containing Vue, Bootstrap and BootstrapVue as
+		// it will be included in every page
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'boot',
+			// minChunks: function (module, count) {
+			//   // any required modules inside node_modules are extracted to vendor
+			//   return (
+			// 	module.resource &&
+			// 	/\.js$/.test(module.resource) &&
+			// 	module.resource.indexOf(
+			// 	  path.join(__dirname, '../node_modules')
+			// 	) === 0
+			//   )
+			// }
+		}),
+
 		// extract CSS nad LESS into own files
 		new ExtractTextPlugin({ filename: '../styles/build.[name].css' }),
 
@@ -98,22 +114,34 @@ module.exports = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-	module.exports.devtool = '#source-map';
-	// http://vue-loader.vuejs.org/en/workflow/production.html
-	module.exports.plugins = (module.exports.plugins || []).concat([
+	// mp source-map
+	options.devtool = false;
+
+
+	options.plugins = (options.plugins || []).concat([
+		// http://vue-loader.vuejs.org/en/workflow/production.html
+		// https://vuejs.org/v2/guide/deployment.html
+		// Run Vue.js in production mode - less warnings and etc...
 		new webpack.DefinePlugin({
 			'process.env': {
 				NODE_ENV: '"production"',
 			},
 		}),
+
+		// Uglify and compress
 		new webpack.optimize.UglifyJsPlugin({
-			sourceMap: true,
+			sourceMap: !!options.devtool,
 			compress: {
 				warnings: false,
 			},
 		}),
+
+		// The LoaderOptionsPlugin is unlike other plugins in that
+		// it is built for migration from webpack 1 to 2
 		new webpack.LoaderOptionsPlugin({
 			minimize: true,
 		}),
 	]);
 }
+
+module.exports = options;
