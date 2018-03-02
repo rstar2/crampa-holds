@@ -3,20 +3,16 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// TODO: Add commons-chunk extract
-// TODO: Add vendor extract
-// TODO: Add Less/Sass
-
 module.exports = {
 	entry: {
 		boot: './src/boot.js',
+		site: './src/site/index.less',
 		admin_fileupload: './src/admin/fileupload.js',
 	},
 	output: {
 		path: path.resolve(__dirname, '../public/js'),
 		publicPath: '/public/js',
 		filename: 'build.[name].js',
-		chunkFilename: 'chunk.[id].[chunkhash].js',
 	},
 	module: {
 		rules: [
@@ -29,6 +25,8 @@ module.exports = {
 					// other vue-loader options go here
 				},
 			},
+
+
 			// {
 			// 	test: /\.css$/,
 			// 	use: [
@@ -44,10 +42,20 @@ module.exports = {
 				}),
 			},
 			{
+				test: /\.less$/,
+				use: ExtractTextPlugin.extract({
+					// use style-loader in development
+					fallback: 'style-loader',
+					use: ['css-loader', 'less-loader'],
+				}),
+			},
+
+			{
 				test: /\.js$/,
 				loader: 'babel-loader',
 				exclude: /node_modules/,
 			},
+
 			{
 				test: /\.(png|jpg|gif|svg)$/,
 				loader: 'file-loader',
@@ -74,25 +82,8 @@ module.exports = {
 		hints: false,
 	},
 	plugins: [
-		// split vendor js into its own file
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'vendor',
-			minChunks: function (module, count) {
-				// any required modules inside node_modules are extracted to vendor
-				return (
-					module.resource &&
-					/\.js$/.test(module.resource) &&
-					module.resource.indexOf(
-						path.join(__dirname, './node_modules')
-					) === 0
-				);
-			},
-		}),
-
-		// extract css into its own file
-		new ExtractTextPlugin({
-			filename: '../styles/build.[name].css',
-		}),
+		// extract CSS nad LESS into own files
+		new ExtractTextPlugin({ filename: '../styles/build.[name].css' }),
 
 		// copy custom static files
 		new CopyWebpackPlugin([
