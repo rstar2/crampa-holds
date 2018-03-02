@@ -7,7 +7,7 @@ const options = {
 	entry: {
 		boot: './src/boot.js',
 		site: './src/site/index.less',
-		admin_fileupload: './src/admin/fileupload.js',
+		admin_fileupload: './src/admin/fileupload',
 	},
 	output: {
 		path: path.resolve(__dirname, '../public/js'),
