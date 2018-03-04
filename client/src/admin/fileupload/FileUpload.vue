@@ -1,5 +1,5 @@
 <template>
-  	<div id="app-admin-fileupload">
+  	<div>
     	<upload-new></upload-new>
 		<hr>
 		<upload-list></upload-list>

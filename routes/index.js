@@ -68,17 +68,17 @@ exports = module.exports = function (app) {
 
 	app.get('/page/:page?', routes.views.page);
 
-	// NOTE: To protect a route so that only admins can see it, use the requireAuth middleware:
-	// app.get('/protected', middleware.requireAuth(keystone), routes.views.protected);
-
+	// Shop related pages
 	app.get('/shop', routes.views.shop.index);
 	app.get('/shop/product/:product', routes.views.shop.product);
 	app.get('/shop/cart', routes.views.shop.cart);
 	app.get('/shop/checkout', routes.views.shop.checkout);
 	app.post('/shop/checkout', middleware.requireAuth(keystone), routes.views.shop.checkout);
 
-	// attach a custom Admin page - for uploading files and etc...
-	app.get('/admin/fileupload', routes.views.admin.fileupload);
+	app.get('/test/:page', routes.views.test);
+
+	// Custom Admin related pages (for uploading files and etc...)
+	app.get('/admin/:page?', routes.views.admin);
 
 	const apiProtected = [
 		// attach res.apiResponse() ...  methods

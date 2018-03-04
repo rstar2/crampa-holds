@@ -5,9 +5,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const options = {
 	entry: {
+		// this is for bundling only Vue, Bootstrap and BootstrapVue
 		boot: './src/boot.js',
+
+		// this is for bundling custom CSS/LESS files for the main site
 		site: './src/site/index.less',
-		admin_fileupload: './src/admin/fileupload',
+
+		// this is bundle for the custom admin SPA pages
+		admin: './src/admin',
 	},
 	output: {
 		path: path.resolve(__dirname, '../public/js'),
