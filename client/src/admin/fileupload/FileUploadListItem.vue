@@ -16,26 +16,9 @@ export default {
   },
   methods: {
     onRemove(item) {
-      fetch(`/api/fileupload/${item.id}/remove`, {
-        credentials: "same-origin",
-        cache: "no-cache"
-      })
-        .then(r => {
-          if (!r.ok) return Promise.reject("failed");
-          return r.json();
-        })
-        .then(data => {
-          const success = data.success === true;
-          if (!success) {
-            return Promise.reject("failed");
-          }
-
-          // remove from list
-          this.$emit("upload-list:remove", item);
-        })
-        .catch(function(error) {
-          alert("Failed to remove file-upload - " + error);
-        });
+		// emit event to the parent - let it handle the action for removing and later updating the store
+		// e.g I'd prefer this component to stay as presentation only
+		this.$emit("upload-list:remove", item);
     }
   }
 };

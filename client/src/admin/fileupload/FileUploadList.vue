@@ -1,12 +1,12 @@
 <template>
  	 <b-container>
-		<h2>Uploaded File List:</h2>
+		<h2>List: <span>{{ count }}</span></h2>
 		<b-list-group>
 			<upload-list-item
 				v-for="item of items" 
 				v-bind:item="item"
 				v-bind:key="item.id" 
-				v-on:upload-list:remove="removeFromList"
+				v-on:upload-list:remove="removeItem"
 				v-bind:animate="loaded">
 			</upload-list-item>
 		</b-list-group>
@@ -14,9 +14,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import FileUploadListItem from "./FileUploadListItem.vue";
-
-import { bus } from "./bus";
 
 export default {
   components: {
@@ -24,47 +23,55 @@ export default {
   },
   data() {
     return {
-      items: [],
       loaded: false
     };
   },
+  // could use straight the $store in the template
+  // but with computed properties the template is agnostic
+  // whether the data is prom props, data or computed
+  // One way is to access directly directly the store, BUT BETTER is to use the getters
+  // euther explicitly if  not so many, or using the mapGetters utility
+  // 1:
+  //   computed: {
+  //     items() {
+  //       return this.$store.state.fileuploads;
+  //     },
+  //     count() {
+  //       // access the getter 'fileuploadsCount' from the state
+  //       return this.$store.state.fileuploads.length;
+  //     }
+  //   },
+  // 2.
+  //   computed: {
+  //     items() {
+  //       return this.$store.state.getters.fileuploads;
+  //     },
+  //     count() {
+  //       // access the getter 'fileuploadsCount' from the state
+  //       return this.$store.state.getters.fileuploadsCount;
+  //     }
+  //   },
+  // 3. Easisest - save/use the names of the getters
+  //   computed: mapGetters(["fileuploads", "fileuploadsCount"]),
+  // 4. use different computed-properties names
+  computed: mapGetters({ items: "fileuploads", count: "fileuploadsCount" }),
+
   methods: {
-    addToList(item) {
-      // mutate
-      this.items.unshift(item);
-    },
-    removeFromList(item) {
-      // mutate
-      const index = this.items.indexOf(item);
-      if (index !== -1) {
-      	this.items.splice(index, 1);
-      }
+    removeItem(item) {
+      this.$store.dispatch("removeFileUpload", { item });
     }
   },
+  created() {
+    console.log("Created FileUploadList");
+  },
   mounted() {
-    bus.$on("upload-list:add", item => {
-      this.addToList(item);
+    console.log("Mounted FileUploadList");
+
+	this.$store.dispatch("listFileUpload")
+	.then(() => {
+      // this will allow later animation
+      this.$nextTick(() => (this.loaded = true));
     });
-
-    // load all current file-uploads
-    fetch("/api/fileupload/list", {
-      credentials: "same-origin",
-      cache: "no-cache"
-    })
-      .then(r => {
-        if (!r.ok) return Promise.reject("failed");
-        return r.json();
-      })
-      .then(data => {
-        const items = data.items;
-        items.forEach(item => this.addToList(item));
-
-        // this will allow later animation
-        this.$nextTick(() => (this.loaded = true));
-      })
-      .catch(function(error) {
-        alert("Failed to list file-uploads - " + error);
-      });
   }
 };
 </script>

@@ -21,9 +21,6 @@
 
 
 <script>
-import axios from 'axios';
-import { bus } from "./bus";
-
 export default {
   data() {
     return {
@@ -33,62 +30,25 @@ export default {
       uploading: true
     };
   },
+  created() {
+    console.log("Created FileUploadNew");
+  },
+  mounted() {
+    console.log("Mounted FileUploadNew");
+  },
   methods: {
     onUpload() {
-      const data = new FormData();
-      // This is the raw file that was selected
-      data.append("file", this.file);
-      // This is the name of the FileUpload
-      data.append("name", this.name);
-
-      // fetch has no upload-progress support
-      //   fetch("/api/fileupload/create", {
-      //     method: "POST",
-      //     body: data,
-      //     credentials: "same-origin",
-      //     cache: "no-cache"
-      //   })
-      //     .then(r => {
-      //       if (!r.ok) return Promise.reject("failed");
-      //       return r.json();
-      //     })
-      //     .then(data => {
-      //       const item = data.item;
-
-      //       // add to list - the components are not child/parent
-      //       // so a bus can be used (or Vuex/redux if necessary)
-      //       bus.$emit("upload-list:add", item);
-      //     })
-      //     .catch(error => {
-      //       alert("Failed to add new file-upload - " + error);
-      // 	});
-
       this.uploadProgress = 0;
       this.uploading = true;
-      axios.post("/api/fileupload/create", data, {
-          withCredentials: true,
-          onUploadProgress: (event) => {
-			// progress listener
-			this.uploadProgress = Math.round(event.loaded / event.total *100);
-		  }
-		})
-        .then(res => {
-		  // axios by default will 'accept' only responses with status 200>=status<300
-		  // others will be automatically 'rejected'
-		  // if (res.status !== 200) return Promise.reject("rejected");
-          return res.data;
+      this.$store.dispatch("createFileUpload", {
+          file: this.file,
+          name: this.name,
+          onUploadProgress: event => {
+            // progress listener
+            this.uploadProgress = Math.round(event.loaded / event.total * 100);
+          }
         })
-        .then(data => {
-          const item = data.item;
-
-          // add to list - the components are not child/parent
-          // so a bus can be used (or Vuex/redux if necessary)
-          bus.$emit("upload-list:add", item);
-        })
-        .catch(error => {
-          alert("Failed to add new file-upload - " + error);
-        })
-        .then(() => this.uploading = false);
+        .then(() => (this.uploading = false));
     }
   }
 };
