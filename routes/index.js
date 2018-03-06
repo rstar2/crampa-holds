@@ -63,10 +63,12 @@ exports = module.exports = function (app) {
 	app.get('/', routes.views.index);
 	app.get('/blog/:category?', routes.views.blog);
 	app.all('/blog/post/:post', routes.views.post);
-	app.get('/gallery', routes.views.gallery);
 	app.all('/contact', routes.views.contact);
-
 	app.get('/page/:page?', routes.views.page);
+
+	// add new local files gallery implementation and let the old one (with the cloudinary images) be on 'xgallery'
+	app.get('/xgallery', routes.views.gallery_cloud);
+	app.get('/gallery/:gallery?', routes.views.gallery);
 
 	// Shop related pages
 	app.get('/shop', routes.views.shop.index);
@@ -98,5 +100,7 @@ exports = module.exports = function (app) {
 	app.all('/api/**', ...apiProtected);
 
 	app.use('/api/fileupload', routes.api.fileupload);
+
+	app.use('/api/gallery', routes.api.gallery);
 
 };

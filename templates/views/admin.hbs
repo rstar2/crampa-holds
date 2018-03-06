@@ -36,7 +36,8 @@
 							{{#if user}}
 							<b-dropdown-item href="/keystone/signout">Sign Out</b-dropdown-item>
 							{{else}}
-							<b-dropdown-item href="/keystone/signin">Sign In</b-dropdown-item>
+							{{!-- TODO: Make a real SPA sign-in, e.g. using a modal dialog, without redirecting and etc. --}}
+							<b-dropdown-item href="/keystone/signin?from=/admin">Sign In</b-dropdown-item>
 							{{/if}}
 						</b-nav-item-dropdown>
 					</b-navbar-nav>
