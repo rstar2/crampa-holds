@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import FileUpload from './fileupload/FileUpload.vue';
-import Gallery from './gallery/Gallery.vue';
+import FileUpload from '../fileupload/FileUpload.vue';
+import Gallery from '../gallery/Gallery.vue';
 
 // register the VueRouter plugin in Vue
 Vue.use(VueRouter);

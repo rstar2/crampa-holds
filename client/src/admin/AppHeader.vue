@@ -3,6 +3,7 @@
     	<b-nav-item to="/fileupload">FileUploads</b-nav-item>
     	<b-nav-item to="/gallery">Gallery</b-nav-item>
   </b-navbar-nav>
+  
 </template>
 
 <script>
