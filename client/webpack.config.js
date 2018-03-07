@@ -9,7 +9,7 @@ const options = {
 		boot: './src/boot.js',
 
 		// this is for bundling custom CSS/LESS files for the main site
-		site: './src/site/index.less',
+		site: './src/site',
 
 		// this is bundle for the custom admin SPA pages
 		admin: './src/admin',

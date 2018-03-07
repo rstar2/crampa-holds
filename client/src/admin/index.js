@@ -29,8 +29,16 @@ new Vue({
 new Vue({
 	el: '#app-admin-auth',
 	store,
-	components: {
-		'app-admin-auth': AppAuth,
+	render (createElement) {
+		// get the HTML attribute from the element and converted to a property to be passed to
+		// the the Vue component
+		const isAuthAttr = this.$el.getAttribute('data-is-auth');
+		return createElement(AppAuth, {
+			props: {
+				// convert the "true"/"false" string to a boolean (e.g. only "true" means TRUE)
+				isAuth: isAuthAttr === 'true',
+			},
+		});
 	},
 });
 

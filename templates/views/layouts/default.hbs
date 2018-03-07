@@ -41,7 +41,6 @@
 			function __loading(value) {
 				var loading = document.getElementById("loading")
 				if (loading) {
-					console.log("Loading", value);
 					if (value === false) {
 						loading.parentElement.remove();
 					} else if (value === true) {
@@ -151,6 +150,7 @@
 		<script type="text/javascript">__loading(40);</script>
 
 		<script src="/public/js/build.boot.js?v={{version}}"></script>
+		<script src="/public/js/build.site.js?v={{version}}"></script>
 		<script type="text/javascript">__loading(85);</script>
 
 		{{{isAdminEditorJS user}}}
