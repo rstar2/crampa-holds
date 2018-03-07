@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 const state = {
 	fileuploads: [],
+	isAuth: false,
 };
 
 const getters = {
@@ -17,6 +18,10 @@ const getters = {
 	// to all getters the state is always passed for us from Vuex
 	fileuploadsCount (state) {
 		return state.fileuploads.length;
+	},
+
+	isAuth (state) {
+		return state.isAuth;
 	},
 };
 
@@ -40,8 +45,13 @@ const mutations = {
 			state.fileuploads.splice(index, 1);
 		}
 	},
+
+	authChange (state, { isAuth }) {
+		state.isAuth = isAuth;
+	},
 };
 
+// TODO: split the state/mustations/actions into modules
 const store = new Vuex.Store({
 	state,
 	getters,

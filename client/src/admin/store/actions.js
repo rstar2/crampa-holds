@@ -90,10 +90,14 @@ function listFileUpload (context) {
 		});
 }
 
+function authChange (context, { isAuth }) {
+	context.commit('authChange', { isAuth });
+}
+
+
 // on the other hand actions can be asynchronous
 // and finally they can commit mutations that finally update the state
 export default {
-	createFileUpload,
-	removeFileUpload,
-	listFileUpload,
+	createFileUpload, removeFileUpload, listFileUpload,
+	authChange,
 };
