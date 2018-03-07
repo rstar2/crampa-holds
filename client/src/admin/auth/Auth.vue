@@ -2,14 +2,16 @@
 	<div>
 		<div>
     	<b-button @click="showModal">{{ text }}</b-button>
-    	<b-modal ref="myModalRef" hide-footer title="Using Component Methods">
-				<div v-show="loading">
-							<i class="fas fa-spinner fa-spin"></i>
-				</div>
-				<div v-show="!loading">
-						<app-admin-auth-signout v-if="isAuth" v-on:cancel="hideModal" v-on:action="signOut"></app-admin-auth-signout>
-						<app-admin-auth-signin v-else v-on:cancel="hideModal" v-on:action="signIn"></app-admin-auth-signin>
-				</div>
+    	<b-modal ref="myModalRef" hide-footer :title="text">
+
+				<b-row align-h="center" align-v="center"> <!-- e.g. class="justify-content-center align-items-center" -->
+        	<b-col cols="4" v-show="loading">
+							asdasd <i class="fas fa-spinner fa-spin"></i> adadsd
+					</b-col>
+				</b-row>
+						
+				<app-admin-auth-signout v-if="isAuth" v-on:cancel="hideModal" v-on:action="signOut"></app-admin-auth-signout>
+				<app-admin-auth-signin v-else v-on:cancel="hideModal" v-on:action="signIn"></app-admin-auth-signin>
     	</b-modal>
   	</div>
 	</div>
