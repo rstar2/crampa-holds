@@ -82,13 +82,14 @@ exports = module.exports = function (app) {
 	// Custom Admin related pages (for uploading files and etc...)
 	app.get('/admin/:page?', routes.views.admin);
 
+
+	// Attach to all API routes res.apiResponse() ...  methods
+	app.all('/api/**', keystone.middleware.api);
+
 	// authentication API (signin/signout)
 	app.use('/api/auth', routes.api.auth);
 
 	const apiProtected = [
-		// attach res.apiResponse() ...  methods
-		keystone.middleware.api,
-
 		// allow registered users to API - return error if not
 		middleware.requireAuth(keystone),
 

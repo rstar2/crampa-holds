@@ -11,7 +11,6 @@ import AppAuth from './auth/Auth.vue';
 import store from './store';
 import router from './router';
 
-
 new Vue({
 	el: '#app-admin',
 	store,
@@ -35,7 +34,8 @@ new Vue({
 		const isAuthAttr = this.$el.getAttribute('data-is-auth');
 		const isAuth = isAuthAttr === 'true';
 		// convert the "true"/"false" string to a boolean (e.g. only "true" means TRUE)
-		this.$store.dispatch('authChange', { isAuth });
+		// NOTE - it's a straight commit - not an action
+		this.$store.commit('authChange', { isAuth });
 		return createElement(AppAuth, /* {
 			props: {
 				isAuth,

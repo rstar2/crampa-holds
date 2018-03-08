@@ -2,7 +2,9 @@
 	<div>
     	<b-button @click="showModal">{{ action }}</b-button>
     	<b-modal ref="myModalRef" :title="action" 
-			no-fade centered hide-footer no-close-on-backdrop hide-header-close>
+			centered hide-footer no-close-on-backdrop hide-header-close
+			@show="beforeShow" @hide="beforeHide"
+			id="app-admin-auth-modal">
 
 			<b-row align-h="center" align-v="center"> <!-- e.g. class="justify-content-center align-items-center" -->
         		<b-col cols="auto" v-show="loading" class="mb-2">
@@ -33,20 +35,18 @@ fontawesome.library.add(faSpinner);
 
 import { mapGetters } from "vuex";
 
-const animatedIn = "animated rollIn";
-const animatedOut = "animated rollOut";
+const classAnimated = "animated";
+const classAnimatedIn = "slideInRight";
+const classAnimatedOut = "slideOutRight";
 
 export default {
   data() {
     return {
       loading: false,
-	  error: null,
-	  
-	  email: null,
-	  password: null,
+      error: null,
 
-      modalDialogClassAnimateShow: "",
-      modalDialogClassAnimateHide: ""
+      email: null,
+      password: null
     };
   },
 
@@ -57,11 +57,18 @@ export default {
     }
   },
 
+  // change the show animation
+  created: function created() {
+    // non-reactive property - once created
+    this.modalDialogEl = null;
+  },
   mounted() {
-	const modalDialog = this.$refs.myModalRef.$el;
-	const modalDialogClass = this.$refs.myModalRef.$el.classList;
-	this.modalDialogClassAnimateShow = modalDialogClass + animatedIn;
-	this.modalDialogClassAnimateHide = modalDialogClass + animatedOut;
+    const modalEl = this.$refs.myModalRef.$el;
+
+    this.modalDialogEl = modalEl.querySelector(
+      "#app-admin-auth-modal .modal-dialog"
+    );
+    this.modalDialogEl.classList.add(classAnimated);
   },
 
   methods: {
@@ -85,12 +92,14 @@ export default {
     doAction() {
       this.setState({ loading: true, error: null });
 
-      new Promise((res, rej) => {
-        setTimeout(rej, 3000000);
-      })
+      const action = this.isAuth
+        ? { type: "authSignOut" }
+        : { type: "authSignIn", username: this.email, password: this.password };
+      this.$store
+        .dispatch(action)
         .then(() => {
-          this.$store.dispatch("authChange", { isAuth: !this.isAuth });
-          this.hideModal();
+					this.setState({ loading: false });
+					this.hideModal();
         })
         .catch(() =>
           this.setState({
@@ -101,16 +110,28 @@ export default {
     },
 
     // change the show animation
-
-    show() {
-      const modalDialog = this.$refs.myModalRef.$el;
-      modalDialog.classList = this.modalDialogClassAnimateShow;
+    beforeShow() {
+      this.modalDialogEl.classList.remove(classAnimatedOut);
+      this.modalDialogEl.classList.add(classAnimatedIn);
     },
 
-    hide() {
-      const modalDialog = this.$refs.myModalRef.$el;
-      modalDialog.classList = this.modalDialogClassAnimateHide;
+    beforeHide() {
+      this.modalDialogEl.classList.remove(classAnimatedIn);
+      this.modalDialogEl.classList.add(classAnimatedOut);
     }
   }
 };
 </script>
+
+<style>
+.modal.fade {
+  transition: opacity 0.5s linear;
+}
+
+.modal.fade .modal-dialog {
+  -webkit-transform: translate(0);
+  -moz-transform: translate(0);
+  transform: translate(0);
+}
+</style>
+

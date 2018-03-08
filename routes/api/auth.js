@@ -3,34 +3,26 @@ const keystone = require('keystone');
 function signin (req, res) {
 	// username/password are obligatory
 	if (!req.body.username || !req.body.password) {
-		return res.json({ success: false });
+		return res.apiError('Missing credentials');
 	}
 
+	// check the user first
 	keystone.list('User').model
 		.findOne({ email: req.body.username })
 		.exec(function (err, user) {
-			if (err || !user) {
-				return res.json({
-					success: false,
-					session: false,
-					user: null,
-					error: (err && err.message ? err.message : false)
-						|| 'Sorry, there was an issue signing you in, please try again.',
-				});
+			if (err) {
+				return res.apiError('Sorry, there was an issue signing you in, please try again.', err);
 			}
 
+			if (!user) {
+				return res.apiError('Invalid credentials');
+			}
+
+			// sign-in - create valid session
 			keystone.session.signin({ email: user.email, password: req.body.password }, req, res, function (user) {
-				return res.json({
-					success: true,
-					session: true,
-				});
+				return res.apiResponse({ success: true });
 			}, function (err) {
-				return res.json({
-					success: false,
-					session: false,
-					message: (err && err.message ? err.message : false)
-						|| 'Sorry, there was an issue signing you in, please try again.'
-				});
+				return res.apiError('Sorry, there was an issue signing you in, please try again.', err);
 			});
 		});
 }
@@ -38,7 +30,7 @@ function signin (req, res) {
 // you'll want one for signout too
 function signout (req, res) {
 	keystone.session.signout(req, res, function () {
-		res.json({ success: true });
+		res.apiResponse({ success: true });
 	});
 }
 

@@ -90,8 +90,47 @@ function listFileUpload (context) {
 		});
 }
 
-function authChange (context, { isAuth }) {
-	context.commit('authChange', { isAuth });
+function authSignIn (context, data) {
+	if (context.state.isAuth) {
+		return Promise.resolve();
+	}
+
+	return fetch('/api/auth/signin', {
+		method: 'POST',
+		headers: {
+			'content-type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		credentials: 'same-origin',
+		cache: 'no-cache',
+	})
+		.then(r => {
+			if (!r.ok) return Promise.reject('failed');
+			return r.json();
+		})
+		.then(data => {
+			// commit/change the isAuth state
+			context.commit('authChange', { isAuth: true });
+		});
+}
+
+function authSignOut (context, { email, password }) {
+	if (!context.state.isAuth) {
+		return Promise.resolve();
+	}
+
+	return fetch('/api/auth/signout', {
+		credentials: 'same-origin',
+		cache: 'no-cache',
+	})
+		.then(r => {
+			if (!r.ok) return Promise.reject('failed');
+			return r.json();
+		})
+		.then(data => {
+			// commit/change the isAuth state
+			context.commit('authChange', { isAuth: false });
+		});
 }
 
 
@@ -99,5 +138,5 @@ function authChange (context, { isAuth }) {
 // and finally they can commit mutations that finally update the state
 export default {
 	createFileUpload, removeFileUpload, listFileUpload,
-	authChange,
+	authSignIn, authSignOut,
 };
