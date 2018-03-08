@@ -12,7 +12,7 @@
 					<b-button variant="success" v-on:click.prevent="onUpload" v-bind:disabled="!file">Upload</b-button>
 				</b-col>
 				<b-col>
-					<b-progress v-if="uploading" :value="uploadProgress" show-progress animated></b-progress>
+					<b-progress v-if="uploading" :value="uploadProgress"></b-progress>
 				</b-col>
 			</b-row>
 		</form>

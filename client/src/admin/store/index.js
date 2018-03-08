@@ -52,6 +52,11 @@ const mutations = {
 		}
 	},
 
+	fileuploadsSet (state, { items }) {
+		// replace the whole list
+		state.fileuploads = items;
+	},
+
 	fileuploadsLoaded (state) {
 		// only loaded state
 		state.isFileuploadsLoaded = true;

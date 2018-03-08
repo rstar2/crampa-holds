@@ -82,7 +82,7 @@ function listFileUpload (context) {
 		})
 		.then(data => {
 			const items = data.items;
-			items.forEach(item => context.commit('fileuploadAdd', { item }));
+			context.commit('fileuploadsSet', { items });
 
 			context.commit('fileuploadsLoaded');
 		})
