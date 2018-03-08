@@ -6,8 +6,11 @@ import actions from './actions';
 // register the Vuex plugin
 Vue.use(Vuex);
 
+// TODO: split the state/mustations/actions into modules
 const state = {
 	fileuploads: [],
+	isFileuploadsLoaded: false,
+
 	isAuth: false,
 };
 
@@ -18,6 +21,9 @@ const getters = {
 	// to all getters the state is always passed for us from Vuex
 	fileuploadsCount (state) {
 		return state.fileuploads.length;
+	},
+	isFileuploadsLoaded (state) {
+		return state.isFileuploadsLoaded;
 	},
 
 	isAuth (state) {
@@ -46,12 +52,16 @@ const mutations = {
 		}
 	},
 
+	fileuploadsLoaded (state) {
+		// only loaded state
+		state.isFileuploadsLoaded = true;
+	},
+
 	authChange (state, { isAuth }) {
 		state.isAuth = isAuth;
 	},
 };
 
-// TODO: split the state/mustations/actions into modules
 const store = new Vuex.Store({
 	state,
 	getters,

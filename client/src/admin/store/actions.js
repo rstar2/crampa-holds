@@ -83,6 +83,8 @@ function listFileUpload (context) {
 		.then(data => {
 			const items = data.items;
 			items.forEach(item => context.commit('fileuploadAdd', { item }));
+
+			context.commit('fileuploadsLoaded');
 		})
 		.catch(function (error) {
 			alert('Failed to list file-uploads - ' + error);

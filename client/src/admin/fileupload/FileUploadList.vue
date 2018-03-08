@@ -7,7 +7,7 @@
 				v-bind:item="item"
 				v-bind:key="item.id" 
 				v-on:upload-list:remove="removeItem"
-				v-bind:animate="loaded">
+				v-bind:animate="animate">
 			</upload-list-item>
 		</b-list-group>
 	</b-container>
@@ -23,9 +23,11 @@ export default {
   },
   data() {
     return {
-      loaded: false
+			// keep local property that will prevent initially the items to be animated
+      animate: false
     };
   },
+
   // could use straight the $store in the template
   // but with computed properties the template is agnostic
   // whether the data is prom props, data or computed
@@ -54,7 +56,11 @@ export default {
   // 3. Easisest - save/use the names of the getters
   //   computed: mapGetters(["fileuploads", "fileuploadsCount"]),
   // 4. use different computed-properties names
-  computed: mapGetters({ items: "fileuploads", count: "fileuploadsCount" }),
+  computed: mapGetters({
+    items: "fileuploads",
+    count: "fileuploadsCount",
+    loaded: "isFileuploadsLoaded"
+  }),
 
   methods: {
     removeItem(item) {
@@ -67,11 +73,20 @@ export default {
   mounted() {
     console.log("Mounted FileUploadList");
 
-	this.$store.dispatch("listFileUpload")
-	.then(() => {
-      // this will allow later animation
-      this.$nextTick(() => (this.loaded = true));
-    });
+    if (!this.loaded) {
+      this.$store.dispatch("listFileUpload");
+    }
+  },
+
+  watch: {
+    loaded(loaded) {
+      if (loaded) {
+        // this will allow later animation - after initial items are loaded and rendered
+        this.$nextTick(() => this.animate = true);
+      } else {
+        this.animate = false;
+      }
+    }
   }
 };
 </script>
