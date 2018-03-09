@@ -12,7 +12,7 @@ import Vue from 'vue';
 
 import store from './store';
 import router from './router';
-import AppAuth from './auth/Auth.vue';
+import AppAuth from './components/auth/Auth.vue';
 
 import { registerBusEvents } from './bus';
 

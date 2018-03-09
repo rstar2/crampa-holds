@@ -1,8 +1,8 @@
 <template>
   	<div>
     	<app-upload-new/>
-			<hr>
-			<app-upload-list/>
+		<hr>
+		<app-upload-list/>
   </div>
 </template>
 
@@ -14,6 +14,6 @@ export default {
   components: {
     "app-upload-new": FileUploadNew,
     "app-upload-list": FileUploadList
-  }
+  },
 };
 </script>

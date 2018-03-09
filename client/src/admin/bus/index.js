@@ -24,6 +24,7 @@ export function registerBusEvents (vmRoot) {
 		console.log('Bus: Show alert');
 
 		// create new instance
+		// <b-alert show dismissible ref="alert" @dismissed="dismissed($refs.alert)">Alert</b-alert>
 		const vmAlert = new BAlert({
 			propsData: {
 				show: timeout || true, // show as self-dismissible if valid timeout is set
@@ -36,6 +37,24 @@ export function registerBusEvents (vmRoot) {
 		// the template will be rendered as an off-document element,
 		// and you will have to use native DOM API to insert it into the document yourself.
 		vmAlert.$mount();
+
+		vmAlert.$el.classList.add('animated', 'bounceInRight');
+
+		vmAlert.$on('dismissed', function () {
+			// this is vmAlerts
+
+			// this will prevent the BAlert to render the component as 'comment' in the DOM
+			// e.g it will stay visible so that I can apply the "animated" CSS animation
+			this.dismissed = false;
+			this.$el.classList.remove('bounceInRight');
+			this.$el.classList.add('bounceOutRight');
+			// finally destroy the component and remove it from the DOM
+			// as '$destroy' don't remove the element from the DOM, just destroys all Vue stuff
+			setTimeout(() => {
+				this.$destroy();
+				this.$el.remove();
+			}, 500);
+		});
 
 		// add it to the DOM where needed
 		this.$el.appendChild(vmAlert.$el);
