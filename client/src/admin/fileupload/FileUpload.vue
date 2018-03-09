@@ -1,8 +1,8 @@
 <template>
   	<div>
-    	<upload-new></upload-new>
+    	<app-upload-new></app-upload-new>
 		<hr>
-		<upload-list></upload-list>
+		<app-upload-list></app-upload-list>
   </div>
 </template>
 
@@ -12,8 +12,8 @@ import FileUploadList from "./FileUploadList.vue";
 
 export default {
   components: {
-    "upload-new": FileUploadNew,
-    "upload-list": FileUploadList
+    "app-upload-new": FileUploadNew,
+    "app-upload-list": FileUploadList
   }
 };
 </script>

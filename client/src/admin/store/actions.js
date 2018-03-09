@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-function createFileUpload (context, { file, name, onUploadProgress }) {
+function fileUploadCreate (context, { file, name, onUploadProgress }) {
+	if (!context.state.isAuth) {
+		return Promise.reject('Not Authorized yet');
+	}
+
 	const data = new FormData();
 	// This is the raw file that was selected
 	data.append('file', file);
@@ -26,7 +30,7 @@ function createFileUpload (context, { file, name, onUploadProgress }) {
 	//       bus.$emit("upload-list:add", item);
 	//     })
 	//     .catch(error => {
-	//       alert("Failed to add new file-upload - " + error);
+	//       console.error("Failed to add new file-upload - " + error);
 	// 	});
 	return axios.post('/api/fileupload/create', data, {
 		withCredentials: true,
@@ -42,11 +46,16 @@ function createFileUpload (context, { file, name, onUploadProgress }) {
 			context.commit('fileuploadAdd', { item: data.item });
 		})
 		.catch(error => {
-			alert('Failed to add new file-upload - ' + error);
+			console.error('Failed to add new file-upload - ' + error);
+			throw error;
 		});
 }
 
-function removeFileUpload (context, { item }) {
+function fileUploadRemove (context, { item }) {
+	if (!context.state.isAuth) {
+		return Promise.reject('Not Authorized yet');
+	}
+
 	return fetch(`/api/fileupload/${item.id}/remove`, {
 		credentials: 'same-origin',
 		cache: 'no-cache',
@@ -64,20 +73,23 @@ function removeFileUpload (context, { item }) {
 			context.commit('fileuploadRemove', { item });
 		})
 		.catch(function (error) {
-			alert('Failed to remove file-upload - ' + error);
+			console.error('Failed to remove file-upload - ' + error);
 			throw error;
 		});
-
 }
 
-function listFileUpload (context) {
+function fileUploadList (context) {
+	if (!context.state.isAuth) {
+		return Promise.reject('Not Authorized yet');
+	}
+
 	// load all current file-uploads
 	return fetch('/api/fileupload/list', {
 		credentials: 'same-origin',
 		cache: 'no-cache',
 	})
 		.then(r => {
-			if (!r.ok) return Promise.reject('failed');
+			if (!r.ok) return Promise.reject('Failed');
 			return r.json();
 		})
 		.then(data => {
@@ -87,7 +99,7 @@ function listFileUpload (context) {
 			context.commit('fileuploadsLoaded');
 		})
 		.catch(function (error) {
-			alert('Failed to list file-uploads - ' + error);
+			console.error('Failed to list file-uploads - ' + error);
 			throw error;
 		});
 }
@@ -139,6 +151,6 @@ function authSignOut (context, { email, password }) {
 // on the other hand actions can be asynchronous
 // and finally they can commit mutations that finally update the state
 export default {
-	createFileUpload, removeFileUpload, listFileUpload,
+	fileUploadCreate, fileUploadRemove, fileUploadList,
 	authSignIn, authSignOut,
 };

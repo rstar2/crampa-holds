@@ -22,25 +22,21 @@
 
 <script>
 export default {
+  name: "app-upload-new",
   data() {
     return {
-      name: "Example name",
+      name: "Name",
       file: null,
       uploadProgress: 0,
       uploading: true
     };
   },
-  created() {
-    console.log("Created FileUploadNew");
-  },
-  mounted() {
-    console.log("Mounted FileUploadNew");
-  },
   methods: {
     onUpload() {
       this.uploadProgress = 0;
       this.uploading = true;
-      this.$store.dispatch("createFileUpload", {
+      this.$store
+        .dispatch("fileUploadCreate", {
           file: this.file,
           name: this.name,
           onUploadProgress: event => {
@@ -48,7 +44,10 @@ export default {
             this.uploadProgress = Math.round(event.loaded / event.total * 100);
           }
         })
-        .then(() => (this.uploading = false));
+        .then(() => (this.uploading = false))
+        .catch(() => {
+          //TODO: show error alert
+        });
     }
   }
 };

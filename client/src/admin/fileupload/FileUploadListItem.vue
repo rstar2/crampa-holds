@@ -10,15 +10,16 @@
 
 <script>
 export default {
+  name: "app-upload-list-item",
   props: {
-    item: {},
+    item: { type: Object, required: true },
     animate: { type: Boolean, default: false }
   },
   methods: {
     onRemove(item) {
-		// emit event to the parent - let it handle the action for removing and later updating the store
-		// e.g I'd prefer this component to stay as presentation only
-		this.$emit("upload-list:remove", item);
+      // emit event to the parent - let it handle the action for removing and later updating the store
+      // e.g I'd prefer this component to stay as presentation only
+      this.$emit("upload-list-item:remove");
     }
   }
 };

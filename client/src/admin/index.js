@@ -11,22 +11,9 @@ import AppAuth from './auth/Auth.vue';
 import store from './store';
 import router from './router';
 
+// Keep this the first Vue component as it will initially set the  'isAuth' state
 new Vue({
-	el: '#app-admin',
-	store,
-	router,
-	render: h => h(App),
-});
-
-new Vue({
-	el: '#app-admin-header',
-	store,
-	router,
-	render: h => h(AppHeader),
-});
-
-new Vue({
-	el: '#app-admin-auth',
+	el: '#app-auth',
 	store,
 	render (createElement) {
 		// get the HTML attribute from the element and converted to a property to be passed to
@@ -42,6 +29,20 @@ new Vue({
 			},
 		} */);
 	},
+});
+
+new Vue({
+	el: '#app-header',
+	store,
+	router,
+	render: h => h(AppHeader),
+});
+
+new Vue({
+	el: '#app',
+	store,
+	router,
+	render: h => h(App),
 });
 
 import 'animate.css';

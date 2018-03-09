@@ -40,6 +40,7 @@ const classAnimatedIn = "slideInRight";
 const classAnimatedOut = "slideOutRight";
 
 export default {
+  name: "app-auth",
   data() {
     return {
       loading: false,
@@ -71,6 +72,16 @@ export default {
     this.modalDialogEl.classList.add(classAnimated);
   },
 
+  watch: {
+    isAuth(isAuthorized) {
+      if (isAuthorized) {
+        // TODO: Show info alert
+      } else {
+        // TODO: Show error alert
+      }
+    }
+  },
+
   methods: {
     setState({ loading, error }) {
       if (!_.isUndefined(loading)) {
@@ -98,8 +109,8 @@ export default {
       this.$store
         .dispatch(action)
         .then(() => {
-					this.setState({ loading: false });
-					this.hideModal();
+          this.setState({ loading: false });
+          this.hideModal();
         })
         .catch(() =>
           this.setState({
