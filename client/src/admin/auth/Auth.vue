@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import _ from "lodash";
+import isUndefined from "lodash/isUndefined";
 
 // import the Spinner FontAwesome icon
 import fontawesome from "@fortawesome/fontawesome";
@@ -90,10 +90,10 @@ export default {
 
   methods: {
     setState({ loading, error }) {
-      if (!_.isUndefined(loading)) {
+      if (!isUndefined(loading)) {
         this.loading = loading;
       }
-      if (!_.isUndefined(error)) {
+      if (!isUndefined(error)) {
         this.error = error;
       }
     },
