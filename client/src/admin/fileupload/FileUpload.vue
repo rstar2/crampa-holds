@@ -1,8 +1,8 @@
 <template>
   	<div>
-    	<app-upload-new></app-upload-new>
-		<hr>
-		<app-upload-list></app-upload-list>
+    	<app-upload-new/>
+			<hr>
+			<app-upload-list/>
   </div>
 </template>
 

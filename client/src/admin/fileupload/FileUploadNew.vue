@@ -46,7 +46,10 @@ export default {
         })
         .then(() => (this.uploading = false))
         .catch(() => {
-          //TODO: show error alert
+          this.$root.$emit("showAlert", {
+            type: "danger",
+            msg: "Failed to create a new file-upload"
+          });
         });
     }
   }

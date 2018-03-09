@@ -38,14 +38,20 @@ export default {
   methods: {
     removeItem(item) {
       this.$store.dispatch("fileUploadRemove", { item }).catch(() => {
-        //TODO: show error alert
+        this.$root.$emit("showAlert", {
+          type: "danger",
+          msg: "Failed to remove a file-upload"
+        });
       });
     }
   },
   mounted() {
     if (!this.loaded) {
       this.$store.dispatch("fileUploadList").catch(() => {
-        //TODO: show error alert
+        this.$root.$emit("showAlert", {
+          type: "danger",
+          msg: "Failed to get file-uploads list"
+        });
       });
     } else {
       this.animate = true;
