@@ -94,6 +94,10 @@ const helpers = {
 		return `/shop`;
 	},
 
+	shopCategoryUrl: function (categorySlug) {
+		return createUrl(`${helpers.shopUrl()}/category`, categorySlug);
+	},
+
 	productUrl: function (productSlug) {
 		return createUrl(`${helpers.shopUrl()}/product`, productSlug);
 	},

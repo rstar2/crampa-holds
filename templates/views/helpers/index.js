@@ -86,13 +86,14 @@ module.exports = function () {
 	// Returns an html-string of the categories on the post.
 	// By default, categories are separated by commas.
 	// input. categories:['tech', 'js']
-	// output. 'Filed Undder <a href="blog/tech">tech</a>, <a href="blog/js">js</a>'
+	// output. 'Filed Under <a href="blog/tech">tech</a>, <a href="blog/js">js</a>'
 
 	_helpers.categoryList = function (categories, options) {
 		var autolink = _.isString(options.hash.autolink) && options.hash.autolink === 'false' ? false : true;
 		var separator = _.isString(options.hash.separator) ? options.hash.separator : ', ';
 		var prefix = _.isString(options.hash.prefix) ? options.hash.prefix : '';
 		var suffix = _.isString(options.hash.suffix) ? options.hash.suffix : '';
+		var parentRoute = _.isString(options.hash.parentRoute) ? options.hash.parentRoute : '/blog';
 		var output = '';
 
 		function createTagList(tags) {
@@ -101,7 +102,7 @@ module.exports = function () {
 			if (autolink) {
 				return _.map(tags, function (tag) {
 					return linkTemplate({
-						url: ('/blog/' + tag.slug),
+						url: (`${parentRoute}/` + tag.slug),
 						text: _.escape(tag.name),
 					});
 				}).join(separator);
@@ -204,7 +205,9 @@ module.exports = function () {
 
 	// create the category url for a blog-category page
 	_helpers.categoryUrl = function (categorySlug, options) {
-		return ('/blog/' + categorySlug);
+		var parentRoute = _.isString(options.hash.parentRoute) ? options.hash.parentRoute : '/blog';
+
+		return (`${parentRoute}/` + categorySlug);
 	};
 
 	// ### Pagination Helpers

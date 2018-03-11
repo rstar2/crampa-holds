@@ -71,7 +71,8 @@ exports = module.exports = function (app) {
 	app.get('/gallery/:gallery?', routes.views.gallery);
 
 	// Shop related pages
-	app.get('/shop', routes.views.shop.index);
+	// app.get('/shop', routes.views.shop.index);
+	app.get('/shop(/category/:category)?', routes.views.shop.index);
 	app.get('/shop/product/:product', routes.views.shop.product);
 	app.get('/shop/cart', routes.views.shop.cart);
 	app.get('/shop/checkout', routes.views.shop.checkout);

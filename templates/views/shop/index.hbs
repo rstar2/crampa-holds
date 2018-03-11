@@ -1,5 +1,5 @@
 <div class="container">
-	<h1>Blog</h1>
+	<h1>Products</h1>
 </div>
 <div class="container">
 	<div class="row">
@@ -9,7 +9,7 @@
 				{{# each products.results}}
 				<div data-ks-editable="{{#if ../user}}{{adminEditableUrl ../user id}}{{/if}}" class="post">
 					<h2><a href="{{productUrl slug}}">{{{title}}}</a></h2>
-					<p class="lead text-muted">{{{categoryList categories prefix="Posted in "}}}
+					<p class="lead text-muted">{{{categoryList categories prefix="Posted in " parentRoute=(shopCategoryUrl '')}}}
 					</p>
 					{{#if image}}<img src="{{{cloudinaryUrl image width=160 height=160 crop='fit' }}}" class="img pull-right">{{/if}}
 					<p>{{{description.brief.html}}}</p>
@@ -23,12 +23,13 @@
 			<div style="margin-top: 70px;" class="list-group">
 				<a href="/blog" class="{{ifx category '' 'active'}} list-group-item">All Categories</a>
 				{{# each categories }}
-				<a href="{{categoryUrl slug}}" class="{{ifx (isSame ../category id) 'active' ''}} list-group-item">{{name}}
+				<a href="{{shopCategoryUrl slug}}" class="{{ifx (isSame ../category id) 'active' ''}} list-group-item">{{name}}
 					<span class="badge pull-right">{{count}}</span>
 				</a>
 				{{/each}}
 			</div>
 		</div>
 	</div>
+	{{!-- TODO: Fix shop pagination --}}
 	{{>pagination}}
 </div>
