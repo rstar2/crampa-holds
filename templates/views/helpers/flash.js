@@ -16,7 +16,7 @@ module.exports = {
 	//          {{{flashMessages messages.warning}}}
 	//      </div>
 	//   {{/if}}`
-	flashMessages: function (messages) {
+	flashMessages: function (messages, options) {
 		let output = '';
 		for (let i = 0; i < messages.length; i++) {
 			const message = messages[i];

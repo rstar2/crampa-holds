@@ -1,8 +1,8 @@
 <div class="container">
 	<div class="row">
-		<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+		<div class="col col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
 			<article>
-				<p><a href="/blog">&larr; back to the blog</a></p>
+				<p><a href="{{blogUrl}}">&larr; back to the blog</a></p>
 				<hr>
 				<header>
 					<h1>{{post.title}}</h1>
@@ -32,6 +32,7 @@
 --}}
 
 {{!-- This sections allows templates to define custom JS here --}}
+//TODO: use VueJS
 {{#section 'body_js'}}
     <script>
 	jQuery(function ($) {

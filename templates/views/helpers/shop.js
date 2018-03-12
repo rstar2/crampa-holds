@@ -1,20 +1,30 @@
+const _ = require('lodash');
 const { createUrl } = require('./util');
 
 const helpers = {
 
-	shopUrl: function () {
-		return `/shop`;
+	shopUrl: function (part, options) {
+		return createUrl('/shop', part);
 	},
 
-	shopCategoryUrl: function (categorySlug) {
-		return createUrl(`${helpers.shopUrl()}/category`, categorySlug);
+	shopCategoryUrl: function (categorySlug, options) {
+		return createUrl(helpers.shopUrl('category'), categorySlug);
 	},
 
-	productUrl: function (productSlug) {
-		return createUrl(`${helpers.shopUrl()}/product`, productSlug);
+	productUrl: function (productSlug, options) {
+		return createUrl(helpers.shopUrl('product'), productSlug);
 	},
 
-	totalPrice: function (price, qty) {
+	cartAddUrl: function (productId, options) {
+		return helpers.shopUrl('cart') + '?action=product.add&id=' + productId;
+	},
+
+	cartRemoveUrl: function (productId, options) {
+		return helpers.shopUrl('cart') + '?action=product.remove&id=' + productId
+			+ (_.isString(options.hash.qty) ? '&qty=' + options.hash.qty : '');
+	},
+
+	totalPrice: function (price, qty, options) {
 		return price * qty;
 	},
 };

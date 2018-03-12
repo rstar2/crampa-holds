@@ -6,5 +6,5 @@ exports.cssLinkTemplate = _.template('<link href="<%= href %>" rel="stylesheet">
 exports.linkTemplate = _.template('<a href="<%= url %>"><%= text %></a>');
 
 exports.createUrl = function (base, slug) {
-	return slug ? `${base}/${slug}` : `${base}`;
+	return _.isString(slug) ? `${base}/${slug}` : `${base}`;
 };

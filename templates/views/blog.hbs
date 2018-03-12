@@ -3,7 +3,7 @@
 </div>
 <div class="container">
 	<div class="row">
-		<div class="col-sm-8 col-md-9">
+		<div class="col col-sm-8 col-md-9">
 			<h4 class="text-weight-normal">Showing {{ posts.results.length}} posts.</h4>
 			<div class="blog">
 				{{# each posts.results}}
@@ -22,10 +22,10 @@
 		<div class="col-sm-4 col-md-3">
 			<h2>Categories</h2>
 			<div style="margin-top: 70px;" class="list-group">
-				<a href="/blog" class="{{ifx category '' 'active'}} list-group-item">All Categories</a>
+				<a href="{{blogUrl}}" class="{{ifx category '' 'active'}} list-group-item">All Categories</a>
 				{{# each categories }}
 				<a href="{{categoryUrl slug}}" class="{{ifx (isSame ../category id) 'active' ''}} list-group-item">{{name}}
-					<span class="badge pull-right">{{count}}</span>
+					<span class="badge float-right">{{count}}</span>
 				</a>
 				{{/each}}
 			</div>

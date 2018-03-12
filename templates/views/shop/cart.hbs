@@ -3,10 +3,10 @@
 		<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
 
 			<article>
-				<p><a href="{{shopUrl}}">&larr; back to Shop</a></p>
-				<hr>
-				
-				{{#if session.cart}}
+				<p>
+					<a href="{{shopUrl}}">&larr; back to Shop</a>
+				</p>
+				<hr> {{#if session.cart}}
 
 				<header>
 					<h1>Shopping cart</h1>
@@ -17,28 +17,24 @@
 				<hr>
 
 				<ul class="list-group cart">
-				{{# each session.cart.items}}
+					{{# each session.cart.items}}
 					<li class="list-group-item product">
-						<strong><a href="{{productUrl product.slug}}">{{{product.title}}}</a></strong>
-						
-						<div class="btn-group pull-right dropdown">
-							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
-								 Action
-								 <span class="caret"></span>
-							 </button>
-  							<ul class="dropdown-menu">
-								<li><a href="/shop/cart?action=product.remove&id={{@key}}">Remove 1</a></li>
-								<li><a href="/shop/cart?action=product.remove&id={{@key}}&qty=all">Remove All</a></li>
-							</ul>
-						</div>
+						<strong>
+							<a href="{{productUrl product.slug}}">{{{product.title}}}</a>
+						</strong>
 
-						<span class="badge">Quantity: {{qty}}</span>
-						<span class="label label-success pull-right">${{ totalPrice product.price qty }}</span>
+						<b-dropdown text="Action">
+							<b-dropdown-item href="{{cartRemoveUrl @key}}">Remove 1</b-dropdown-item>
+							<b-dropdown-item href="{{cartRemoveUrl @key qty='all'}}">Remove All</b-dropdown-item>
+						</b-dropdown>
+
+						<b-badge pill variant="primary">Quantity: {{qty}}</b-badge>
+						<b-badge pill variant="primary" class="float-right">${{ totalPrice product.price qty }}</b-badge>
 					</li>
-				{{/each}}
-			    </ul>
+					{{/each}}
+				</ul>
 
-				<a href="/shop/checkout" type="button" class="btn btn-success">Checkout</a>
+				<b-button href="{{shopUrl 'checkout'}}" variant="success" class="my-2">Checkout</b-button>
 
 				{{else}}
 				<header>
@@ -46,7 +42,7 @@
 				</header>
 				{{/if}}
 			</article>
-			
+
 		</div>
 	</div>
 </div>

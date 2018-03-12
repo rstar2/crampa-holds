@@ -1,26 +1,26 @@
 const _ = require('lodash');
 
-const { linkTemplate } = require('./util');
+const { createUrl, linkTemplate } = require('./util');
 
 const helpers = {
 
 	// Direct url link to a specific post
-	blogUrl: function () {
-		return '/blog';
+	blogUrl: function (part, options) {
+		return createUrl('/blog', part);
 	},
 
 	// Direct url link to a specific post
 	postUrl: function (postSlug, options) {
-		return ('/blog/post/' + postSlug);
+		return helpers.blogUrl('post/' + postSlug);
 	},
 
 	// might be a ghost helper
 	// used for pagination urls on blog
 	blogPageUrl: function (pageNumber, options) {
-		return '/blog?page=' + pageNumber;
+		return helpers.blogUrl() + '?page=' + pageNumber;
 	},
 
-	// TODO: Move to separete pagination.js file and make more general - to be used from shop/products page also
+	// TODO: Move to separate pagination.js file and make more general - to be used from shop/products page also
 	// ### Pagination Helpers
 	// These are helpers used in rendering a pagination system for content
 	// Mostly generalized and with a small adjust to `_helper.blogPageUrl` could be universal for content types
