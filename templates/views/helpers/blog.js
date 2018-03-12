@@ -20,6 +20,7 @@ const helpers = {
 		return '/blog?page=' + pageNumber;
 	},
 
+	// TODO: Move to separete pagination.js file and make more general - to be used from shop/products page also
 	// ### Pagination Helpers
 	// These are helpers used in rendering a pagination system for content
 	// Mostly generalized and with a small adjust to `_helper.blogPageUrl` could be universal for content types
