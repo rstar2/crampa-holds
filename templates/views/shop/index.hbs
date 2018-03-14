@@ -11,7 +11,7 @@
 					<h2><a href="{{productUrl slug}}">{{{title}}}</a></h2>
 					<p class="lead text-muted">{{{categoryList categories prefix="Posted in " parentRoute=(shopCategoryUrl '')}}}
 					</p>
-					{{#if image}}<img src="{{{cloudinaryUrl image width=160 height=160 crop='fit' }}}" class="img pull-right">{{/if}}
+					{{#if image}}<img src="{{{cloudinaryUrl image width=160 height=160 crop='fit' }}}" class="img float-right">{{/if}}
 					<p>{{{description.brief.html}}}</p>
 					{{#if description.extended.html}}<p class="read-more"><a href="{{productUrl slug}}">Read more...</a></p>{{/if}}
 				</div>
@@ -20,11 +20,11 @@
 		</div>
 		<div class="col-sm-4 col-md-3">
 			<h2>Categories</h2>
-			<div style="margin-top: 70px;" class="list-group">
+			<div class="list-group">
 				<a href="{{shopUrl}}" class="{{ifx category '' 'active'}} list-group-item">All Categories</a>
 				{{# each categories }}
 				<a href="{{shopCategoryUrl slug}}" class="{{ifx (isSame ../category id) 'active' ''}} list-group-item">{{name}}
-					<span class="badge pull-right">{{count}}</span>
+					<span class="badge float-right">{{count}}</span>
 				</a>
 				{{/each}}
 			</div>

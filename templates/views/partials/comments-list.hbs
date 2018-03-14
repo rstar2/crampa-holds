@@ -1,0 +1,34 @@
+<div class="comments-list-wrap">
+	{{#if comments}}
+	<h3 class="text-success">Comments</h3>
+	<hr/>
+	<ul class="list-inline comments">
+		{{#each comments}} {{#if author}}
+		<li class="mb-2">
+			<div class="media">
+				<img class="mr-3 avatar" src="http://placehold.it/65x65" alt="">
+				<div class="media-body comment">
+					<div class="row pb-2 mb-2 comment-meta">
+						<div class="col">Dec 18, 2014 {{author.name.full}} says : </div>
+						{{#if (isSame ../user author.id) }}
+						<div class="col-auto">
+							<i class="float-right">
+								<a href="?action=comment.remove&comment={{id}}">
+									<i class="fas fa-shopping-cart"></i>
+								</a>
+							</i>
+						</div>
+						{{/if}}
+					</div>
+					<div> {{{content}}} </div>
+				</div>
+			</div>
+		</li>
+		{{/if}} {{/each}}
+	</ul>
+
+	{{else}}
+	<h3 class="text-success">No comments</h3>
+	{{/if}}
+
+</div>

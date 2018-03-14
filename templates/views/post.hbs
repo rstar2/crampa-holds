@@ -16,9 +16,9 @@
 					{{{post.content.extended}}}
 				</div>
 				<hr>
-				<div>
+				<div class="comments-wrap">
 					{{>comment-form}}
-					{{>comments}}
+					{{>comments-list}}
 				</div>
 			</article>
 		</div>
@@ -32,7 +32,7 @@
 --}}
 
 {{!-- This sections allows templates to define custom JS here --}}
-//TODO: use VueJS
+{{!-- TODO: use VueJS --}}
 {{#section 'body_js'}}
     <script>
 	jQuery(function ($) {

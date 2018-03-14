@@ -21,7 +21,7 @@
 		</div>
 		<div class="col-sm-4 col-md-3">
 			<h2>Categories</h2>
-			<div style="margin-top: 70px;" class="list-group">
+			<div class="list-group">
 				<a href="{{blogUrl}}" class="{{ifx category '' 'active'}} list-group-item">All Categories</a>
 				{{# each categories }}
 				<a href="{{categoryUrl slug}}" class="{{ifx (isSame ../category id) 'active' ''}} list-group-item">{{name}}
