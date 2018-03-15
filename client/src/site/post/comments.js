@@ -8,11 +8,12 @@ fontawesome.library.add(faTrash);
 import Vue from 'vue';
 
 new Vue({
-	el: '#app-comments',
+	el: '#app-comment-form',
 
-	mounted () {
-		console.log('Comments mounted');
+	data: {
+		comment: '',
 	},
+
 });
 
 

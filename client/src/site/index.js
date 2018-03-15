@@ -10,6 +10,11 @@ import './index.less';
 
 import Vue from 'vue';
 
+// Let Vue control some default components/elements
 new Vue({
-	el: '#app',
+	el: '#app-header',
+});
+
+new Vue({
+	el: '#app-flash-messages',
 });

@@ -59,9 +59,9 @@
 		</div>
 		<script type="text/javascript">__loading(true);</script>
 
-		<div id="app" v-cloak>
+		<div>
 
-			<div id="header">
+			<div id="app-header" v-cloak>
 				<b-navbar toggleable="md" type="dark" variant="info">
 					<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 					<b-navbar-brand href="/">Crampa Holds</b-navbar-brand>
@@ -102,14 +102,14 @@
 					</b-collapse>
 				</b-navbar>
 			</div>
-
+			
 			<div id="body">
 				<!--
 					Flash messages allow you to display once-off status messages to users, e.g. form
 					validation errors, success messages, etc
 				-->
 				{{#if messages}}
-				<b-container id="flash-messages" class="my-3">
+				<div id="app-flash-messages" v-cloak class="container my-3">
 					{{#if messages.info}}
 					<b-alert show dismissible>
 						{{{flashMessages messages.info}}}
@@ -133,7 +133,7 @@
 						{{{flashMessages messages.error}}}
 					</b-alert>
 					{{/if}}
-				</b-container>
+				</div>
 				{{/if}}
 
 				<!-- The content block should contain the body of your template's content-->
@@ -141,10 +141,12 @@
 			</div>
 
 			<div id="footer" class="mt-4 border-top pt-4 text-muted">
-				<b-container>
+				<div class="container">
 					<p>Designed By Rumen Neshev. Powered by <a href="http://keystonejs.com" target="_blank">KeystoneJS</a>.</p>
-				</b-container>
+				</div>
 			</div>
+
+
 		</div>
 
 
