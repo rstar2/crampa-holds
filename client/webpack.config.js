@@ -8,11 +8,13 @@ const options = {
 		// this is for bundling only Vue, Bootstrap and BootstrapVue
 		boot: './src/boot.js',
 
+		// this is bundle for the custom admin SPA pages
+		admin: './src/admin',
+
 		// this is for bundling custom CSS/LESS files for the main site
 		site: './src/site',
 
-		// this is bundle for the custom admin SPA pages
-		admin: './src/admin',
+		post: './src/site/post',
 	},
 	output: {
 		path: path.resolve(__dirname, '../public/js'),

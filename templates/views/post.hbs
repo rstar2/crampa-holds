@@ -16,7 +16,7 @@
 					{{{post.content.extended}}}
 				</div>
 				<hr>
-				<div class="comments-wrap">
+				<div id="app-comments" class="comments-wrap">
 					{{>comment-form}}
 					{{>comments-list}}
 				</div>
@@ -25,40 +25,10 @@
 	</div>
 </div>
 
-{{!-- 
-{{#section 'header_css'}}
-<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+{{#section 'head_css'}}
+	<link href="/public/styles/build.post.css?v={{version}}" rel="stylesheet">
 {{/section}} 
---}}
 
-{{!-- This sections allows templates to define custom JS here --}}
-{{!-- TODO: use VueJS --}}
 {{#section 'body_js'}}
-    <script>
-	jQuery(function ($) {
-		var comments = $('#comments');
-		var input = $('.comment-field-input');
-		var submit = comments.find('button[type=submit]');
-
-		// Scroll to comments and focus input field
-		$('[href="#comments"]').click(function scrollToComments(e) {
-			e.preventDefault();
-
-			$('html, body').animate({ scrollTop: comments.offset().top }, 250);
-
-			input.eq(0).focus();
-		});
-
-		// Check if field has content: enable/disable submit. Disable by default
-		submit.attr('disabled', 'disabled');
-		input.keyup(function () {
-			if ($.trim($(this).val())) {
-				submit.removeAttr('disabled');
-			} else {
-				submit.attr('disabled', 'disabled');
-			}
-		});
-	});
-</script>
+	<script src="/public/js/build.post.js?v={{version}}"></script>
 {{/section}}
-
