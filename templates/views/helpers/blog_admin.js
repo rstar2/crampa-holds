@@ -1,34 +1,18 @@
-const { cssLinkTemplate, scriptTemplate } = require('./util');
-
-const hbs = require('handlebars');
 const keystone = require('keystone');
 
 /**
-* KeystoneJS specific helpers
+* Specific helpers for blog-editors - e.g. when the user is able to
+* edit a post straight from the main site
 * ===========================
 */
 module.exports = {
 
-	isAdminEditorCSS: function (user, options) {
-		let output = '';
-		if (typeof (user) !== 'undefined' && user.isAdmin) {
-			output = cssLinkTemplate({
-				href: '/keystone/styles/content/editor.min.css',
-			});
-		}
-		return new hbs.SafeString(output);
+	isAdminEditor: function (user, options) {
+		return (typeof (user) !== 'undefined' && user.isAdmin);
 	},
-	isAdminEditorJS: function (user, options) {
-		let output = '';
-		if (typeof (user) !== 'undefined' && user.isAdmin) {
-			output = scriptTemplate({
-				src: '/keystone/js/content/editor.js',
-			});
-		}
-		return new hbs.SafeString(output);
-	},
-	adminEditableUrl: function (user, id) {
-		const rtn = keystone.app.locals.editable(user, {
+
+	adminEditablePostUrl: function (user, id) {
+		const rtn = keystone.content.editable(user, {
 			list: 'Post',
 			id: id,
 		});

@@ -71,7 +71,6 @@ keystone.set('locals', {
 	env: keystone.get('env'),
 	version: require('./package.json').version,
 	utils: keystone.utils,
-	editable: keystone.content.editable,
 	ga: {
 		property: process.env.GOOGLE_ANALYTICS_PROPERTY,
 		domain: process.env.GOOGLE_ANALYTICS_DOMAIN,

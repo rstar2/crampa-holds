@@ -6,8 +6,8 @@
 		<div class="col-sm-8 col-md-9">
 			<h4 class="text-weight-normal">Showing {{ products.results.length}} products.</h4>
 			<div class="products">
-				{{# each products.results}}
-				<div data-ks-editable="{{#if ../user}}{{adminEditableUrl ../user id}}{{/if}}" class="post">
+				{{#each products.results}}
+				<div class="product">
 					<h2><a href="{{productUrl slug}}">{{{title}}}</a></h2>
 					<p class="lead text-muted">{{{categoryList categories prefix="Posted in " parentRoute=(shopCategoryUrl '')}}}
 					</p>
