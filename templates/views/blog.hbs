@@ -5,9 +5,9 @@
 	<div class="row">
 		<div class="col col-sm-8 col-md-9">
 			<h4 class="text-weight-normal">Showing {{ posts.results.length}} posts.</h4>
-			<div class="blog">
+			<div class="blog" {{#if (isAdminEditor user)}}id="app-blog-editor"{{/if}}>
 				{{#each posts.results}}
-				<div data-ks-editable="{{#if ../user}}{{adminEditablePostUrl ../user id}}{{/if}}" class="post">
+				<div data-ks-editable="{{#if (isAdminEditor ../user)}}{{adminEditablePostUrl ../user id}}{{/if}}" class="post" is="app-post-editor">
 					<h2><a href="{{postUrl slug}}">{{{title}}}</a></h2>
 					<p class="lead text-muted">{{{categoryList categories prefix="Posted in "}}}
 							{{#if author.name.first}}by {{author.name.first}}{{/if}}
@@ -34,7 +34,7 @@
 	{{>pagination}}
 </div>
 
-{{#if user}}
+{{#if (isAdminEditor user)}}
 
 {{!-- These files provide the default styling for the KeystoneJS Content Editor
 	- only renders when user is logged in and admin --}}
