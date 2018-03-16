@@ -18,6 +18,8 @@ const options = {
 		// these are bundles for a specific main/client site page
 		'blog-editor': './src/site/blog-editor',
 		'post': './src/site/post',
+		'shop-cart': './src/site/shop-cart.js',
+		'shop-checkout': './src/site/shop-checkout.js',
 	},
 	output: {
 		path: path.resolve(__dirname, '../public/js'),

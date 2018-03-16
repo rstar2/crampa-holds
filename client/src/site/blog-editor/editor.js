@@ -6,6 +6,6 @@ import PostEditor from './PostEditor';
 new Vue({
 	el: '#app-blog-editor',
 	components: {
-		'app-post-editor': PostEditor
+		'app-post-editor': PostEditor,
 	},
 });
