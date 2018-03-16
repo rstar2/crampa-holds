@@ -13,6 +13,7 @@ const Order = new keystone.List('Order', {
 
 Order.add({
 	user: { type: Types.Relationship, ref: 'User', index: true },
+	zone: Number,
 	shippingAddress: { type: String },
 	billingAddress: { type: String },
 	additionalInfo: { type: String },
@@ -23,54 +24,65 @@ Order.add({
 // add this arbitrary 'cart' schema directly to the Mongoose model,
 // the Keystone model doesn't support this yet
 Order.schema.add({
-	cart: {
-		products: [{
-			id: String,
-			quantity: Number,
-		}],
-	},
-	zone: Number,
+	products: [{
+		id: String,
+		quantity: Number,
+	}],
 });
 
-// Order.schema.methods.sendNotificationEmail = function (callback) {
-// 	if (typeof callback !== 'function') {
-// 		callback = function (err) {
-// 			if (err) {
-// 				console.error('There was an error sending the notification email:', err);
-// 			}
-// 		};
-// 	}
+Order.schema.methods.sendNotifications = function (callback) {
+	if (typeof callback !== 'function') {
+		callback = function (err) {
+			if (err) {
+				console.error('There was an error sending the notification email:', err);
+			}
+		};
+	}
 
-// 	if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
-// 		console.log('Unable to send email - no mailgun credentials provided');
-// 		return callback(new Error('could not find mailgun credentials'));
-// 	}
+	if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+		console.log('Unable to send email - no mailgun credentials provided');
+		return callback(new Error('could not find mailgun credentials'));
+	}
 
-// 	var enquiry = this;
-// 	var brand = keystone.get('brand');
+	const order = this;
+	const brand = keystone.get('brand');
 
-// 	keystone.list('User').model.find().where('isAdmin', true).exec(function (err, admins) {
-// 		if (err) return callback(err);
-// 		new keystone.Email({
-// 			templateName: 'enquiry-notification',
-// 			transport: 'mailgun',
-// 		}).send({
-// 			to: admins,
-// 			from: {
-// 				name: 'Crampa Holds',
-// 				email: 'contact@crampaclimb.com',
-// 			},
-// 			subject: 'New Enquiry for Crampa Holds',
-// 			enquiry: enquiry,
-// 			brand: brand,
-// 			layout: false,
-// 		}, callback);
-// 	});
-// };
+	keystone.list('User').model.find().where('isAdmin', true).exec(function (err, admins) {
+
+		// TODO: merge with Enquiry.js sendNotification
+
+		if (err) return callback(err);
+		new keystone.Email({
+			templateName: 'order',
+			transport: 'mailgun',
+		}).send({
+			to: admins,
+			subject: `New Order for ${brand}`,
+			from: { // this is the MAILGUN (or other transport) sending user
+				name: 'Crampa Holds',
+				email: 'contact@crampaclimb.com',
+			},
+
+			// these are locals for the template
+			order,
+			brand,
+			// this is whether the template should use a layout
+			layout: false,
+		}, callback);
+
+		// TODO: send SMS notification
+	});
+};
 
 Order.schema.pre('save', function (next) {
-	// TODO: send email notification & SMS notification
+	this.wasNew = this.isNew;
 	next();
+});
+
+Order.schema.post('save', function () {
+	if (this.wasNew) {
+		this.sendNotifications();
+	}
 });
 
 Order.defaultSort = '-createdAt';

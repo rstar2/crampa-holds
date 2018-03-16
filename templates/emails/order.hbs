@@ -1,0 +1,19 @@
+<h1>Hi %recipient.firstName%</h1>
+
+<p class="text-larger">An order was just submitted to {{brand}}:</p>
+
+{{!-- TODO: Fill with order details -user/products, etc.--}}
+
+<p class="text-larger">From {{#if enquiry.name.full}}
+	<strong>{{enquiry.name.full}}</strong>
+	{{/if}} {{#if enquiry.email}} (
+	<a href="mailto:{{enquiry.email}}">{{enquiry.email}}</a>) {{/if}}
+</p>
+
+{{#if enquiry.phone}}
+<p class="text-larger">Phone: {{enquiry.phone}}</p>
+{{/if}} {{#if enquiry.enquiryType}}
+<p class="text-larger">{{underscoreFormat enquiry 'enquiryType'}}</p>
+{{/if}} {{#if enquiry.message}} {{{enquiry.message.html}}} {{/if}}
+
+<p class="text-muted">Sent {{underscoreFormat enquiry 'createdAt'}}</p>

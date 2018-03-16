@@ -43,14 +43,14 @@ keystone.hbs = hbs;
 require('express-handlebars-sections')(hbs);
 
 keystone.init({
-	'name': 'Crampa Holds',
-	'brand': 'Crampa Holds',
+	'name': 'Crampa Holds',  // the name of the KeystoneJS application - don't know if it's used anywhere ?
+	'brand': 'Crampa Holds', // Displayed in the top left hand corner of the Admin UI. I added it also in the site UI (title, nav-header) and in email-notifications
 
-	'favicon': 'public/favicon.ico',
 	'views': 'templates/views',
 	'view engine': '.hbs',
-
 	'custom engine': hbs.engine,
+
+	'favicon': 'public/favicon.ico',
 
 	'emails': 'templates/emails',
 
@@ -69,6 +69,7 @@ keystone.import('models');
 keystone.set('locals', {
 	_: require('lodash'),
 	env: keystone.get('env'),
+	brand: keystone.get('brand'),
 	version: require('./package.json').version,
 	utils: keystone.utils,
 	ga: {

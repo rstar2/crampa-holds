@@ -55,17 +55,20 @@ Enquiry.schema.methods.sendNotificationEmail = function (callback) {
 	keystone.list('User').model.find().where('isAdmin', true).exec(function (err, admins) {
 		if (err) return callback(err);
 		new keystone.Email({
-			templateName: 'enquiry-notification',
+			templateName: 'enquiry',
 			transport: 'mailgun',
 		}).send({
 			to: admins,
-			from: {
+			subject: `New Enquiry for ${brand}`,
+			from: { // this is the MAILGUN (or other transport) sending user
 				name: 'Crampa Holds',
 				email: 'contact@crampaclimb.com',
 			},
-			subject: 'New Enquiry for Crampa Holds',
-			enquiry: enquiry,
-			brand: brand,
+
+			// these are locals for the template
+			enquiry,
+			brand,
+			// this is whether the template should use a layout
 			layout: false,
 		}, callback);
 	});
