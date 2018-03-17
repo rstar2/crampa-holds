@@ -43,18 +43,26 @@ keystone.hbs = hbs;
 require('express-handlebars-sections')(hbs);
 
 keystone.init({
-	'name': 'Crampa Holds',  // the name of the KeystoneJS application - don't know if it's used anywhere ?
-	'brand': 'Crampa Holds', // Displayed in the top left hand corner of the Admin UI. I added it also in the site UI (title, nav-header) and in email-notifications
+	// the name of the KeystoneJS application - don't know if it's used anywhere ?
+	'name': 'Crampa Holds',
+	// Displayed in the top left hand corner of the Admin UI. I added it also in the site UI (title, nav-header) and in email-notifications
+	'brand': 'Crampa Holds',
 
+	// the root folder for the template views
 	'views': 'templates/views',
+	// the template view engine - Handlebars
 	'view engine': '.hbs',
 	'custom engine': hbs.engine,
 
-	'favicon': 'public/favicon.ico',
-
+	// the root folder for the template emails
+	// (it will again use Handlebars if don't specified differently)
 	'emails': 'templates/emails',
 
+	'favicon': 'public/favicon.ico',
+
 	'auto update': true,
+
+	// session and authentication
 	'session': true,
 	'auth': true,
 	'user model': 'User',

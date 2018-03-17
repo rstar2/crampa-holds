@@ -201,6 +201,13 @@ const helpers = {
 		return (`${parentRoute}/` + categorySlug);
 	},
 
+	/**
+	 * Return whether there's an authenticated user.
+	 */
+	isAuth: function (user, options) {
+		return !!user;
+	},
+
 };
 
 module.exports = helpers;

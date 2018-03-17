@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import FileUpload from '../components/fileupload/FileUpload.vue';
 import Gallery from '../components/gallery/Gallery.vue';
+import Notify from '../components/notify/Notify.vue';
 
 // register the VueRouter plugin in Vue
 Vue.use(VueRouter);
@@ -10,6 +11,7 @@ Vue.use(VueRouter);
 const routes = [
 	{ path: '/fileupload', component: FileUpload },
 	{ path: '/gallery', component: Gallery },
+	{ path: '/notify', component: Notify },
 ];
 
 // the server is configured to always serve the admin SPA page and so the client will handle the routing

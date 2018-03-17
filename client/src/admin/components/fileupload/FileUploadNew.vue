@@ -22,7 +22,6 @@
 
 <script>
 export default {
-  name: "app-upload-new",
   data() {
     return {
       name: "Name",

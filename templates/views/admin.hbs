@@ -5,45 +5,14 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Crampa Holds - Admin</title>
+	<title>{{brand}} - Admin</title>
 	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> {{!-- Load the Site styles - Bootstrap --}}
 	<link href="/public/styles/build.boot.css?v={{version}}" rel="stylesheet">
 	<link href="/public/styles/build.admin.css?v={{version}}" rel="stylesheet">
-
-	<style>
-		[v-cloak] {
-			display: none;
-		}
-	</style>
 </head>
 
 <body>
-	<div id="app" v-cloak>
-		<div id="header">
-			<b-navbar toggleable="md" type="dark" variant="info">
-				<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-				<b-navbar-brand href="/">{{brand}} - Admin</b-navbar-brand>
-
-				<b-collapse is-nav id="nav_collapse">
-					<b-navbar-nav>
-						<b-nav-item to="/fileupload">FileUploads</b-nav-item>
-						<b-nav-item to="/gallery">Gallery</b-nav-item>
-					</b-navbar-nav>
-
-					<!-- Right aligned nav items -->
-					<b-navbar-nav class="ml-auto">
-						{{!-- pass 'is-auth-init' as boolean property --}}
-						<app-auth v-once :is-auth-init="{{ifx user true false}}"></app-auth>
-					</b-navbar-nav>
-				</b-collapse>
-			</b-navbar>
-		</div>
-
-		<div id="body">
-			<router-view></router-view>
-		</div>
-
-	</div>
+	<div id="app" data-brand="{{brand}}" data-is-auth-init="{{isAuth user}}"></div>
 
 	<script src="/public/js/build.boot.js?v={{version}}"></script>
 	<script src="/public/js/build.admin.js?v={{version}}"></script>

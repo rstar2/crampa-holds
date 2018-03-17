@@ -10,7 +10,6 @@
 
 <script>
 export default {
-  name: "app-upload-list-item",
   props: {
     item: { type: Object, required: true },
     animate: { type: Boolean, default: false }

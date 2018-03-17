@@ -35,7 +35,7 @@ keystone.pre('render', middleware.cacheControl);
 // Handle 404 errors
 keystone.set('404', function (req, res, next) {
 	// this is defined in middleware.initErrorHandlers
-	res.notfound();
+	res.notFound();
 });
 
 // Handle other errors
@@ -46,7 +46,7 @@ keystone.set('500', function (err, req, res, next) {
 		err = err.stack;
 	}
 	// this is defined in middleware.initErrorHandlers
-	res.err(err, title, message);
+	res.error(err, title, message);
 });
 
 // Import Route Controllers
@@ -105,7 +105,6 @@ exports = module.exports = function (app) {
 	app.all('/api/**', ...apiProtected);
 
 	app.use('/api/fileupload', routes.api.fileupload);
-
 	app.use('/api/gallery', routes.api.gallery);
-
+	app.use('/api/notify', routes.api.notify);
 };

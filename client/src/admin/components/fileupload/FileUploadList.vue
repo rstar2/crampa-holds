@@ -18,7 +18,6 @@ import { mapGetters } from "vuex";
 import FileUploadListItem from "./FileUploadListItem.vue";
 
 export default {
-  name: "app-upload-list",
   components: {
     "app-upload-list-item": FileUploadListItem
   },

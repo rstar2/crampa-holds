@@ -72,7 +72,7 @@ function fileUploadRemove (context, { item }) {
 
 			context.commit('fileuploadRemove', { item });
 		})
-		.catch(function (error) {
+		.catch(error => {
 			console.error('Failed to remove file-upload - ' + error);
 			throw error;
 		});
@@ -98,7 +98,7 @@ function fileUploadList (context) {
 
 			context.commit('fileuploadsLoaded');
 		})
-		.catch(function (error) {
+		.catch(error => {
 			console.error('Failed to list file-uploads - ' + error);
 			throw error;
 		});

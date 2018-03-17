@@ -67,8 +67,13 @@ exports.cacheControl = function (req, res, next) {
  */
 exports.requireAuth = function (keystone) {
 	return function (req, res, next) {
+		// api not allowed error
+		if (!req.user && res.apiNotAllowed) {
+			return res.apiNotAllowed();
+		}
+
 		if (!req.user || !req.user.canAccessKeystone) {
-			if (-1 || req.headers.accept.indexOf('application/json')) {
+			if (req.headers.accept.indexOf('application/json') !== -1) {
 				return req.user
 					? res.status(403).json({ error: 'not authorized' })
 					: res.status(401).json({ error: 'not signed in' });
@@ -116,25 +121,39 @@ exports.validateCorsAPI = function (keystone) {
     Inits the error handler functions into `res`
 */
 exports.initErrorHandlers = function (req, res, next) {
-	res.err = function (err, title, message) {
-		res.status(500).render('errors/500', {
-			err: err,
-			errorTitle: title,
-			errorMsg: message,
+	res.error = function (error, title, message) {
+		res.status(500);
+		if (res.apiError) {
+			return res.apiError('Server error');
+		} else if (req.headers.accept.indexOf('application/json') !== -1) {
+			return res.json({ error: 'Server error' });
+		} else {
+			return res.render('errors/500', {
+				error,
+				errorTitle: title,
+				errorMsg: message,
 
-			// this is for express-handlebars to set that we don't want the default layout
-			layout: false,
-		});
+				// this is for express-handlebars to set that we don't want the default layout
+				layout: false,
+			});
+		}
 	};
 
-	res.notfound = function (title, message) {
-		res.status(404).render('errors/404', {
-			errorTitle: title,
-			errorMsg: message,
+	res.notFound = function (title, message) {
+		res.status(404);
+		if (res.apiNotFound) {
+			return res.apiNotFound();
+		} else if (req.headers.accept.indexOf('application/json') !== -1) {
+			return res.json({ error: 'Not found' });
+		} else {
+			res.render('errors/404', {
+				errorTitle: title,
+				errorMsg: message,
 
-			// this is for express-handlebars to set that we don't want the default layout
-			layout: false,
-		});
+				// this is for express-handlebars to set that we don't want the default layout
+				layout: false,
+			});
+		}
 	};
 
 	next();

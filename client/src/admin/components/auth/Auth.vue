@@ -40,13 +40,6 @@ const classAnimatedIn = "slideInRight";
 const classAnimatedOut = "slideOutRight";
 
 export default {
-  name: "app-auth",
-  props: {
-    isAuthInit: {
-      type: Boolean,
-      default: false
-    }
-  },
   data() {
     return {
       loading: false,
@@ -66,10 +59,6 @@ export default {
 
   // change the show animation
   created: function created() {
-    // when passed the initial property - commit it to the store
-    // Note - it's straight commit - not dispatching an action
-    this.$store.commit("authChange", { isAuth: this.isAuthInit });
-
     // non-reactive property - once created
     this.modalDialogEl = null;
   },

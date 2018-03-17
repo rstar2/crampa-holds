@@ -12,18 +12,30 @@ import Vue from 'vue';
 
 import store from './store';
 import router from './router';
-import AppAuth from './components/auth/Auth.vue';
+
+import App from './App';
 
 import { registerBusEvents } from './bus';
+
+// {{ifx user true false}}
+// {{brand}}
 
 new Vue({
 	el: '#app',
 	store,
 	router,
-	components: {
-		'app-auth': AppAuth,
-	},
 	created () {
 		registerBusEvents(this);
+	},
+	render (createElement) {
+		// get the initial values from the original element HTML5 dataset
+		const data = this.$el.dataset;
+		const props = { brand: data.brand, isAuthInit: data.isAuthInit };
+
+		// when passed the initial property - commit it to the store
+		// Note - it's straight commit - not dispatching an action
+		this.$store.commit('authChange', { isAuth: data.isAuthInit });
+
+		return createElement(App, { props });
 	},
 });
