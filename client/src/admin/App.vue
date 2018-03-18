@@ -43,7 +43,7 @@ export default {
   },
   components: {
     "app-auth": AppAuth
-  },
+  }
 };
 </script>
 

@@ -18,7 +18,8 @@
         "nocreate",
         "noedit",
         "originalname",
-        "signin"
+        "signin",
+        "twilio"
     ],
     "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
     "javascript.format.insertSpaceAfterConstructor": true,

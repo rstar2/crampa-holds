@@ -2,18 +2,9 @@
 
 <p class="text-larger">An order was just submitted to {{brand}}:</p>
 
-{{!-- TODO: Fill with order details -user/products, etc.--}}
-
-<p class="text-larger">From {{#if enquiry.name.full}}
-	<strong>{{enquiry.name.full}}</strong>
-	{{/if}} {{#if enquiry.email}} (
-	<a href="mailto:{{enquiry.email}}">{{enquiry.email}}</a>) {{/if}}
+<p class="text-larger">From {{#if order.user.name.full}} <strong>{{order.user.name.full}}</strong> {{/if}}
+	{{#if order.user.email}} (<a href="mailto:{{order.user.email}}">{{order.user.email}}</a>) {{/if}}
 </p>
 
-{{#if enquiry.phone}}
-<p class="text-larger">Phone: {{enquiry.phone}}</p>
-{{/if}} {{#if enquiry.enquiryType}}
-<p class="text-larger">{{underscoreFormat enquiry 'enquiryType'}}</p>
-{{/if}} {{#if enquiry.message}} {{{enquiry.message.html}}} {{/if}}
-
-<p class="text-muted">Sent {{underscoreFormat enquiry 'createdAt'}}</p>
+<p class="text-larger">Order ID: {{order.id}}</p>
+<p class="text-muted">Sent {{underscoreFormat order 'createdAt'}}</p>

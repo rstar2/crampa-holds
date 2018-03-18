@@ -1,13 +1,3 @@
-if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
-	console.log('----------------------------------------'
-		+ '\nWARNING: MISSING MAILGUN CREDENTIALS'
-		+ '\n----------------------------------------'
-		+ '\nYou have opted into email sending but have not provided'
-		+ '\nmailgun credentials. Attempts to send will fail.'
-		+ '\n\nCreate a mailgun account and add the credentials to the .env file to'
-		+ '\nset up your mailgun integration');
-}
-
 // Simulate config options from your production environment by
 // customizing the .env file in your project's root folder.
 require('dotenv').config();
@@ -107,3 +97,13 @@ keystone.set('routes', require('./routes'));
 
 // Start Keystone to connect to your database and initialize the web server
 keystone.start();
+
+if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+	console.log('----------------------------------------'
+		+ '\nWARNING: MISSING MAILGUN CREDENTIALS'
+		+ '\n----------------------------------------'
+		+ '\nYou have opted into email sending but have not provided'
+		+ '\nmailgun credentials. Attempts to send will fail.'
+		+ '\n\nCreate a mailgun account and add the credentials to the .env file to'
+		+ '\nset up your mailgun integration');
+}
