@@ -13,12 +13,18 @@ import Vue from 'vue';
 import store from './store';
 import router from './router';
 
+// A block-ui plugin for Vue
+// Used: https://github.com/realdah/vue-blockui
+import BlockUI from 'vue-blockui';
+Vue.use(BlockUI);
+
+// the main compoenent
 import App from './App';
 
+// the root component will be registered as a common Bus
+// that will listen for any kind of events that are not state-related
+// like currently showing of alerts
 import { registerBusEvents } from './bus';
-
-// {{ifx user true false}}
-// {{brand}}
 
 new Vue({
 	el: '#app',

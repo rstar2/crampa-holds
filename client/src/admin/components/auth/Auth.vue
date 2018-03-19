@@ -72,8 +72,8 @@ export default {
   },
 
   watch: {
-    isAuth(isAuthorized) {
-      this.$root.$emit("authChanged", { isAuth: isAuthorized });
+    isAuth(newValue) {
+      this.$root.$emit("authChanged", { isAuth: newValue });
     }
   },
 

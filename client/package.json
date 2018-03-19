@@ -21,6 +21,7 @@
     "copy-webpack-plugin": "^4.5.0",
     "promise-polyfill": "^7.1.0",
     "vue": "^2.5.11",
+    "vue-blockui": "^1.1.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "whatwg-fetch": "^2.0.3"

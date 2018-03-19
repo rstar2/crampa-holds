@@ -14,14 +14,14 @@ const Order = new keystone.List('Order', {
 });
 
 Order.add({
-	user: { type: Types.Relationship, ref: 'User', index: true },
-	zone: Number,
-	shippingAddress: { type: String },
+	user: { type: Types.Relationship, ref: 'User', required: true, index: true },
+	zone: { type: Number, required: true },
+	shippingAddress: { type: String, required: true },
 	billingAddress: { type: String },
 	additionalInfo: { type: String },
 	createdAt: { type: Date, default: Date.now },
-	paymentId: { type: String },
-	paymentProvider: { type: String },
+	paymentId: { type: String, required: true },
+	paymentProvider: { type: String, required: true },
 });
 // add this arbitrary 'cart' schema directly to the Mongoose model,
 // the Keystone model doesn't support this yet
@@ -30,6 +30,7 @@ Order.schema.add({
 		id: String,
 		quantity: Number,
 	}],
+	totalPrice: { type: Number },
 });
 
 Order.schema.pre('save', function (next) {

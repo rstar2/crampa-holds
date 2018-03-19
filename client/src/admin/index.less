@@ -5,3 +5,12 @@
 #app-admin-fileupload {
 	color: @color;
 }
+
+// make the BlockUI component be absolute inside an relative component
+.loading-container {
+	&
+	.loading,
+	.loading-backdrop {
+		position: absolute !important;
+	}
+}

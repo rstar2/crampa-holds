@@ -8,14 +8,15 @@ const { sendNotificationsForEnquiry, sendNotificationsForOrder } = require('../.
 
 // API Test notifications - sending emails and SMS-es
 const router = keystone.createRouter();
-router.post('/enquiry/email', emailForEnquiry);
-router.post('/order/email', emailForOrder);
-router.post('/order/sms', smsForOrder);
+router.post('/enquiry/:gateway', forEnquiry);
+router.post('/order/:gateway', forOrder);
 
 module.exports = router;
 
 
-function emailForEnquiry (req, res, next) {
+function forEnquiry (req, res) {
+	let gateways = req.body.isSMS === true ? ['sms'] : ['email'];
+
 	// To test enquiry notifications we create a dummy enquiry that
 	// is not saved to the database, but passed to the template.
 	const Enquiry = keystone.list('Enquiry');
@@ -27,7 +28,7 @@ function emailForEnquiry (req, res, next) {
 		message: { md: req.body.message },
 	});
 
-	sendNotificationsForEnquiry(keystone, newEnquiry, ['email'], (error) => {
+	sendNotificationsForEnquiry(keystone, newEnquiry, gateways, (error) => {
 		if (error) {
 			return res.apiError(error);
 		}
@@ -37,10 +38,32 @@ function emailForEnquiry (req, res, next) {
 	});
 }
 
-function emailForOrder (req, res, callback) {
-	// TODO: 
-}
+function forOrder (req, res) {
+	let gateways = req.body.isSMS === true ? ['sms'] : ['email'];
 
-function smsForOrder (req, res, callback) {
-	// TODO:
+	// To test enquiry notifications we create a dummy enquiry that
+	// is not saved to the database, but passed to the template.
+	const Order = keystone.list('Order');
+	const newOrder = new Order.model({
+		user: {
+			name: req.body.name, // firstName and LastName
+			email: req.body.email,
+			phone: req.body.phone,
+		},
+		zone: req.body.zone,
+		shippingAddress: req.body.shippingAddress,
+		paymentId: 'paymentID',
+		paymentProvider: 'PayPal',
+		products: [{ id: 'productId_1', quantity: 1 }, { id: 'productId_3', quantity: 3 }],
+		totalPrice: req.body.totalPrice,
+	});
+
+	sendNotificationsForOrder(keystone, newOrder, gateways, (error) => {
+		if (error) {
+			return res.apiError(error);
+		}
+		res.apiResponse({
+			success: true,
+		});
+	});
 }
