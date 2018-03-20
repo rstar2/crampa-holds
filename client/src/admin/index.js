@@ -18,7 +18,7 @@ import router from './router';
 import BlockUI from 'vue-blockui';
 Vue.use(BlockUI);
 
-// the main compoenent
+// the main component
 import App from './App';
 
 // the root component will be registered as a common Bus
@@ -32,19 +32,22 @@ new Vue({
 	router,
 	created () {
 		registerBusEvents(this);
-	},
-	render (createElement) {
+
 		// get the initial values from the original element HTML5 dataset
-		const data = this.$el.dataset;
+		const el = document.querySelector(this.$options.el);
+		const data = el.dataset;
 		const brand = data.brand;
 		// convert the string to boolean
 		const isAuthInit = data.isAuthInit === 'true';
-		const props = { brand, isAuthInit };
 
-		// when passed the initial property - commit it to the store
+		// commit it to the store the initial auth state
 		// Note - it's straight commit - not dispatching an action
 		this.$store.commit('authChange', { isAuth: isAuthInit });
 
-		return createElement(App, { props });
+		// one time fields - not reactive
+		this.props = { brand, isAuthInit };
+	},
+	render (createElement) {
+		return createElement(App, { props: this.props });
 	},
 });
