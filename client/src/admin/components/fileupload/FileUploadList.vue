@@ -1,6 +1,10 @@
 <template>
  	 <b-container>
-		<h2>List: <span>{{ count }}</span></h2>
+		  <b-row>
+			  <b-col><h2>List: <span>{{ count }}</span></h2></b-col>
+			  <b-col cols="auto"><b-button @click="loadItems">Refresh</b-button></b-col>
+		  </b-row>
+		
 		<b-list-group>
 			<app-upload-list-item
 				v-for="item of items" 
@@ -42,16 +46,19 @@ export default {
           msg: "Failed to remove a file-upload"
         });
       });
-    }
-  },
-  mounted() {
-    if (!this.loaded) {
+    },
+    loadItems() {
       this.$store.dispatch("fileUploadList").catch(() => {
         this.$root.$emit("showAlert", {
           type: "danger",
           msg: "Failed to get file-uploads list"
         });
       });
+    }
+  },
+  mounted() {
+    if (!this.loaded) {
+      this.loadItems();
     } else {
       this.animate = true;
     }
