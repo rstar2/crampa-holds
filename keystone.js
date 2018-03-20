@@ -44,9 +44,10 @@ keystone.init({
 	'view engine': '.hbs',
 	'custom engine': hbs.engine,
 
-	// the root folder for the template emails
+	// the root folders for the template emails ans SMS
 	// (it will again use Handlebars if don't specified differently)
 	'emails': 'templates/emails',
+	'sms': 'templates/sms',
 
 	'favicon': 'public/favicon.ico',
 

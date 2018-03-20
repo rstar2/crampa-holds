@@ -1,2 +1,4 @@
-A new order was just submitted from {{order.user.name.full}}
-Order ID: {{order.id}}. Total price: {{order.totalPrice}}
+{{brand}}:
+A new order was just submitted from: {{#if order.user.name.full}}{{order.user.name.full}} with email {{/if}}{{order.user.email}}.
+Order ID: {{order.id}}.
+Total price: {{order.totalPrice}}
