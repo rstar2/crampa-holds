@@ -1,6 +1,6 @@
 <template>
 	<div>
-    	<b-button @click="showModal">{{ action }}</b-button>
+    	<b-button @click="showModal" :disabled="loading">{{ action }}</b-button>
     	<b-modal ref="myModalRef" :title="action" 
 			centered hide-footer no-close-on-backdrop hide-header-close
 			@show="beforeShow" @hide="beforeHide"
@@ -19,7 +19,7 @@
         		<b-form-input v-model.trim="email" type="text" placeholder="Email" class="mb-2"></b-form-input>
         		<b-form-input v-model.trim="password" type="password" placeholder="Password" class="mb-2"></b-form-input>
       		</div>
-			<b-btn class="mt-3" variant="outline-success" block @click="doAction">{{ action }}</b-btn>
+			<b-btn class="mt-3" variant="outline-success" block @click="doAction" :disabled="loading">{{ action }}</b-btn>
 			<b-btn class="mt-3" variant="outline-danger" block  @click="hideModal">Close</b-btn>				
     	</b-modal>
   	</div>

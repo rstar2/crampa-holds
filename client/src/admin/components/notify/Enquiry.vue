@@ -32,8 +32,8 @@
 </template>
 
 <script>
+import * as api from "../../services/api";
 
-import * as api from '../../services/api';
 export default {
   data() {
     return {
@@ -44,40 +44,33 @@ export default {
       },
       phone: "",
       email: "",
-			message: "",
-			
-			isLoading: false,
+      message: "",
+
+      isLoading: false
     };
-	},
-	watch: {
-		isLoading(newValue) {
-			// TODO: make isLoading more common - move to router/App and crontroll with every ajax request/response
-			// to disable the current active router's component - or use the common Bus
-			if (newValue) {
-				this.oldElPosition = this.$el.style.position;
-				this.$el.style.position = 'relative';
-			} else {
-				this.$el.style.position = this.oldElPosition;
-				delete this.oldElPosition;
-			}
-		}
-	},
+  },
+  watch: {
+    isLoading(newValue) {
+      // TODO: make isLoading more common - move to router/App and crontroll with every ajax request/response
+      // to disable the current active router's component - or use the common Bus
+      if (newValue) {
+        this.oldElPosition = this.$el.style.position;
+        this.$el.style.position = "relative";
+      } else {
+        this.$el.style.position = this.oldElPosition;
+        delete this.oldElPosition;
+      }
+    }
+  },
   methods: {
     test() {
-			this.isLoading = true;
-      api.post("/api/notify/enquiry/email", this.$data)
-        .then(() => {
-          this.$root.$emit("showAlert", {
-            msg: "Test email sent"
-					});
+      this.isLoading = true;
+      api.post("/api/notify/enquiry/email", this.$data, {
+          vm: this,
+          successAlert: "Test email sent",
+          failAlert: "Failed to send test email"
         })
-        .catch(error => {
-          this.$root.$emit("showAlert", {
-            type: "danger",
-            msg: "Failed to send test email"
-          });
-				})
-				.then(() => this.isLoading = false);
+        .then(() => (this.isLoading = false));
     }
   }
 };

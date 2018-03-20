@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import * as api from "../../services/api";
+
 export default {
   data() {
     return {
@@ -54,36 +56,11 @@ export default {
   },
   methods: {
     test() {
-      fetch("/api/notify/order/email", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json"
-        },
-        body: JSON.stringify(this.$data),
-        credentials: "same-origin",
-        cache: "no-cache"
-      })
-        .then(r => {
-          if (!r.ok) return Promise.reject("failed");
-          return r.json();
-        })
-        .then(data => {
-          const success = data.success === true;
-          if (!success) {
-            return Promise.reject("failed");
-          }
-        })
-        .then(() => {
-          this.$root.$emit("showAlert", {
-            msg: "Test email sent"
-          });
-        })
-        .catch(error => {
-          this.$root.$emit("showAlert", {
-            type: "danger",
-            msg: "Failed to send test email"
-          });
-        });
+      api.post("/api/notify/enquiry/email", this.$data, {
+        vm: this,
+        successAlert: "Test email sent",
+        failAlert: "Failed to send test email"
+      });
     }
   }
 };
