@@ -40,19 +40,14 @@ export default {
 
   methods: {
     removeItem(item) {
-      this.$store.dispatch("fileUploadRemove", { item }).catch(() => {
-        this.$root.$emit("showAlert", {
-          type: "danger",
-          msg: "Failed to remove a file-upload"
-        });
+      this.$store.dispatch("fileUploadRemove", {
+        item,
+        apiProps: { vm: this, failAlert: "Failed to remove a file-upload" }
       });
     },
     loadItems() {
-      this.$store.dispatch("fileUploadList").catch(() => {
-        this.$root.$emit("showAlert", {
-          type: "danger",
-          msg: "Failed to get file-uploads list"
-        });
+      this.$store.dispatch("fileUploadList", {
+        apiProps: { vm: this, failAlert: "Failed to get file-uploads list" }
       });
     }
   },

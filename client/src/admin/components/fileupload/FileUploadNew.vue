@@ -41,15 +41,13 @@ export default {
           onUploadProgress: event => {
             // progress listener
             this.uploadProgress = Math.round(event.loaded / event.total * 100);
+          },
+          apiProps: {
+            vm: this,
+            failAlert: "Failed to create a new file-upload"
           }
         })
-        .then(() => (this.uploading = false))
-        .catch(() => {
-          this.$root.$emit("showAlert", {
-            type: "danger",
-            msg: "Failed to create a new file-upload"
-          });
-        });
+        .then(() => (this.uploading = false));
     }
   }
 };

@@ -1,7 +1,11 @@
 import axios from 'axios';
-import { fail } from 'assert';
+
+import { showAlert } from './alert';
+import { blockUI } from './blockui';
 
 export function get (url, { vm, successAlert, failAlert, block = true } = {}) {
+	if (block) blockUI(true, { vm });
+
 	return fetch(url, {
 		credentials: 'same-origin',
 		cache: 'no-cache',
@@ -16,17 +20,19 @@ export function get (url, { vm, successAlert, failAlert, block = true } = {}) {
 			if (data.success !== undefined && data.success !== true) {
 				return Promise.reject('failed');
 			}
-			showAlert(true, { vm: vm, alert: successAlert });
+			showAlert(true, { vm, alert: successAlert });
 			return data;
 		})
 		.catch(error => {
 			console.error(`Failed to GET from ${url} - because of ${error}`);
-			showAlert(false, { vm: vm, alert: failAlert });
+			showAlert(false, { vm, alert: failAlert });
 			throw error;
 		});
 }
 
 export function post (url, data, { vm, successAlert, failAlert, block = true } = {}) {
+	if (block) blockUI(true, { vm });
+
 	return fetch(url, {
 		method: 'POST',
 		headers: {
@@ -52,6 +58,8 @@ export function upload (url, data, onUploadProgress, { vm, successAlert, failAle
 
 	Object.keys(data).forEach(key => fd.append(key, data[key]));
 
+	if (block) blockUI(true, { vm });
+
 	return axios.post(url, fd, {
 		withCredentials: true,
 		onUploadProgress,
@@ -60,23 +68,15 @@ export function upload (url, data, onUploadProgress, { vm, successAlert, failAle
 			// axios by default will 'accept' only responses with status 200>=status<300
 			// others will be automatically 'rejected'
 			// if (res.status !== 200) return Promise.reject("rejected");
-			showAlert(true, { vm: vm, alert: successAlert });
+			showAlert(true, { vm, alert: successAlert });
 			return res.data;
 		})
 		.catch(error => {
 			console.error(`Failed to UPLOAD to ${url} - because of ${error}`);
-			showAlert(false, { vm: vm, alert: failAlert });
+			showAlert(false, { vm, alert: failAlert });
 			throw error;
 		});
 }
 
-
-function showAlert (success, { vm, alert }) {
-	if (vm && alert) {
-		vm.$root.$emit('showAlert', {
-			msg: alert,
-			type: success ? 'info' : 'danger',
-			timeout: success ? 3 : undefined,
-		});
-	}
-}
+// TODO: add Promise.always() and Promise.finally()
+// and call if (block) blockUI(false, { vm });
