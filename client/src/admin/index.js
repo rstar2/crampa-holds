@@ -18,6 +18,9 @@ import router from './router';
 import BlockUI from 'vue-blockui';
 Vue.use(BlockUI);
 
+import Spinner from 'vue-spinner-component/src/Spinner';
+Vue.component('spinner', Spinner);
+
 // the main component
 import App from './App';
 
@@ -26,8 +29,21 @@ import App from './App';
 // like currently showing of alerts
 import { registerBusEvents } from './bus';
 
+import { blockUIDefaults as blockUI } from './services/blockui';
+
 new Vue({
 	el: '#app',
+	data: {
+		// blockUI properties - see BlockUI component
+		// NOTE!!! - all blockUI_props must be declared in front in order the Vue reactivity to handle them
+		// blockUI: {
+		// 	isEnabled: undefined,
+		// 	message: undefined,
+		// 	url: undefined,
+		// 	html: undefined,
+		// },
+		blockUI: { ...blockUI },
+	},
 	store,
 	router,
 	created () {
@@ -48,6 +64,6 @@ new Vue({
 		this.props = { brand, isAuthInit };
 	},
 	render (createElement) {
-		return createElement(App, { props: this.props });
+		return createElement(App, { props: { ...this.props, blockUI: this.blockUI } });
 	},
 });

@@ -60,4 +60,15 @@ export function registerBusEvents (vmRoot) {
 		this.$el.appendChild(vmAlert.$el);
 	});
 
+
+	vmRoot.$on('blockUI', function ({ isEnabled = false, message = '', url, html }) {
+		console.log('Bus: BlockUI changed', isEnabled);
+
+		// just update the root-component's 'blockUI' data property
+		// it will in tern update the responsible child (currently the App.vue)
+		this.blockUI.isEnabled = isEnabled;
+		this.blockUI.message = message;
+		this.blockUI.url = url;
+		this.blockUI.html = html;
+	});
 };

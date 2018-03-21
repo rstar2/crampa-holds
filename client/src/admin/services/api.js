@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 import { showAlert } from './alert';
-import { blockUI } from './blockui';
+import { blockUI as showBlockUI } from './blockui';
 
-export function get (url, { vm, successAlert, failAlert, block = true } = {}) {
-	if (block) blockUI(true, { vm });
+export function get (url, { vm, successAlert, failAlert, blockUI = { isEnabled: true } } = {}) {
+	if (blockUI) showBlockUI(true, vm, blockUI);
 
 	return fetch(url, {
 		credentials: 'same-origin',
@@ -20,18 +20,23 @@ export function get (url, { vm, successAlert, failAlert, block = true } = {}) {
 			if (data.success !== undefined && data.success !== true) {
 				return Promise.reject('failed');
 			}
+
 			showAlert(true, { vm, alert: successAlert });
+			if (blockUI) showBlockUI(false, vm);
+
 			return data;
 		})
 		.catch(error => {
 			console.error(`Failed to GET from ${url} - because of ${error}`);
 			showAlert(false, { vm, alert: failAlert });
+			if (blockUI) showBlockUI(false, vm);
+
 			throw error;
 		});
 }
 
-export function post (url, data, { vm, successAlert, failAlert, block = true } = {}) {
-	if (block) blockUI(true, { vm });
+export function post (url, data, { vm, successAlert, failAlert, blockUI = { isEnabled: true } } = {}) {
+	if (blockUI) showBlockUI(true, vm, blockUI);
 
 	return fetch(url, {
 		method: 'POST',
@@ -44,21 +49,26 @@ export function post (url, data, { vm, successAlert, failAlert, block = true } =
 	})
 		.then(r => {
 			if (!r.ok) return Promise.reject('failed');
+
 			showAlert(true, { vm, alert: successAlert });
+			if (blockUI) showBlockUI(false, vm);
+
 			return r.json();
 		}).catch(error => {
 			console.error(`Failed to POST to ${url} - because of ${error}`);
 			showAlert(false, { vm, alert: failAlert });
+			if (blockUI) showBlockUI(false, vm);
+
 			throw error;
 		});
 };
 
-export function upload (url, data, onUploadProgress, { vm, successAlert, failAlert, block = true } = {}) {
+export function upload (url, data, onUploadProgress, { vm, successAlert, failAlert, blockUI = { isEnabled: true } } = {}) {
 	const fd = new FormData();
 
 	Object.keys(data).forEach(key => fd.append(key, data[key]));
 
-	if (block) blockUI(true, { vm });
+	if (blockUI) showBlockUI(true, vm, blockUI);
 
 	return axios.post(url, fd, {
 		withCredentials: true,
@@ -69,11 +79,15 @@ export function upload (url, data, onUploadProgress, { vm, successAlert, failAle
 			// others will be automatically 'rejected'
 			// if (res.status !== 200) return Promise.reject("rejected");
 			showAlert(true, { vm, alert: successAlert });
+			if (blockUI) showBlockUI(false, vm);
+
 			return res.data;
 		})
 		.catch(error => {
 			console.error(`Failed to UPLOAD to ${url} - because of ${error}`);
 			showAlert(false, { vm, alert: failAlert });
+			if (blockUI) showBlockUI(false, vm);
+
 			throw error;
 		});
 }

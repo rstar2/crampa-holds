@@ -22,6 +22,17 @@
 			</b-navbar>
 
 			<router-view></router-view>
+			<BlockUI v-show="blockUI.isEnabled" v-bind="blockUI">
+				<div class="spinnerWrap" style="
+						display: flex; align-items: center; justify-content: center;
+            height: 15rem;
+            margin-bottom: 5rem;">
+					<spinner :status="true" color="#4fc08d" :size="200"></spinner>
+				</div>
+			</BlockUI>
+
+
+			
 
 	</div>
 </template>
@@ -38,6 +49,14 @@ export default {
     isAuthInit: {
       type: Boolean,
       default: false
+    },
+    /* All blockUI props are repassed */
+    blockUI: {
+      type: Object,
+      // object/array defaults should be returned from a factory function
+      default: function() {
+        return {};
+      }
     }
   },
   components: {
