@@ -1,6 +1,7 @@
-// Simulate config options from your production environment by
-// customizing the .env file in your project's root folder.
-require('dotenv').config();
+// require('dotenv').config();
+require('dotenv-safe').config({
+	allowEmptyValues: true,
+});
 
 // Require keystone
 const keystone = require('keystone');

@@ -81,9 +81,6 @@ exports = module.exports = function (req, res) {
 	const view = new keystone.View(req, res);
 	const locals = res.locals;
 
-	// Set locals
-	locals.section = 'shopping-cart';
-
 	// Add a Product
 	view.on('get', { action: 'product.add' }, function (next) {
 		cartUpdate(req, res, next);
@@ -94,6 +91,12 @@ exports = module.exports = function (req, res) {
 		cartUpdate(req, res, next, true);
 	});
 
+	// Set locals
+	locals.section = 'shopping-cart';
+
+	// set PayPal settings
+	locals.PayPal_env = process.env.PAYPAL_IS_LIVE === 'true' ? 'production' : 'sandbox';
+	locals.PayPal_clientId = process.env.PAYPAL_APP_PUBLIC_ID;
 
 	// Render the view
 	view.render('shop/cart');
