@@ -18,7 +18,7 @@ export function init (paypalMode, elButtonSelector) {
 
 		// Specify the style of the button
 		style: {
-			label: 'pay',    // checkout | credit | pay | buynow | generic | paypal
+			label: 'pay',    // checkout | credit | pay | buynow | paypal
 			fundingicons: true, // optional
 			// branding: true,     // optional
 			// layout: 'vertical', // horizontal | vertical
@@ -50,16 +50,17 @@ export function init (paypalMode, elButtonSelector) {
 			// });
 
 			// Set up the data you need to pass to your server
-			data = {
+			const params = {
 				paymentID: data.paymentID,
 				payerID: data.payerID,
 			};
 
 			// Make a call to your server to execute the payment
-			return paypal.request.post(PAYMENT_URL_EXECUTE, data)
+			return paypal.request.post(PAYMENT_URL_EXECUTE, params)
 				.then(function (res) {
-					window.alert('Payment Complete!');
-					// or show a confirmation page - alert
+					document.querySelector(elButtonSelector)
+						.innerText = 'Payment Complete!';
+					// TODO: show bootstrap alerts
 				});
 		},
 
