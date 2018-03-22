@@ -11,6 +11,6 @@ exports = module.exports = function (req, res) {
 	view.on('post', function (next) {
 	});
 
-	// Render the view
-	view.render('shop/checkout');
+	// Render - nothing 
+	view.render();
 };

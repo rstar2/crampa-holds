@@ -95,8 +95,7 @@ exports = module.exports = function (req, res) {
 	locals.section = 'shopping-cart';
 
 	// set PayPal settings
-	locals.PayPal_env = process.env.PAYPAL_IS_LIVE === 'true' ? 'production' : 'sandbox';
-	locals.PayPal_clientId = process.env.PAYPAL_APP_PUBLIC_ID;
+	locals.PAYPAL_MODE = process.env.PAYPAL_MODE || 'sandbox';
 
 	// Render the view
 	view.render('shop/cart');
