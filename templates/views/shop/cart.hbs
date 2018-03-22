@@ -34,14 +34,10 @@
 					{{/each}}
 				</ul>
 
-				{{!-- <b-button href="{{shopUrl 'checkout'}}" variant="success" class="my-2">Checkout</b-button> --}}
-				
-				{{#if PayPal_clientId}}
+				{{!--
+				<b-button href="{{shopUrl 'checkout'}}" variant="success" class="my-2">Checkout</b-button> --}} {{#if PayPal_clientId}}
 				<div id="paypal-button-container" class="mt-3"></div>
-				{{/if}}
-
-
-				{{else}}
+				{{/if}} {{else}}
 				<header>
 					<h1>Empty Shopping cart</h1>
 				</header>
@@ -59,51 +55,60 @@
 {{#section 'body_js'}}
 <script src="/public/js/build.shop-cart.js?v={{version}}"></script>
 
-{{#if PayPal_clientId}}
 <script>
 	paypal.Button.render({
 
+		// Specify the style of the button
 
-		env: '{{ PayPal_env }}', // sandbox | live
+        style: {
+            label: 'buynow',    // checkout | credit | pay | buynow | generic | paypal
+            fundingicons: true, // optional
+            branding: true,     // optional
+			layout: 'vertical', // horizontal | vertical
+            size:  'small',     // small | medium | large | responsive
+            shape: 'rect',      // pill | rect
+            color: 'gold'       // gold | blue | silver | black,
+			tagline: false
+        },
 
-		// PayPal Client IDs - replace with your own
-		// Create a PayPal app: https://developer.paypal.com/developer/applications/create
-		client: {
-			{{ PayPal_env }}: '{{ PayPal_clientId }}',
-		},
+		env: '{{ PayPal_env }}', // sandbox | production
 
 		// Show the buyer a 'Pay Now' button in the checkout flow
 		commit: true,
 
 		// payment() is called when the button is clicked
-		payment: function (data, actions) {
+		payment: function () {
 
-			// Make a call to the REST api to create the payment
-			return actions.payment.create({
-				payment: {
-					transactions: [
-						{
-							amount: { total: '0.05', currency: 'EU' },
-							description: "This is the payment description"
-						}
-					]
-				}
-			});
+			// Set up a url on your server to create the payment
+			var CREATE_URL = '/demo/checkout/api/paypal/payment/create/';
+
+			// Make a call to your server to set up the payment
+			return paypal.request.post(CREATE_URL)
+				.then(function (res) {
+					return res.paymentID;
+				});
 		},
 
 		// onAuthorize() is called when the buyer approves the payment
 		onAuthorize: function (data, actions) {
 
-			// Make a call to the REST api to execute the payment
-			return actions.payment.execute().then(function () {
-				
-				window.alert('Payment Complete!');
-			});
+			// Set up a url on your server to execute the payment
+			var EXECUTE_URL = '/demo/checkout/api/paypal/payment/execute/';
+
+			// Set up the data you need to pass to your server
+			var data = {
+				paymentID: data.paymentID,
+				payerID: data.payerID
+			};
+
+			// Make a call to your server to execute the payment
+			return paypal.request.post(EXECUTE_URL, data)
+				.then(function (res) {
+					window.alert('Payment Complete!');
+				});
 		}
 
 	}, '#paypal-button-container');
-
 </script>
-{{/if}}
 
 {{/section}}
