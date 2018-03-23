@@ -1,5 +1,6 @@
-const debug = require('debug')('app:routes:views:shop:cart');
 const keystone = require('keystone');
+const debug = require('debug')('app:routes:views:shop:cart');
+
 const Cart = require('../../../lib/models/shop/Cart');
 
 function _cartUpdate (req, isDel, callback) {
@@ -41,7 +42,7 @@ function _cartUpdate (req, isDel, callback) {
 }
 
 function cartUpdate (req, res, next, isDel = false) {
-	_cartUpdate(req, isDel, function (error, cart) {
+	_cartUpdate(req, isDel, function (error) {
 		if (req.headers.accept === 'application/json') {
 			// if this is AJAX request - return JSON
 			if (error) {
@@ -91,11 +92,17 @@ exports = module.exports = function (req, res) {
 		cartUpdate(req, res, next, true);
 	});
 
-	// Set locals
-	locals.section = 'shopping-cart';
+	// these render function will be called finally if any of the action-functions did not resolved the response
+	// e.g. only when getting the cart view page
+	view.on('render', function (next) {
+		// Set locals
+		locals.section = 'shopping-cart';
 
-	// set PayPal settings
-	locals.PAYPAL_MODE = process.env.PAYPAL_MODE || 'sandbox';
+		// set PayPal settings
+		locals.PAYPAL_MODE = process.env.PAYPAL_MODE || 'sandbox';
+
+		next();
+	});
 
 	// Render the view
 	view.render('shop/cart');

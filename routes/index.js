@@ -75,8 +75,10 @@ exports = module.exports = function (app) {
 	app.get('/shop(/category/:category)?', routes.views.shop.index);
 	app.get('/shop/product/:product', routes.views.shop.product);
 	app.get('/shop/cart', routes.views.shop.cart);
-	app.get('/shop/checkout', routes.views.shop.checkout);
-	app.post('/shop/checkout', middleware.requireAuth(keystone), routes.views.shop.checkout);
+
+	// this is the checkout integration
+	// provider is currently allowed to be only 'paypal' (with 'create'/'execute' allowed actions)
+	app.post('/shop/checkout/:provider/payment/:action', routes.views.shop.checkout);
 
 	app.get('/test/:page', routes.views.test);
 

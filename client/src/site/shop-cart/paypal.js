@@ -1,10 +1,10 @@
 /* globals paypal */
 
 // Set up a url on your server to create the payment
-const PAYMENT_URL_CREATE = '/api/checkout/paypal/payment/create/';
+const PAYMENT_URL_CREATE = '/shop/checkout/paypal/payment/create/';
 
 // Set up a url on your server to execute the payment
-const PAYMENT_URL_EXECUTE = '/api/checkout/paypal/payment/execute/';
+const PAYMENT_URL_EXECUTE = '/shop/checkout/paypal/payment/execute/';
 
 
 // should be called after the Vue component containing the PayPal button is mounted

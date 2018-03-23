@@ -9,6 +9,8 @@
  */
 const _ = require('lodash');
 
+const debug = require('debug')('app:routes');
+
 /**
 	Initializes the standard view locals
 
@@ -122,6 +124,7 @@ exports.validateCorsAPI = function (keystone) {
 */
 exports.initErrorHandlers = function (req, res, next) {
 	res.error = function (error, title, message) {
+		debug(error);
 		res.status(500);
 		if (res.apiError) {
 			return res.apiError('Server error');
