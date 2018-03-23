@@ -25,22 +25,9 @@ module.exports = function (req, action, cart, callback) {
 
 function create (cart, callback) {
 	// TODO: parse the cart and create the items, amount and etc.
-	//  = {
-	// 	item_list: {
-	// 		items: [{
-	// 			name: 'item',
-	// 			sku: 'item',
-	// 			price: '1.00',
-	// 			currency: 'EUR',
-	// 			quantity: 1,
-	// 		}],
-	// 	},
-	// 	amount: {
-	// 		currency: 'EUR',
-	// 		total: '1.00',
-	// 	},
-	// 	description: 'This is the payment description.',
-	// };
+
+	// To check the REST API for full details on what/which props are allowed in the JSON
+	// see https://developer.paypal.com/docs/api/payments/#definition-details
 
 	const currency = 'EUR';
 
@@ -57,44 +44,43 @@ function create (cart, callback) {
 	//  98 EUR
 	const transaction = {
 		amount: {
-			total: '98.00',
+			total: '38.00',
 			currency,
 			details: {
-				subtotal: '80.00',
+				subtotal: '20.00',
 				shipping: '15.00',
 				tax: '3.00',
 				handling_fee: '1.00',
 				insurance: '1.00',
 				discount: '2.00',
-				// shipping_discount
-				// gift_wrap  
+				// shipping_discount: '0'
+				// gift_wrap: '0'
 			},
 		},
 		item_list: {
 			items: [
 				{
-					sku: 'idItem1', // stock keeping number
+					sku: 'id1', // stock keeping number
 					name: 'item 1',
 					price: '10',
 					quantity: '2',
 					description: 'item 1 description',
 					currency,
 				},
-				{
-					sku: 'idItem2',
+				/* {
+					sku: 'id2',
 					name: 'item 2',
 					price: '20',
 					quantity: '3',
 					description: 'item 2 description',
 					currency,
-				}],
+				} */
+			],
 		},
 		description: 'The payment transaction description.',
 
 		// Maximum length: 165
-		// note_to_payer: 'Contact us for any questions on your order.',
-
-		// invoice_number: 'merchant invoice',
+		// note_to_payee: 'The note to the recipient of the funds in this transaction.',
 
 		//Maximum length: 127
 		// custom: 'merchant custom data',
@@ -110,7 +96,16 @@ function create (cart, callback) {
 	};
 
 
-	paypal.create(transaction, function (error, payment) {
+	// A free-form field that clients can use to send a note to the payer.
+	// Maximum length: 165
+	// note_to_payer: 'Contact us for any questions on your order.'
+
+	// The PayPal-generated ID for the merchant's payment experience profile
+	// experience_profile_id:
+
+	// TODO: test 'note_to_payer' and 'experience_profile_id'
+
+	paypal.create({ transaction }, function (error, payment) {
 		if (error) debug('Paypal-checkout - create payment failed');
 		else debug('Paypal-checkout create - payment succeeded');
 
@@ -124,7 +119,7 @@ function execute (req, callback) {
 	const paymentID = req.body.paymentID;
 	const payerID = req.body.payerID;
 
-	paypal.execute(paymentID, payerID, function (error, payment) {
+	paypal.execute({ paymentID, payerID }, function (error, payment) {
 		if (error) debug('Paypal-checkout - execute payment failed');
 		else debug('Paypal-checkout - execute payment succeeded');
 
@@ -156,6 +151,7 @@ function execute (req, callback) {
 
 		// };
 
+		// TODO: Why executed payments are with status "Unclaimed"?
 
 		callback(error);
 	});
