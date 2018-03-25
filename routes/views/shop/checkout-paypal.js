@@ -1,7 +1,14 @@
 const debug = require('debug')('app:routes:views:shop:checkout:paypal');
+const _ = require('lodash');
 
+const keystone = require('keystone');
+
+const stripHTML = require('../../../lib/utils/stripHTML');
+const ensureLimit = require('../../../lib/utils/ensureLimit');
 const Cart = require('../../../lib/models/shop/Cart');
 const paypal = require('../../../lib/payments/paypal');
+
+const Order = keystone.list('Order');
 
 /**
  * PayPal provider/gateway payment route
@@ -10,10 +17,10 @@ const paypal = require('../../../lib/payments/paypal');
  * @param {Cart} cart the current session cart
  * @param {Function} callback could be called synchronously or asynchronously
  */
-module.exports = function (req, action, cart, callback) {
+module.exports = function (req, action, opt = {}, callback) {
 	switch (action) {
 		case 'create':
-			create(cart, callback);
+			create(req, opt, callback);
 			break;
 		case 'execute':
 			execute(req, callback);
@@ -23,13 +30,14 @@ module.exports = function (req, action, cart, callback) {
 	}
 };
 
-function create (cart, callback) {
-	// TODO: parse the cart and create the items, amount and etc.
-
+/**
+ * @param {Request} req
+ * @param {Object} opt
+ * @param {Function} callback
+ */
+function create (req, opt, callback) {
 	// To check the REST API for full details on what/which props are allowed in the JSON
 	// see https://developer.paypal.com/docs/api/payments/#definition-details
-
-	const currency = 'EUR';
 
 	// NOTE - total amount must sum up to all details
 	// + subtotal = 10 * 2 + 20 * 3
@@ -42,82 +50,126 @@ function create (cart, callback) {
 	// - discount = 2
 	// --------------
 	//  98 EUR
+	// const transaction = {
+	// 	amount: {
+	// 		total: '38.00',
+	// 		currency: 'EUR',
+	// 		details: {
+	// 			subtotal: '20.00',
+	// 			shipping: '15.00',
+	// 			tax: '3.00',
+	// 			handling_fee: '1.00',
+	// 			insurance: '1.00',
+	// 			discount: '2.00',
+	// 			// shipping_discount: '0'
+	// 			// gift_wrap: '0'
+	// 		},
+	// 	},
+	// 	item_list: {
+	// 		items: [
+	// 			{
+	// 				sku: 'id1', // stock keeping number
+	// 				name: 'item 1',
+	// 				price: '10',
+	// 				quantity: '2',
+	// 				description: 'item 1 description',
+	// 				currency: 'EUR',
+	// 			},
+	// 			/* {
+	// 				sku: 'id2',
+	// 				name: 'item 2',
+	// 				price: '20',
+	// 				quantity: '3',
+	// 				description: 'item 2 description',
+	// 				currency: 'EUR',
+	// 			} */
+	// 		],
+	// 	},
+	// 	description: 'The payment transaction description.',
+
+	// 	// Maximum length: 165
+	// 	// note_to_payee: 'The note to the recipient of the funds in this transaction.',
+
+	// 	//Maximum length: 127
+	// 	// custom: 'merchant custom data',
+
+	// 	// shipping_address: {
+	// 	// 	recipient_name: 'Betsy Buyer',
+	// 	// 	line1: '111 First Street',
+	// 	// 	city: 'Saratoga',
+	// 	// 	country_code: 'US',
+	// 	// 	postal_code: '95070',
+	// 	// 	state: 'CA',
+	// 	// },
+	// };
+
+	// req.session.cart is ensured to be valid
+	const cart = new Cart(req.session.cart).toJSON();
+
+	// this also is ensured to be valid - and of type ShippingZone
+	const shippingZone = req.session.shippingZone;
+
+	const currency = opt.currency || 'EUR';
+	const total = toValidNum(cart.totalPrice)
+		+ toValidNum(shippingZone.shipping)
+		+ toValidNum(shippingZone.tax)
+		- toValidNum(opt.discount);
+
+	// TODO: limiting the string with ensureLimit() should be in the lib/paypal.js file
 	const transaction = {
 		amount: {
-			total: '38.00',
-			currency,
+			total: toStringNum(total),
 			details: {
-				subtotal: '20.00',
-				shipping: '15.00',
-				tax: '3.00',
-				handling_fee: '1.00',
-				insurance: '1.00',
-				discount: '2.00',
-				// shipping_discount: '0'
-				// gift_wrap: '0'
+				subtotal: toStringNum(cart.totalPrice),
+				shipping: toStringNum(opt.shipping),
+				tax: toStringNum(opt.tax),
+				discount: toStringNum(opt.discount),
 			},
+			currency,
 		},
 		item_list: {
-			items: [
-				{
-					sku: 'id1', // stock keeping number
-					name: 'item 1',
-					price: '10',
-					quantity: '2',
-					description: 'item 1 description',
+			items: Object.keys(cart.items).map(id => {
+				const item = cart.items[id];
+				return {
+					sku: ensureLimit(id, 127),
+					name: ensureLimit(item.product.title, 127),
+					description: ensureLimit(stripHTML(item.product.description.brief.html), 127),
+					price: toStringNum(item.product.price),
+					quantity: toStringNum(item.qty),
 					currency,
-				},
-				/* {
-					sku: 'id2',
-					name: 'item 2',
-					price: '20',
-					quantity: '3',
-					description: 'item 2 description',
-					currency,
-				} */
-			],
+				};
+			}),
 		},
-		description: 'The payment transaction description.',
-
-		// Maximum length: 165
-		// note_to_payee: 'The note to the recipient of the funds in this transaction.',
-
-		//Maximum length: 127
-		// custom: 'merchant custom data',
-
-		// shipping_address: {
-		// 	recipient_name: 'Betsy Buyer',
-		// 	line1: '111 First Street',
-		// 	city: 'Saratoga',
-		// 	country_code: 'US',
-		// 	postal_code: '95070',
-		// 	state: 'CA',
-		// },
+		description: ensureLimit(opt.description, 127),
 	};
-
 
 	// A free-form field that clients can use to send a note to the payer.
 	// Maximum length: 165
-	// note_to_payer: 'Contact us for any questions on your order.'
+	const note_to_payer = ensureLimit(opt.noteToPayer, 165);
 
 	// The PayPal-generated ID for the merchant's payment experience profile
 	// experience_profile_id:
+	// TODO: test 'experience_profile_id'
+	const experience_profile_id = undefined;
 
-	// TODO: test 'note_to_payer' and 'experience_profile_id'
-
-	paypal.create({ transaction }, function (error, payment) {
+	paypal.create({ transaction, note_to_payer, experience_profile_id }, function (error, payment) {
 		if (error) debug('Paypal-checkout - create payment failed');
 		else debug('Paypal-checkout create - payment succeeded');
 
 		// NOTE - Here we still don't have a shipping address
 
-		callback(error, { paymentID: payment.id });
+		callback(error, null, { paymentID: payment.id });
 	});
 }
 
 function execute (req, callback) {
 	const paymentID = req.body.paymentID;
 	const payerID = req.body.payerID;
+
+	// here it's not from type ShippingZone, as it's survived serialization
+	const shippingZone = req.session.shippingZone;
+
+	// TODO: validate the payer's shipping address with the selected shipping zone
 
 	paypal.execute({ paymentID, payerID }, function (error, payment) {
 		if (error) debug('Paypal-checkout - execute payment failed');
@@ -148,11 +200,48 @@ function execute (req, callback) {
 		//     		},
 		//     },
 		//     transactions: [...]
-
 		// };
 
-		// TODO: Why executed payments are with status "Unclaimed"?
-
-		callback(error);
+		// TODO: create  the order
+		// Order.Status.PAID
+		const order = null; // new Order.model({});
+		callback(error, order);
 	});
+}
+
+/**
+ *
+ * @param {Number} [num]
+ * @param {Number} [maxLength]
+ * @returns {String|undefined}
+ */
+function toStringNum (num, maxLength = 10) {
+	if (_.isUndefined(num) || _.isNull(num)) return undefined;
+
+	if (_.isNumber(num)) {
+		const str = '' + num;
+
+		// no more than 10 chars validations
+		if (str.length > maxLength) {
+			debug(`Convert to string : ${num} is more than ${maxLength} characters`);
+			throw new Error(`PaypalCheckout - Convert to string : ${num} is more than ${maxLength} characters`);
+		}
+		return str;
+	}
+
+	debug(`Invalid type to convert to string : ${num}`);
+	throw new Error(`PaypalCheckout - Invalid type to convert to string : ${num}`);
+}
+
+/**
+ *
+ * @param {Number} [num]
+ * @returns {Number}
+ */
+function toValidNum (num) {
+	if (_.isUndefined(num) || _.isNull(num)) return 0;
+	if (_.isNumber(num)) return num;
+
+	debug(`Invalid type to convert to valid number : ${num}`);
+	throw new Error(`PaypalCheckout - Invalid type to convert to valid number : ${num}`);
 }

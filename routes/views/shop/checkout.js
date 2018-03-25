@@ -1,19 +1,18 @@
 const debug = require('debug')('app:routes:views:shop:checkout');
+const _ = require('lodash');
 
-const Cart = require('../../../lib/models/shop/Cart');
+const keystone = require('keystone');
+
+const Order = keystone.list('Order');
 
 const listProviders = new Map();
 listProviders.set('paypal', require('./checkout-paypal'));
 
 exports = module.exports = function (req, res, next) {
 
-	const locals = res.locals;
+	const view = new keystone.View(req, res);
 
-	// Set locals
-	locals.section = 'shopping-cart';
-
-	const cart = req.session.cart ? new Cart(req.session.cart) : null;
-	// if (!cart) return next('Checkout failed - no cart');
+	if (!req.session.cart) return next('Checkout failed - no cart');
 
 	const providerKey = req.params.provider;
 	const provider = listProviders.get(providerKey);
@@ -21,16 +20,71 @@ exports = module.exports = function (req, res, next) {
 
 	const action = req.params.action;
 
-	provider(req, action, cart, function (error, data = {}) {
+	let shippingZone;
+	let details;
+
+	// the details are needed only on 'create' action
+	if (action === 'create') {
+
+		// get the shipping zone if any
+		view.on('render', function (next) {
+			const shippingZoneId = req.body.shippingZone;
+
+			// selected shipping zone is obligatory
+			if (!_.isUndefined(shippingZoneId)) {
+				keystone.list('ShippingZone').model.findById(shippingZoneId)
+					.exec(function (err, zone) {
+						if (err) return next(err);
+
+						shippingZone = zone;
+						next();
+					});
+			} else {
+				next('No shipping zone provided');
+			}
+		});
+
+		view.on('render', function (next) {
+			// remember selected shippingZon in the session
+			req.session.shippingZone = shippingZone;
+			details = {
+				currency: 'EUR',
+				shippingZone,
+				// discount: 20,
+				noteToPayer: 'Contact us for any questions on your order.',
+				description: 'The payment transaction description.',
+			};
+			next();
+		});
+	}
+
+	view.render(function (error) {
 		if (error) return next(`Checkout failed - ${error}`);
 
-		// TODO: save to DB as Order
-		// 1. when payment is created with status 'created'
-		// 2. when payment is executed with status 'paid'
-		// 3. later when we ship it we will set it with status 'shipped'
-		// 4. later when received - status 'completed'
+		provider(req, action, details, function (error, order, data = {}) {
+			if (error) return next(`Checkout failed - ${error}`);
 
+			// the Order model may not be created on each checkout-flow step,
+			// this could depend on the provider
+			if (order) {
+				switch (order.status) {
+					case Order.Status.CREATED:
+						break;
+					case Order.Status.PAID:
+						// empty current session cart and shippingZone
+						delete req.session.cart;
+						delete req.session.shippingZone;
+						break;
+					default:
+						debug(`Unsupported order status: ${order.status}`);
+						throw new Error(`Checkout - Unsupported order status: ${order.status}`);
+				}
+				// TODO: save it to DB as Order
+			}
 
-		res.status(200).json(data);
+			// repass the needed data to the client
+			res.status(200).json(data);
+		});
 	});
+
 };

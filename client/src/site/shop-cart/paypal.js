@@ -6,12 +6,17 @@ const PAYMENT_URL_CREATE = '/shop/checkout/paypal/payment/create/';
 // Set up a url on your server to execute the payment
 const PAYMENT_URL_EXECUTE = '/shop/checkout/paypal/payment/execute/';
 
+import { PAYPAL_STATE } from './index';
 
-// should be called after the Vue component containing the PayPal button is mounted
-export function init (paypalMode, elButtonSelector) {
+
+/**
+ * @param {{mode: String, elButton: String, state: String}} paypalState
+ */
+export function init (paypalState) {
+
 	paypal.Button.render({
 		// sandbox | production
-		env: paypalMode,
+		env: paypalState.mode,
 
 		// Show the buyer a 'Pay Now' button in the checkout flow
 		commit: true,
@@ -32,9 +37,12 @@ export function init (paypalMode, elButtonSelector) {
 		 * Called when the button is clicked
 		 */
 		payment: function (data, actions) {
+			paypalState.state = PAYPAL_STATE.STARTED;
+
 			// Make a call to the server to set up the payment
 			return paypal.request.post(PAYMENT_URL_CREATE)
 				.then(function (res) {
+					paypalState.state = PAYPAL_STATE.CREATED;
 					return res.paymentID;
 				});
 		},
@@ -43,7 +51,6 @@ export function init (paypalMode, elButtonSelector) {
 		 * Called when the buyer approves the payment
 		 */
 		onAuthorize: function (data, actions) {
-
 			// // Get the payment and buyer details
 			// return actions.payment.get().then(function(payment) {
 			// 	console.log('Payment details:', payment);
@@ -58,9 +65,7 @@ export function init (paypalMode, elButtonSelector) {
 			// Make a call to your server to execute the payment
 			return paypal.request.post(PAYMENT_URL_EXECUTE, params)
 				.then(function (res) {
-					document.querySelector(elButtonSelector)
-						.innerText = 'Payment Complete!';
-					// TODO: show bootstrap alerts
+					paypalState.state = PAYPAL_STATE.SUCCESS;
 				});
 		},
 
@@ -81,16 +86,16 @@ export function init (paypalMode, elButtonSelector) {
 		 * called when a buyer cancelled the payment
 		 */
 		onCancel: function (data, actions) {
-
+			paypalState.state = PAYPAL_STATE.CANCELED;
 		},
 
 		/**
 		 * Called when an error occurred during the transaction
 		 */
 		onError: function (err) {
-
+			paypalState.state = PAYPAL_STATE.FAILED;
 		},
 
-	}, elButtonSelector);
+	}, paypalState.elButton);
 
 };

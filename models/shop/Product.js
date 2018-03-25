@@ -28,7 +28,7 @@ Product.add({
 });
 
 Product.schema.virtual('description.full').get(function () {
-	return this.description.extended.html ? this.description.extended : this.description.brief;
+	return this.description.extended ? this.description.extended : this.description.brief;
 });
 
 Product.schema.methods.isPublished = function () {

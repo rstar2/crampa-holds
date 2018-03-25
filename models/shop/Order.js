@@ -11,15 +11,31 @@ const { sendNotificationsForOrder } = require('../../lib/notify');
 const Order = new keystone.List('Order', {
 	nocreate: true,
 	// noedit: true,
+	track: true,
 });
 
+Order.Status = {
+	CREATED: 'created',
+	PAID: 'paid',
+	SHIPPED: 'shipped',
+	COMPLETED: 'completed',
+};
+
 Order.add({
-	user: { type: Types.Relationship, ref: 'User', required: true, index: true },
-	zone: { type: Number, required: true },
+	name: { type: Types.Name, required: true, index: true },
+	email: { type: Types.Email, required: true, unique: true, index: true },
+
+	shippingZone: { type: Types.Relationship, ref: 'ShippingZone', required: true },
 	shippingAddress: { type: String, required: true },
 	billingAddress: { type: String },
 	additionalInfo: { type: String },
-	createdAt: { type: Date, default: Date.now },
+
+	status: {
+		type: Types.Select, options: Object.keys(Order.Status).map(key => Order.Status[key]),
+		default: Order.Status.CREATED,
+	},
+	totalPrice: { type: Number },
+
 	paymentId: { type: String, required: true },
 	paymentProvider: { type: String, required: true },
 });
@@ -30,16 +46,15 @@ Order.schema.add({
 		id: String,
 		quantity: Number,
 	}],
-	totalPrice: { type: Number },
 });
-
-Order.schema.pre('save', function (next) {
-	this.wasNew = this.isNew;
-	next();
+// add this 'payment' - arbitrary data depending on the provider (for PayPal it can be one schema, for Stripe - different)
+// this is just for reference, not to go to the provider's DB and check it from there when needed
+Order.schema.add({
+	payment: { type: Object },
 });
 
 Order.schema.post('save', function () {
-	if (this.wasNew) {
+	if (this.status === Order.Status.PAID) {
 		this.sendNotifications();
 	}
 });
@@ -49,5 +64,5 @@ Order.schema.methods.sendNotifications = function (callback) {
 };
 
 Order.defaultSort = '-createdAt';
-Order.defaultColumns = 'createdAt, user';
+Order.defaultColumns = 'createdAt, name, email';
 Order.register();

@@ -94,6 +94,17 @@ exports = module.exports = function (req, res) {
 
 	// these render function will be called finally if any of the action-functions did not resolved the response
 	// e.g. only when getting the cart view page
+
+	// these render function will be called finally if any of the action-functions did not resolved the response
+	// e.g. only when getting the cart view page
+	view.on('render', function (next) {
+		keystone.list('ShippingZone').model.find()
+			.exec(function (err, zones) {
+				locals.shippingZones = zones;
+				next(err);
+			});
+	});
+
 	view.on('render', function (next) {
 		// Set locals
 		locals.section = 'shopping-cart';

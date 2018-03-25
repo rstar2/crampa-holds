@@ -10,6 +10,7 @@
     "debug-to-file": "^1.0.8",
     "dotenv": "4.0.0",
     "dotenv-safe": "^5.0.1",
+    "ellipsize": "0.0.3",
     "express-handlebars": "3.0.0",
     "express-handlebars-sections": "^1.0.1",
     "handlebars": "4.0.6",
