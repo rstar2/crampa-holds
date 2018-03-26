@@ -18,12 +18,22 @@ new Vue({
 	data: {
 		paymentSuccess: false,
 		paypal: {
-			mode: '',
+			mode: 'sandbox',
 			elButton: '#paypal-button-container',
 			state: 'init',
 		},
+
+		// set from the server as initial values
+		cartTotalPrice: 0,
+		shippingZones: false, // TODO: use this to make 'shippingZone' be obligatory to be selected
+
+
+		shippingZone: null,
 	},
 	computed: {
+		totalPrice () {
+			return this.cartTotalPrice + (this.shippingZone ? this.shippingZone.shipping : 0);
+		},
 		paypalFinished () {
 			switch (this.paypal.state) {
 				case PAYPAL_STATE.SUCCESS:
@@ -46,6 +56,14 @@ new Vue({
 			}
 		},
 	},
+	created () {
+		// get the props/data as pass from the server - passed as data-attributes of the main element
+		const el = document.querySelector(this.$options.el);
+		const data = el.dataset;
+		if (data.paypalMode !== undefined) this.paypal.mode = data.paypalMode;
+		if (data.cartTotalPrice !== undefined) this.cartTotalPrice = +data.cartTotalPrice;
+		if (data.shippingZones !== undefined) this.shippingZones = data.shippingZones === 'true';
+	},
 	mounted () {
 		// Initialize the PayPal button
 		// I'm using the Express Checkout with Server-side REST
@@ -54,19 +72,17 @@ new Vue({
 
 		// when the cart is empty there will be no button rendered
 		if (paypalButton) {
-			// get the PayPal mode/env(e.g. sandbox or production) as passed from the server
-			this.paypal.mode = paypalButton.dataset.paypalMode || 'sandbox';
 			initPaypal(this.paypal);
 		}
 	},
 	watch: {
-		'paypal.state': function (newValue) {
+		'paypal.state': function (state) {
 			// console.log('Paypal state changed', this.paypal.state);
 			// clear the cart
 
 			// This not the "reactive" state, but because not the whole view is managed by Vue
 			// this is the easiest solution. It's only one time action anyway.
-			if (newValue === PAYPAL_STATE.SUCCESS) {
+			if (state === PAYPAL_STATE.SUCCESS) {
 				const cartBadge = document.getElementById('app-shopping-cart-badge');
 				if (cartBadge) {
 					cartBadge.innerHTML = '';

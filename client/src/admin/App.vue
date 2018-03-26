@@ -21,7 +21,13 @@
 				</b-collapse>
 			</b-navbar>
 
-			<router-view></router-view>
+			<!--
+				Pass the Router a key (he full path) - so that it will not play smart and reuse
+				components between routes when they are the same. Let them be created from scratch.
+				This is a little overhead for the compnentents BUT much more-predictable and safe.
+			 -->
+			<router-view :key="$router.fullPath"></router-view>
+
 			<BlockUI v-show="blockUI.isEnabled" v-bind="blockUI">
 				<div class="spinnerWrap" style="
 						display: flex; align-items: center; justify-content: center;
@@ -30,9 +36,6 @@
 					<spinner :status="true" color="#4fc08d" :size="200"></spinner>
 				</div>
 			</BlockUI>
-
-
-			
 
 	</div>
 </template>

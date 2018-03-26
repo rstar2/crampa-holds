@@ -28,8 +28,8 @@ export function init (paypalState) {
 			// branding: true,     // optional
 			// layout: 'vertical', // horizontal | vertical
 			size: 'responsive',     // small | medium | large | responsive
-			shape: 'rect',      // pill | rect
-			color: 'blue',      // gold | blue | silver | black,
+			// shape: 'rect',      // pill | rect
+			// color: 'blue',      // gold | blue | silver | black,
 			// tagline: true,
 		},
 
