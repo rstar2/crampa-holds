@@ -1,7 +1,6 @@
 <div class="container" id="app-shop-cart" v-cloak
 	data-cart-total-price="{{ifx session.cart session.cart.totalPrice 0}}"
-	data-shipping-zones="{{ifx shippingZones true false}}"
-	data-paypal-mode="{{ PAYPAL_MODE }}">
+	data-shipping-zones="{{ifx shippingZones true false}}">
 	<div class="row">
 		<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
 
@@ -58,7 +57,14 @@
 						</b-col>
 						<b-col>
 							{{!-- <b-button href="{{shopUrl 'checkout'}}" variant="success">Checkout</b-button> --}}
-							<div v-pre id="paypal-button-container"></div>
+							
+							{{!-- Add a PayPal express-checkout button --}}
+							<app-paypal-button mode="{{ PAYPAL_MODE }}"
+											   create-url="/shop/checkout/paypal/payment/create"
+											   execute-url="/shop/checkout/paypal/payment/execute"
+											   :state="paypalState"
+											   @stateChanged="paypalStateChanged">
+							</app-paypal-button>
 						</b-col>
 					</b-row>
 
