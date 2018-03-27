@@ -42,10 +42,7 @@ Order.add({
 // add this arbitrary 'cart' schema directly to the Mongoose model,
 // the Keystone model doesn't support this yet
 Order.schema.add({
-	products: [{
-		id: String,
-		quantity: Number,
-	}],
+	products: { type: Object },
 });
 // add this 'payment' - arbitrary data depending on the provider (for PayPal it can be one schema, for Stripe - different)
 // this is just for reference, not to go to the provider's DB and check it from there when needed
