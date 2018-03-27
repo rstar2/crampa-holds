@@ -21,6 +21,7 @@ new Vue({
 
 	data: {
 		paypalState: PAYPAL_STATE.INIT,
+		paypalError: null,
 
 		// set from the server as initial values
 		cartTotalPrice: 0,
@@ -50,7 +51,7 @@ new Vue({
 				case PAYPAL_STATE.CANCELED:
 					return 'Payment is canceled, we are sorry.';
 				case PAYPAL_STATE.FAILED:
-					return 'An error occurred processing your payment, try again later.';
+					return `An error occurred processing your payment${this.paypalError ? ' - ' + this.paypalError + '.' : ', try again later.'}`;
 			}
 		},
 		paypalRequestCreateData () {
@@ -67,8 +68,9 @@ new Vue({
 		},
 	},
 	methods: {
-		paypalStateChanged (state) {
+		paypalStateChanged ({ state, error }) {
 			this.paypalState = state;
+			this.paypalError = error;
 
 			if (state === PAYPAL_STATE.SUCCESS) {
 				// clear the cart badge

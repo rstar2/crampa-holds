@@ -1,5 +1,6 @@
 const debug = require('debug')('app:routes:views:shop:checkout:paypal');
 const _ = require('lodash');
+const async = require('async');
 
 const keystone = require('keystone');
 
@@ -170,76 +171,99 @@ function execute (req, opt, callback) {
 	const cart = opt.cart.toJSON();  // convert from Cart type to plain JSON
 	const shippingZone = opt.shippingZone;
 
-	// TODO: validate the payer's shipping address with the selected shipping zone
-	// this should be done before executing the payment - e.g getting the payment in advance ?
+	async.series({
+		verify: function (next) {
+			paypal.get({ paymentID }, function (error, payment) {
+				if (error) debug('Paypal-checkout - execute payment failed');
+				else debug('Paypal-checkout - execute payment succeeded');
 
-	paypal.execute({ paymentID, payerID }, function (error, payment) {
-		if (error) debug('Paypal-checkout - execute payment failed');
-		else debug('Paypal-checkout - execute payment succeeded');
-
-		// NOTE - Here we do have a shipping address
-		// (either on the payer level or on a transaction level if we created the transaction with shipping address)
-
-		// payment == {
-		//     	...
-		//     	payer: {
-		//     		payment_method: 'paypal',
-		//     		payer_info: {
-		//     			email: 'bbuyer@example.com',
-		//     			first_name: 'Betsy',
-		//     			last_name: 'Buyer',
-		//     			payer_id: 'CR87QHB7JTRSC',
-		//              shipping_address: {
-		//     				recipient_name: "Brian Robinson",
-		//     				line1: "4th Floor",
-		//     				line2: "Unit #34",
-		//     				city: "San Jose",
-		//     				state: "CA",
-		//     				phone: "011862212345678",
-		//     				postal_code: "95131",
-		//     				country_code: "US"
-		//     			}
-		//     		},
-		//     },
-		//     transactions: [...]
-		// };
-
-		if (error) {
-			callback(error);
-		} else {
-			// create the order
-
-			const transaction = payment.transactions[0];
-			const payerInfo = payment.payer.payer_info;
-
-			const order = new Order.model({
-				name: {
-					first: payerInfo.first_name,
-					last: payerInfo.last_name,
-				},
-				email: payerInfo.email,
-
-				status: Order.Status.PAID,
-				total: transaction.amount.total,
-
-				shippingZone: shippingZone.id,
-
-				shippingAddress: Object.keys(payerInfo.shipping_address)
-					.map(key => key + ' : ' + payerInfo.shipping_address[key])
-					.join('\n'),
-
-				products: Object.keys(cart.items)
-					.map(id => ({ id, quantity: cart.items[id].qty, price: cart.items[id].product.price })),
-
-				paymentId: payment.id,
-				paymentProvider: 'paypal',
-
-				// also save the whole 'payment' object as coming from PayPal - just for reference
-				payment,
+				if (!error) {
+					// validate the payer's shipping address with the selected shipping zone
+					// this should be done in advance before executing the payment
+					const shipping_address = payment.payer.payer_info.shipping_address;
+					if (!shipping_address || !shipping_address.country_code) {
+						error = 'No shipping country code provided';
+					} else {
+						const country = shipping_address.country_code;
+						if (shippingZone.countries.indexOf(country) < 0) {
+							error = 'No shipping country code is not verified by the selected zone';
+						}
+					}
+				}
+				return next(error);
 			});
+		},
+		execute: function (next) {
+			paypal.execute({ paymentID, payerID }, function (error, payment) {
+				if (error) debug('Paypal-checkout - execute payment failed');
+				else debug('Paypal-checkout - execute payment succeeded');
 
-			callback(null, order);
-		}
+				// NOTE - Here we do have a shipping address
+				// (either on the payer level or on a transaction level if we created the transaction with shipping address)
+
+				// payment == {
+				//     	...
+				//     	payer: {
+				//     		payment_method: 'paypal',
+				//     		payer_info: {
+				//     			email: 'bbuyer@example.com',
+				//     			first_name: 'Betsy',
+				//     			last_name: 'Buyer',
+				//     			payer_id: 'CR87QHB7JTRSC',
+				//              shipping_address: {
+				//     				recipient_name: "Brian Robinson",
+				//     				line1: "4th Floor",
+				//     				line2: "Unit #34",
+				//     				city: "San Jose",
+				//     				state: "CA",
+				//     				phone: "011862212345678",
+				//     				postal_code: "95131",
+				//     				country_code: "US"
+				//     			}
+				//     		},
+				//     },
+				//     transactions: [...]
+				// };
+
+				if (error) return next(error);
+
+				// create the order
+
+				const transaction = payment.transactions[0];
+				const payerInfo = payment.payer.payer_info;
+
+				const order = new Order.model({
+					name: {
+						first: payerInfo.first_name,
+						last: payerInfo.last_name,
+					},
+					email: payerInfo.email,
+
+					status: Order.Status.PAID,
+					total: transaction.amount.total,
+
+					shippingZone: shippingZone.id,
+
+					shippingAddress: Object.keys(payerInfo.shipping_address)
+						.map(key => key + ' : ' + payerInfo.shipping_address[key])
+						.join('\n'),
+
+					products: Object.keys(cart.items)
+						.map(id => ({ id, quantity: cart.items[id].qty, price: cart.items[id].product.price })),
+
+					paymentId: payment.id,
+					paymentProvider: 'paypal',
+
+					// also save the whole 'payment' object as coming from PayPal - just for reference
+					payment,
+				});
+
+				next(null, order);
+			});
+		},
+	}, function (error, results) {
+		// results is now equal to: {verify: ..., execute: ...}
+		callback(error, results ? results.execute : null);
 	});
 }
 

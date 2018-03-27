@@ -72,14 +72,14 @@ export default {
             return Promise.reject("Not enabled");
           }
 
-          vm.$emit("state-changed", PAYPAL_STATE.STARTED);
+          vm.$emit("state-changed", { state: PAYPAL_STATE.STARTED });
 
           // re-pass the data coming from the parent
           const params = { ...vm.createData };
 
           // Make a call to the server to set up the payment
           return paypal.request.post(vm.createUrl, params).then(function(res) {
-            vm.$emit("state-changed", PAYPAL_STATE.CREATED);
+            vm.$emit("state-changed", { state: PAYPAL_STATE.CREATED });
             return res.paymentID;
           });
         },
@@ -101,7 +101,7 @@ export default {
 
           // Make a call to your server to execute the payment
           return paypal.request.post(vm.executeUrl, params).then(function(res) {
-            vm.$emit("state-changed", PAYPAL_STATE.SUCCESS);
+            vm.$emit("state-changed", { state: PAYPAL_STATE.SUCCESS });
           });
         },
 
@@ -122,14 +122,14 @@ export default {
          * called when a buyer cancelled the payment
          */
         onCancel: function(data, actions) {
-          vm.$emit("state-changed", PAYPAL_STATE.CANCELED);
+          vm.$emit("state-changed", { state: PAYPAL_STATE.CANCELED });
         },
 
         /**
          * Called when an error occurred during the transaction
          */
         onError: function(err) {
-          vm.$emit("state-changed", PAYPAL_STATE.FAILED);
+          vm.$emit("state-changed", { state: PAYPAL_STATE.FAILED, error: err });
         }
       },
       "#paypal-button-container"
@@ -142,10 +142,10 @@ export default {
 // A way to overwrite the BlockUI styles
 // Make the blocking only over the AppPayPalButton component - not over the whole page
 .loading-container {
-	& .loading-backdrop{
-		background-color: white !important;
-		position: absolute !important;
-	}
+  & .loading-backdrop {
+    background-color: white !important;
+    position: absolute !important;
+  }
   & .loading {
     background-color: unset !important;
     box-shadow: unset !important;
