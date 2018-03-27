@@ -5,7 +5,6 @@ const keystone = require('keystone');
 
 const stripHTML = require('../../../lib/utils/stripHTML');
 const ensureLimit = require('../../../lib/utils/ensureLimit');
-const Cart = require('../../../lib/models/shop/Cart');
 const paypal = require('../../../lib/payments/paypal');
 
 const Order = keystone.list('Order');
@@ -14,7 +13,6 @@ const Order = keystone.list('Order');
  * PayPal provider/gateway payment route
  * @param {Request} req HTTP incoming request
  * @param {String} action payment action - can be either 'create' or 'execute'
- * @param {Cart} cart the current session cart
  * @param {Function} callback could be called synchronously or asynchronously
  */
 module.exports = function (req, action, opt = {}, callback) {
@@ -23,7 +21,7 @@ module.exports = function (req, action, opt = {}, callback) {
 			create(req, opt, callback);
 			break;
 		case 'execute':
-			execute(req, callback);
+			execute(req, opt, callback);
 			break;
 		default:
 			callback('Paypal-checkout - invalid action');
@@ -103,11 +101,9 @@ function create (req, opt, callback) {
 	// 	// },
 	// };
 
-	// req.session.cart is ensured to be valid
-	const cart = new Cart(req.session.cart).toJSON();
-
-	// this also is ensured to be valid - and of type ShippingZone
-	const shippingZone = req.session.shippingZone;
+	// opt.cart and opt.shippingZone are ensured to be valid
+	const cart = opt.cart.toJSON();  // convert from Cart type to plain JSON
+	const shippingZone = opt.shippingZone;
 
 	const currency = opt.currency || 'EUR';
 	const total = toValidNum(cart.totalPrice)
@@ -121,8 +117,8 @@ function create (req, opt, callback) {
 			total: toStringNum(total),
 			details: {
 				subtotal: toStringNum(cart.totalPrice),
-				shipping: toStringNum(opt.shipping),
-				tax: toStringNum(opt.tax),
+				shipping: toStringNum(shippingZone.shipping),
+				tax: toStringNum(shippingZone.tax),
 				discount: toStringNum(opt.discount),
 			},
 			currency,
@@ -157,19 +153,25 @@ function create (req, opt, callback) {
 		else debug('Paypal-checkout create - payment succeeded');
 
 		// NOTE - Here we still don't have a shipping address
-
-		callback(error, null, { paymentID: payment.id });
+		const response = payment ? { paymentID: payment.id } : null;
+		callback(error, null, response);
 	});
 }
 
-function execute (req, callback) {
+/**
+ * @param {Request} req
+ * @param {Object} opt
+ * @param {Function} callback
+ */
+function execute (req, opt, callback) {
 	const paymentID = req.body.paymentID;
 	const payerID = req.body.payerID;
 
-	// here it's not from type ShippingZone, as it's survived serialization
-	const shippingZone = req.session.shippingZone;
+	const cart = opt.cart.toJSON();  // convert from Cart type to plain JSON
+	const shippingZone = opt.shippingZone;
 
 	// TODO: validate the payer's shipping address with the selected shipping zone
+	// this should be done before executing the payment - e.g getting the payment in advance ?
 
 	paypal.execute({ paymentID, payerID }, function (error, payment) {
 		if (error) debug('Paypal-checkout - execute payment failed');
@@ -202,10 +204,43 @@ function execute (req, callback) {
 		//     transactions: [...]
 		// };
 
-		// TODO: create  the order
-		// Order.Status.PAID
-		const order = null; // new Order.model({});
-		callback(error, order);
+		if (error) {
+			callback(error);
+		} else {
+			// create the order
+
+			const transaction = payment.transactions[0];
+			const payerInfo = payment.payer.payer_info;
+
+			const order = new Order.model({
+				name: {
+					first: payerInfo.first_name,
+					last: payerInfo.last_name,
+				},
+				email: payerInfo.email,
+
+				status: Order.Status.PAID,
+				total: transaction.amount.total,
+
+				shippingZone: shippingZone.id,
+
+				shippingAddress: Object.keys(payerInfo.shipping_address)
+					.map(key => key + ' : ' + payerInfo.shipping_address[key])
+					.join('\n'),
+
+				// TODO: check why products are saved as Mongoose documents - having a '_id' index
+				products: Object.keys(cart.items)
+					.map(id => ({ id, quantity: cart.items[id].qty, price: cart.items[id].product.price })),
+
+				paymentId: payment.id,
+				paymentProvider: 'paypal',
+
+				// also save the whole 'payment' object as coming from PayPal - just for reference
+				payment,
+			});
+
+			callback(null, order);
+		}
 	});
 }
 

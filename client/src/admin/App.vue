@@ -29,12 +29,12 @@
 			<router-view :key="$router.fullPath"></router-view>
 
 			<BlockUI v-show="blockUI.isEnabled" v-bind="blockUI">
-				<div class="spinnerWrap" style="
+				<!-- <div class="spinnerWrap" style="
 						display: flex; align-items: center; justify-content: center;
             height: 15rem;
             margin-bottom: 5rem;">
 					<spinner :status="true" color="#4fc08d" :size="200"></spinner>
-				</div>
+				</div> -->
 			</BlockUI>
 
 	</div>

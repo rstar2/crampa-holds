@@ -24,8 +24,7 @@ new Vue({
 
 		// set from the server as initial values
 		cartTotalPrice: 0,
-		shippingZones: false, // TODO: use this to make 'shippingZone' be obligatory to be selected
-
+		shippingZones: false,
 
 		shippingZone: null,
 	},
@@ -54,9 +53,14 @@ new Vue({
 					return 'An error occurred processing your payment, try again later.';
 			}
 		},
+		paypalRequestCreateData () {
+			return {
+				shippingZone: this.shippingZone ? this.shippingZone.id : null,
+			};
+		},
 	},
 	watch: {
-		'shippingZone': function (zone) {
+		shippingZone: function (zone) {
 			// if shippingZones are defined then a valid selected one is obligatory
 			this.paypalState = !this.shippingZones || zone
 				? PAYPAL_STATE.READY : PAYPAL_STATE.INIT;

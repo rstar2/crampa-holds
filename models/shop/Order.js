@@ -23,7 +23,7 @@ Order.Status = {
 
 Order.add({
 	name: { type: Types.Name, required: true, index: true },
-	email: { type: Types.Email, required: true, unique: true, index: true },
+	email: { type: Types.Email, required: true, index: true },
 
 	shippingZone: { type: Types.Relationship, ref: 'ShippingZone', required: true },
 	shippingAddress: { type: String, required: true },
@@ -32,9 +32,9 @@ Order.add({
 
 	status: {
 		type: Types.Select, options: Object.keys(Order.Status).map(key => Order.Status[key]),
-		default: Order.Status.CREATED,
+		required: true,
 	},
-	totalPrice: { type: Number },
+	total: { type: Number, required: true },
 
 	paymentId: { type: String, required: true },
 	paymentProvider: { type: String, required: true },

@@ -62,8 +62,9 @@
 							<app-paypal-button mode="{{ PAYPAL_MODE }}"
 											   create-url="/shop/checkout/paypal/payment/create"
 											   execute-url="/shop/checkout/paypal/payment/execute"
+											   :create-data="paypalRequestCreateData"
 											   :state="paypalState"
-											   @stateChanged="paypalStateChanged">
+											   @state-changed="paypalStateChanged">
 							</app-paypal-button>
 						</b-col>
 					</b-row>
@@ -89,6 +90,10 @@
 {{/section}}
 
 {{/if}}
+
+{{#section 'head_css'}}
+<link href="/public/styles/build.shop-cart.css?v={{version}}" rel="stylesheet">
+{{/section}}
 
 {{#section 'body_js'}}
 <script src="/public/js/build.shop-cart.js?v={{version}}"></script>

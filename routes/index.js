@@ -83,8 +83,7 @@ exports = module.exports = function (app) {
 	app.get('/test/:page', routes.views.test);
 
 	// Custom Admin related pages (for uploading files and etc...) - full SPA
-	app.get('/admin/**', routes.views.admin);
-
+	app.get('/admin(/**)?', routes.views.admin);
 
 	// Attach to all API routes res.apiResponse() ...  methods
 	app.all('/api/**', keystone.middleware.api);

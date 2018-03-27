@@ -3,6 +3,8 @@ const _ = require('lodash');
 
 const keystone = require('keystone');
 
+const Cart = require('../../../lib/models/shop/Cart');
+const ShippingZone = keystone.list('ShippingZone');
 const Order = keystone.list('Order');
 
 const listProviders = new Map();
@@ -13,6 +15,7 @@ exports = module.exports = function (req, res, next) {
 	const view = new keystone.View(req, res);
 
 	if (!req.session.cart) return next('Checkout failed - no cart');
+	const cart = new Cart(req.session.cart);
 
 	const providerKey = req.params.provider;
 	const provider = listProviders.get(providerKey);
@@ -20,14 +23,12 @@ exports = module.exports = function (req, res, next) {
 
 	const action = req.params.action;
 
-	let shippingZone;
 	let details;
 
 	// the details are needed only on 'create' action
 	if (action === 'create') {
-
 		// get the shipping zone if any
-		view.on('render', function (next) {
+		view.on('init', function (next) {
 			const shippingZoneId = req.body.shippingZone;
 
 			// selected shipping zone is obligatory
@@ -36,26 +37,36 @@ exports = module.exports = function (req, res, next) {
 					.exec(function (err, zone) {
 						if (err) return next(err);
 
-						shippingZone = zone;
+						// remember selected shippingZone in the session - serialize it (it will be auto serialized anyway)
+						req.session.shippingZone = zone.toObject();
+
+						details = {
+							cart,
+							shippingZone: zone,
+
+							currency: 'EUR',
+							// discount: 20,
+							noteToPayer: 'Contact us for any questions on your order.',
+							description: 'The payment transaction description.',
+						};
+
 						next();
 					});
 			} else {
 				next('No shipping zone provided');
 			}
 		});
+	} else {
+		// recreate the ShippingZone  as it's survived session serialization
+		if (!req.session.shippingZone) {
+			next('No shipping zone survived');
+		}
+		details = {
+			cart,
 
-		view.on('render', function (next) {
-			// remember selected shippingZon in the session
-			req.session.shippingZone = shippingZone;
-			details = {
-				currency: 'EUR',
-				shippingZone,
-				// discount: 20,
-				noteToPayer: 'Contact us for any questions on your order.',
-				description: 'The payment transaction description.',
-			};
-			next();
-		});
+			// deserialize the ShippingZone object - e.g. re-create it
+			shippingZone: new ShippingZone.model(req.session.shippingZone),
+		};
 	}
 
 	view.render(function (error) {
@@ -79,7 +90,12 @@ exports = module.exports = function (req, res, next) {
 						debug(`Unsupported order status: ${order.status}`);
 						throw new Error(`Checkout - Unsupported order status: ${order.status}`);
 				}
-				// TODO: save it to DB as Order
+				// save it to DB - don't listen to the callback as the payment is successful anyway
+				// just trace
+				order.save(function (error) {
+					if (error) debug(`Checkout - saving order '${order.id}' for '${order.email}' failed`);
+					else debug(`Checkout - saving order '${order.id}' for '${order.email}' succeeded`);
+				});
 			}
 
 			// repass the needed data to the client

@@ -1,10 +1,16 @@
 <template>
-  <div id="paypal-button-container"></div>
+  <div id="paypal-button-container">
+		<BlockUI v-show="!isEnabled"></BlockUI>
+	</div>
 </template>
 
 
 <script>
 /* globals paypal */
+
+import Vue from "vue";
+import BlockUI from "vue-blockui";
+Vue.use(BlockUI);
 
 import { PAYPAL_STATE } from "./index";
 
@@ -25,13 +31,15 @@ export default {
     state: {
       type: String,
       required: true
+    },
+    createData: {
+      type: Object,
+      required: true
     }
   },
-  watch: {
-    state: function(newState) {
-      if (newState === PAYPAL_STATE.READY) {
-        console.log("Ready");
-      }
+  computed: {
+    isEnabled: function() {
+      return this.state === PAYPAL_STATE.READY;
     }
   },
   mounted() {
@@ -60,15 +68,18 @@ export default {
          * Called when the button is clicked
          */
         payment: function(data, actions) {
-          if (vm.state !== PAYPAL_STATE.READY) {
-            return Promise.reject();
+          if (!vm.isEnabled) {
+            return Promise.reject("Not enabled");
           }
 
-          vm.$emit("stateChanged", PAYPAL_STATE.STARTED);
+          vm.$emit("state-changed", PAYPAL_STATE.STARTED);
+
+          // re-pass the data coming from the parent
+          const params = { ...vm.createData };
 
           // Make a call to the server to set up the payment
-          return paypal.request.post(vm.createUrl).then(function(res) {
-            vm.$emit("stateChanged", PAYPAL_STATE.CREATED);
+          return paypal.request.post(vm.createUrl, params).then(function(res) {
+            vm.$emit("state-changed", PAYPAL_STATE.CREATED);
             return res.paymentID;
           });
         },
@@ -89,11 +100,9 @@ export default {
           };
 
           // Make a call to your server to execute the payment
-          return paypal.request
-            .post(vm.executeUrl, params)
-            .then(function(res) {
-              vm.$emit("stateChanged", PAYPAL_STATE.SUCCESS);
-            });
+          return paypal.request.post(vm.executeUrl, params).then(function(res) {
+            vm.$emit("state-changed", PAYPAL_STATE.SUCCESS);
+          });
         },
 
         /**
@@ -113,14 +122,14 @@ export default {
          * called when a buyer cancelled the payment
          */
         onCancel: function(data, actions) {
-          vm.$emit("stateChanged", PAYPAL_STATE.CANCELED);
+          vm.$emit("state-changed", PAYPAL_STATE.CANCELED);
         },
 
         /**
          * Called when an error occurred during the transaction
          */
         onError: function(err) {
-          vm.$emit("stateChanged", PAYPAL_STATE.FAILED);
+          vm.$emit("state-changed", PAYPAL_STATE.FAILED);
         }
       },
       "#paypal-button-container"
@@ -128,3 +137,21 @@ export default {
   }
 };
 </script>
+
+<style lang="less">
+// A way to overwrite the BlockUI styles
+// Make the blocking only over the AppPayPalButton component - not over the whole page
+.loading-container {
+	& .loading-backdrop{
+		background-color: white !important;
+		position: absolute !important;
+	}
+  & .loading {
+    background-color: unset !important;
+    box-shadow: unset !important;
+  }
+}
+</style>
+
+
+
