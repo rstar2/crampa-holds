@@ -2,12 +2,12 @@
 
 <p class="text-larger">An order was just submitted to {{brand}}:</p>
 
-<p class="text-larger">From {{#if order.user.name.full}} <strong>{{order.user.name.full}}</strong> {{/if}}
-	{{#if order.user.email}} (<a href="mailto:{{order.user.email}}">{{order.user.email}}</a>) {{/if}}
+<p class="text-larger">From {{#if order.name.full}} <strong>{{order.name.full}}</strong> {{/if}}
+	{{#if order.email}} (<a href="mailto:{{order.email}}">{{order.email}}</a>) {{/if}}
 </p>
 
 <p class="text-larger">Order ID: {{order.id}}</p>
-<p class="text-larger">Shipping to: {{order.shippingAddress}}</p>
-<p class="text-larger">Zone: {{order.zone}}</p>
+<p class="text-larger">Shipping to:</p>
+<p class="text-larger" style="white-space: pre;">{{order.shippingAddress}}</p>
 <p class="text-larger">Total price: {{order.total}}</p>
-<p class="text-muted">Sent {{underscoreFormat order 'createdAt'}}</p>
+<p class="text-muted">Paid on: {{underscoreFormat order 'updatedAt'}}</p>

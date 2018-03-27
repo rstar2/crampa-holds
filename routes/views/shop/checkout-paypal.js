@@ -228,7 +228,6 @@ function execute (req, opt, callback) {
 					.map(key => key + ' : ' + payerInfo.shipping_address[key])
 					.join('\n'),
 
-				// TODO: check why products are saved as Mongoose documents - having a '_id' index
 				products: Object.keys(cart.items)
 					.map(id => ({ id, quantity: cart.items[id].qty, price: cart.items[id].product.price })),
 
