@@ -186,7 +186,7 @@ function execute (req, opt, callback) {
 					} else {
 						const country = shipping_address.country_code;
 						if (shippingZone.countries.indexOf(country) < 0) {
-							error = 'No shipping country code is not verified by the selected zone';
+							error = 'Shipping country code is not verified by the selected zone';
 						}
 					}
 				}

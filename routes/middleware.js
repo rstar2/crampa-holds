@@ -124,12 +124,13 @@ exports.validateCorsAPI = function (keystone) {
 */
 exports.initErrorHandlers = function (req, res, next) {
 	res.error = function (error, title, message) {
-		debug(error);
+		debug(`Request ${req} failed with error: ${error}; title: ${title}; message: ${message}`);
+
 		res.status(500);
 		if (res.apiError) {
-			return res.apiError('Server error');
+			return res.apiError(error);
 		} else if (req.headers.accept.indexOf('application/json') !== -1) {
-			return res.json({ error: 'Server error' });
+			return res.json({ error });
 		} else {
 			return res.render('errors/500', {
 				error,

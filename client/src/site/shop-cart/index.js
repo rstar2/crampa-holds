@@ -2,6 +2,8 @@ import Vue from 'vue';
 
 import AppPayPalButton from './AppPayPalButton';
 
+import './paypal.less';
+
 export const PAYPAL_STATE = {
 	INIT: 'init',
 	READY: 'ready',

@@ -70,10 +70,10 @@ exports = module.exports = function (req, res, next) {
 	}
 
 	view.render(function (error) {
-		if (error) return next(`Checkout failed - ${error}`);
+		if (error) return next(error);
 
 		provider(req, action, details, function (error, order, data = {}) {
-			if (error) return next(`Checkout failed - ${error}`);
+			if (error) return next(error);
 
 			// the Order model may not be created on each checkout-flow step,
 			// this could depend on the provider
@@ -88,7 +88,7 @@ exports = module.exports = function (req, res, next) {
 						break;
 					default:
 						debug(`Unsupported order status: ${order.status}`);
-						throw new Error(`Checkout - Unsupported order status: ${order.status}`);
+						throw new Error(`Unsupported order status: ${order.status}`);
 				}
 				// save it to DB - don't listen to the callback as the payment is successful anyway
 				// just trace

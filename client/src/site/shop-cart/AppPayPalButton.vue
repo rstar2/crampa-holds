@@ -128,30 +128,44 @@ export default {
         /**
          * Called when an error occurred during the transaction
          */
-        onError: function(err) {
-          vm.$emit("state-changed", { state: PAYPAL_STATE.FAILED, error: err });
+        onError: function(error) {
+          vm.$emit("state-changed", { state: PAYPAL_STATE.FAILED, error: parseError(error.message) });
         }
       },
       "#paypal-button-container"
     );
   }
 };
-</script>
 
-<style lang="less">
-// A way to overwrite the BlockUI styles
-// Make the blocking only over the AppPayPalButton component - not over the whole page
-.loading-container {
-  & .loading-backdrop {
-    background-color: white !important;
-    position: absolute !important;
-  }
-  & .loading {
-    background-color: unset !important;
-    box-shadow: unset !important;
-  }
+/**
+ * @param {String} error
+ */
+function parseError(error) {
+  // this is a possible format if we return JSON:
+  // Request to post /shop/checkout/paypal/payment/execute failed with 500 error. Correlation id: unknown
+  //
+  // {
+  //     "error": "Shipping country code is not verified by the selected zone"
+  // }
+
+  const startJSON = error.indexOf("{");
+  if (startJSON > 0) {
+    const endJSON = error.lastIndexOf("}");
+    if (endJSON > 0) {
+      const errorJSONStr = error.substring(startJSON, endJSON+1).trim();
+      const errorJSON = JSON.parse(errorJSONStr);
+      error = errorJSON.error || error;
+    }
+  } else {
+    // wil assume a plain text:
+    const startPlain = error.indexOf("\n");
+    if (startPlain > 0) {
+      error = error.substr(startPlain).trim();
+    }
+	}
+	
+	return error;
 }
-</style>
-
+</script>
 
 
