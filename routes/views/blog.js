@@ -74,6 +74,8 @@ exports = module.exports = function (req, res) {
 		});
 	});
 
-	// Render the view
-	view.render('blog', null, res.cache);
+	// Render the view - allowing response to be cache (with or without expiration) or not
+	// view.render('blog');
+	// view.render('blog', null, res.cache);
+	view.render('blog', null, res.cache.expire(5));
 };
