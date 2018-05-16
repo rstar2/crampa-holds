@@ -21,12 +21,10 @@
 const keystone = require('keystone');
 const middleware = require('./middleware');
 
-// import/require all the files in the 'lib/init' directory and call them
-// Note, each one of them must export a function with argument 'keystone'
-const middlewareFns = keystone.import('lib/middleware');
-Object.keys(middlewareFns).forEach(key => middlewareFns[key](keystone));
+const checkCache = require('../lib/middleware/cacheRedis');
 
 // Common Middleware
+keystone.pre('routes', checkCache(keystone));
 keystone.pre('routes', middleware.initLocals);
 keystone.pre('routes', middleware.initErrorHandlers);
 keystone.pre('render', middleware.flashMessages);
