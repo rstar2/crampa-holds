@@ -47,5 +47,5 @@ exports = module.exports = function (req, res, next) {
 			// rely on the default 404 handler
 			next();
 		}
-	});
+	}, null, res.cache);
 };

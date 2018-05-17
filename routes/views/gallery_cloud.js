@@ -12,6 +12,6 @@ exports = module.exports = function (req, res) {
 	view.query('galleries', keystone.list('GalleryCloud').model.find().sort('sortOrder'));
 
 	// Render the view
-	view.render('gallery_cloud');
+	view.render('gallery_cloud', null, res.cache);
 
 };

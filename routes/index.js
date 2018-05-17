@@ -21,7 +21,7 @@
 const keystone = require('keystone');
 const middleware = require('./middleware');
 
-const checkCache = require('../lib/middleware/cacheRedis');
+const checkCache = require('../lib/middleware/renderCacheRedis');
 
 // Common Middleware
 keystone.pre('routes', checkCache(keystone));
