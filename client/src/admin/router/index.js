@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import FileUpload from '../components/fileupload/FileUpload.vue';
 import Gallery from '../components/gallery/Gallery.vue';
+import Cache from '../components/cache/Cache.vue';
 import Enquiry from '../components/notify/Enquiry.vue';
 import Order from '../components/notify/Order.vue';
 
@@ -12,6 +13,7 @@ Vue.use(VueRouter);
 const routes = [
 	{ path: '/fileupload', component: FileUpload },
 	{ path: '/gallery', component: Gallery },
+	{ path: '/cache', component: Cache },
 	{
 		path: '/notify',
 		component: {

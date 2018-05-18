@@ -7,11 +7,20 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug",
+            "name": "App",
             "program": "${workspaceFolder}/keystone.js",
             "console": "internalConsole",
             // this is needed to output also logs that write directly to process.stdout/process.stderr
             "outputCapture": "std"
-        }
+        },
+        {
+          "type": "node",
+          "request": "launch",
+          "name": "File",
+          "program": "${file}",
+          "console": "internalConsole",
+          // this is needed to output also logs that write directly to process.stdout/process.stderr
+          "outputCapture": "std"
+      }
     ]
 }

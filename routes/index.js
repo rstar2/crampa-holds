@@ -106,4 +106,5 @@ exports = module.exports = function (app) {
 	app.use('/api/fileupload', routes.api.fileupload);
 	app.use('/api/gallery', routes.api.gallery);
 	app.use('/api/notify', routes.api.notify);
+	app.use('/api/cache', routes.api.cache);
 };

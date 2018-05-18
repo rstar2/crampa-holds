@@ -4,7 +4,7 @@
 		<b-list-group-item>
 			<a v-bind:href="item.file.url" download>{{ item.name }}</a>
 			<b-button variant="danger" v-on:click.prevent="onRemove(item)" class="float-right">Delete</b-button>
-		</b-list-group-item>class="float-left"
+		</b-list-group-item>
 	</transition>
 </template>
 

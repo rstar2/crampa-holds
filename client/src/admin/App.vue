@@ -12,6 +12,7 @@
 							<b-dropdown-item to="/notify/enquiry">Enquiry</b-dropdown-item>
 							<b-dropdown-item to="/notify/order">Order</b-dropdown-item>
 						</b-nav-item-dropdown>
+						<b-nav-item to="/cache">Cache</b-nav-item>
 					</b-navbar-nav>
 
 					<!-- Right aligned nav items -->
