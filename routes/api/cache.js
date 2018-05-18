@@ -7,6 +7,8 @@ router.get('/render/keys', renderKeys);
 router.post('/render/get', renderGet);
 router.post('/render/remove', renderRemove);
 
+const cache = keystone.cache;
+
 module.exports = router;
 
 /**
