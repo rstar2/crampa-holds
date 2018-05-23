@@ -50,9 +50,15 @@ function renderGet (req, res) {
  * Remove all (or specified) cached "render" keys
  */
 function renderDelete (req, res) {
-	cache.render.del(req.body.key, (error, count) => {
+	const callback = (error, keys) => {
 		if (error) return res.apiError(error);
 
-		res.apiResponse({ count });
-	});
+		res.apiResponse({ keys: keys });
+	};
+	// either 'key' (key may be empty string) or 'pattern' should be present
+	if (req.body.pattern) {
+		cache.render.delPattern(req.body.pattern, callback);
+	} else {
+		cache.render.del(req.body.key, callback);
+	}
 }

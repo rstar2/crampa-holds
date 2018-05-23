@@ -4,6 +4,7 @@
 			  <b-col><h2>Keys: <span>{{ keys ? keys.length : ''}}</span></h2></b-col>
 			  <b-col cols="auto"><b-button @click="load">Load</b-button></b-col>
 			  <b-col cols="auto"><b-button class="float-right" variant="danger" @click="purge">Purge</b-button></b-col>
+			  <b-col cols="auto"><b-button class="float-right" variant="danger" @click="del('blog', true)">Purge blog</b-button></b-col>
 		  </b-row>
 		
 		<b-list-group>
@@ -51,14 +52,20 @@ export default {
       });
     },
 
-    del(cacheKey) {
-      console.log("Cache delete key:", cacheKey);
+    del(cacheKey, isPattern = false) {
+      console.log("Cache delete key/pattern:", cacheKey);
 
-      api.post("/api/cache/render/delete", { key: cacheKey }).then(data => {
-        if (data.count > 0) {
-          this.keys = this.keys.filter(key => key !== cacheKey);
-        }
-      });
+      api.post("/api/cache/render/delete", {
+          [isPattern ? "pattern" : "key"]: cacheKey
+        })
+        .then(data => {
+          // the deleted keys array
+          if (data.keys) {
+            data.keys.forEach(deletedKey => {
+              this.keys = this.keys.filter(key => key !== deletedKey);
+            });
+          }
+        });
     },
 
     get(cacheKey) {
