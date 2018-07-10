@@ -102,7 +102,7 @@ exports = module.exports = function (app) {
 	];
 
 	// All API routes are protected and/or should allow CORS
-	app.all('/api/**', ...apiProtected);
+	app.all('/api/*', ...apiProtected);
 
 	app.use('/api/fileupload', routes.api.fileupload);
 	app.use('/api/gallery', routes.api.gallery);

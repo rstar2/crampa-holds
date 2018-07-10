@@ -7,7 +7,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "App",
+            "name": "Server",
             "program": "${workspaceFolder}/keystone.js",
             "console": "internalConsole",
             // this is needed to output also logs that write directly to process.stdout/process.stderr

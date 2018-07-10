@@ -22,7 +22,7 @@ Enquiry.add({
 			{ value: 'message', label: 'Just leaving a message' },
 			{ value: 'question', label: 'I\'ve got a question' },
 			{ value: 'other', label: 'Something else...' },
-		]
+		],
 	},
 	message: { type: Types.Markdown, required: true },
 	createdAt: { type: Date, default: Date.now },
