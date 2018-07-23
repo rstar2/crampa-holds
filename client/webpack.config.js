@@ -16,6 +16,7 @@ const options = {
 		'site': './src/site',
 
 		// these are bundles for a specific main/client site page
+		'home': './src/site/home',
 		'blog-editor': './src/site/blog-editor',
 		'post': './src/site/post',
 		'shop-cart': './src/site/shop-cart',
