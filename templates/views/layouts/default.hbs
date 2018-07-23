@@ -58,19 +58,20 @@
           		
           		<ul>
 					{{#each navLinks}}
-						<li {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}><a href="{{ href }}"><i class="fas fa-{{ icon }}"></i> <em>{{ label }}</em></a></li>
+						<li><a href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}><i class="fas fa-{{ icon }}"></i> <em>{{ label }}</em></a></li>
 					{{/each}}
           		</ul>
         	</nav>
 
-			<div class="body">
-				{{{body}}}
+			<div class="slide">
+				<div class="content">
+					{{{body}}}
+				</div>
 			</div>
 			
 			<div class="footer">
 				<div class="content">
-					<p>Copyright &copy; 2018 Crampa</p>
-					<p>Designed By Rumen Neshev</p>
+					<p></p>Copyright &copy; 2018 Crampa. Produced By Rumen Neshev</p>
 				</div>
 			</div>
 		</div>
