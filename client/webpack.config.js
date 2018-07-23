@@ -15,11 +15,12 @@ const options = {
 		// mainly CSS/LESS files for the main site and also registering common  Vue components
 		'site': './src/site',
 
-		// these are bundles for a specific main/client site page
-		'home': './src/site/home',
-		'blog-editor': './src/site/blog-editor',
-		'post': './src/site/post',
-		'shop-cart': './src/site/shop-cart',
+		// these are bundles for a specific main/client site pages
+		'home': './src/site/pages/home',
+		'gallery': './src/site/pages/gallery',
+		'blog': './src/site/pages/blog',
+		'post': './src/site/pages/post',
+		'shop-cart': './src/site/pages/shop-cart',
 	},
 	output: {
 		path: path.resolve(__dirname, '../public/js'),
