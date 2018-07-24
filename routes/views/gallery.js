@@ -1,15 +1,16 @@
 const fs = require('fs');
+const path = require('path');
 
 const keystone = require('keystone');
 
-let gallery = // fs.readdirSync(keystone.root('/uploads/files'));
-	[
-		'_5gcHqKDy9DAOzKz.JPG',
-		'KCIhlWZ7youOOEWd.JPG',
-		'PS4RB7_2IbU9L7pw.JPG',
-	];
+const galleryFolder = '/uploads/gallery/main';
+const galleryPath = path.join(keystone.get('module root'), galleryFolder);
+let gallery = fs.readdirSync(galleryPath).filter(name => {
+	const info = fs.statSync(path.join(galleryPath, name));
+	return info.isFile();
+});
 
-gallery = gallery.map(file => ({ url: `/uploads/files/${file}` }));
+gallery = gallery.map(file => ({ url: `${galleryFolder}/${file}` }));
 
 
 exports = module.exports = function (req, res) {
