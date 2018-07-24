@@ -21,13 +21,12 @@ const debug = require('debug')('app:routes');
 exports.initLocals = function (req, res, next) {
 	res.locals.navLinks = [
 		{ label: req.__('Home'), key: 'home', href: '/', icon: 'home' },
-		{ label: req.__('News'), key: 'blog', href: '/blog', icon: 'pencil-alt' },
-		{ label: req.__('Gallery'), key: 'gallery', href: '/gallery', icon: 'image' },
-		{ label: req.__('Contact'), key: 'contact', href: '/contact', icon: 'envelope' },
 		{ label: req.__('Products'), key: 'shop', href: '/shop', icon: 'euro-sign' },
-		{
-			label: req.__('Cart'), key: 'shopping-cart', href: '/shop/cart', icon: 'shopping-cart',
-		},
+		{ label: req.__('About'), key: 'about', href: '/about', icon: 'info' },
+		{ label: req.__('Gallery'), key: 'gallery', href: '/gallery', icon: 'image' },
+		{ label: req.__('News'), key: 'blog', href: '/news', icon: 'pencil-alt' },
+		{ label: req.__('Contact'), key: 'contact', href: '/contact', icon: 'envelope' },
+		// { label: req.__('Cart'), key: 'shopping-cart', href: '/shop/cart', icon: 'shopping-cart' },
 	];
 	// expose the user (if any) and the session to the views
 	res.locals.user = req.user;

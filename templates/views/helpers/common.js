@@ -208,6 +208,24 @@ const helpers = {
 		return !!user;
 	},
 
+	/**
+	 * Usage example:
+	 * {{ imageUrl url width=600 height=300 }}
+	 */
+	imageUrl: function (url, options) {
+		// pick just the 'width' and 'height' kwargs
+		const params = _.pick(options.hash, ['width', 'height']);
+
+		let output = url;
+		let isFirst = true;
+		Object.keys(params).forEach(key => {
+			output += (isFirst ? '?' : '&');
+			output += `${key}=${params[key]}`;
+			isFirst = false;
+		});
+		return new hbs.SafeString(output);
+	},
+
 };
 
 module.exports = helpers;

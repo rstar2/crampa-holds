@@ -1,4 +1,16 @@
+const fs = require('fs');
+
 const keystone = require('keystone');
+
+let gallery = // fs.readdirSync(keystone.root('/uploads/files'));
+	[
+		'_5gcHqKDy9DAOzKz.JPG',
+		'KCIhlWZ7youOOEWd.JPG',
+		'PS4RB7_2IbU9L7pw.JPG',
+	];
+
+gallery = gallery.map(file => ({ url: `/uploads/files/${file}` }));
+
 
 exports = module.exports = function (req, res) {
 
@@ -7,9 +19,7 @@ exports = module.exports = function (req, res) {
 
 	// Set locals
 	locals.section = 'gallery';
-
-	// Load the galleries by sortOrder
-	view.query('galleries', keystone.list('Gallery').model.find().sort('sortOrder'));
+	locals.images = gallery;
 
 	// Render the view
 	view.render('gallery', null, res.cache);

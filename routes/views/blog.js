@@ -1,5 +1,4 @@
 const keystone = require('keystone');
-const async = require('async');
 
 exports = module.exports = function (req, res) {
 
@@ -8,47 +7,6 @@ exports = module.exports = function (req, res) {
 
 	// Init locals
 	locals.section = 'blog';
-
-	// Load all categories
-	view.on('init', function (next) {
-
-		keystone.list('PostCategory').model.find().sort('name')
-			.exec(function (err, categories) {
-
-				if (err || !categories.length) {
-					return next(err);
-				}
-
-				locals.categories = categories;
-
-				// Load the counts for each category
-				async.each(locals.categories, function (category, next) {
-
-					keystone.list('Post').model.count().where('categories').in([category.id])
-						.exec(function (err, count) {
-							category.count = count;
-							next(err);
-						});
-
-				}, function (err) {
-					next(err);
-				});
-			});
-	});
-
-	// Load the current category filter
-	view.on('init', function (next) {
-
-		if (req.params.category) {
-			keystone.list('PostCategory').model.findOne({ slug: req.params.category })
-				.exec(function (err, category) {
-					locals.category = category;
-					next(err);
-				});
-		} else {
-			next();
-		}
-	});
 
 	// Load the posts
 	view.on('init', function (next) {
@@ -62,11 +20,7 @@ exports = module.exports = function (req, res) {
 			},
 		})
 			.sort('-publishedDate')
-			.populate('author categories');
-
-		if (locals.category) {
-			q.where('categories').in([locals.category]);
-		}
+			.populate('author');
 
 		q.exec(function (err, results) {
 			locals.posts = results;
@@ -74,8 +28,7 @@ exports = module.exports = function (req, res) {
 		});
 	});
 
-	// Render the view - allowing response to be cache (with or without expiration) or not
-	// view.render('blog');
+	// Render the view - allowing response to be cache (with or without expiration)
 	view.render('blog', null, res.cache);
 	// view.render('blog', null, res.cacheExpire(5));
 };

@@ -24,10 +24,7 @@ module.exports = {
 			context = this;
 		}
 
-		// safe guard to ensure context is never null
-		context = context === null ? undefined : context;
-
-		if ((context) && (context.public_id)) {
+		if (context && context.public_id) {
 			options.hash.secure = keystone.get('cloudinary secure') || false;
 			const imageName = context.public_id.concat('.', context.format);
 			return cloudinary.url(imageName, options.hash);
