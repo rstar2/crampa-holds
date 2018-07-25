@@ -52,13 +52,13 @@
               			<img src="/public/images/logo.png" alt="">
         			</div>
           			<div class="logo-mini d-block d-md-none">
-              			<img src="/public/images/mini_logo.png" alt="">
+              			<img src="/public/images/logo-mini.png" alt="">
           			</div>
 				</a>
           		
           		<ul>
 					{{#each navLinks}}
-						<li><a href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}><i class="fas fa-{{ icon }}"></i> <em>{{ label }}</em></a></li>
+						<li><a href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}><i class="fas fa-{{ icon }}"></i> <span>{{ label }}</span></a></li>
 					{{/each}}
           		</ul>
         	</nav>

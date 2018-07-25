@@ -1,34 +1,18 @@
-.keyframes(@name, @arguments) {
-	@keyframes @name { @arguments(); }
-	@-webkit-keyframes @name { @arguments(); }
-	@-moz-keyframes @name { @arguments(); }
-    @-ms-keyframes @name { @arguments(); }
-	@-o-keyframes @name { @arguments(); }
-}
-
-.animation(@arguments) {
-	animation: @arguments;
-	-webkit-animation: @arguments;
-	-moz-animation: @arguments;
-	-ms-animation: @arguments;
-	-o-animation: @arguments;
-}
-
-.keyframes(fillColour, {
+.keyframes(navFillColour, {
 	0% {
-		color: #fff;
+		color: @nav-item-color;
 	}
 
 	50% {
-		color: #fff;
+		color: @nav-item-color;
 	}
 
 	100% {
-		color: #333;
+		color: @nav-item-color-active;
 	}
 });
 
-.keyframes(fill, {
+.keyframes(navFillSize, {
 	0% {
 		width: 0%;
 		height: 1px;
@@ -42,6 +26,5 @@
 	100% {
 		width: 100%;
 		height: 100%;
-		background: #fff;
 	}
 });

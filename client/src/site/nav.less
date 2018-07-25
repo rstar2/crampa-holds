@@ -4,90 +4,70 @@ nav {
 	bottom: @bottom;
 	left: 0;
 	width: 20vw;
-
 	text-align: center;
 	background: rgba(0, 0, 0, 0.5);
-	
 	font-weight: 300;
 	font-size: 1rem;
-}
 
-nav em {
-	font-style: normal;
-	margin-left: 5px;
-	font-size: 14px;
-}
+	ul {
+		margin-top: 60px;
+		text-align: left;
+		margin-left: 40px;
+		list-style-type: none;
+		height: 48vh;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		-ms-flex-pack: distribute;
+		justify-content: space-around;
 
-nav ul li i {
-	width: 25px;
-}
+		li {
+			margin: 15px 0px;
 
-nav ul li a {
-	font-size: 18px;
-}
+			a {
+				padding: 10px 20px;
+				position: relative;
+				color: @nav-item-color;
 
-nav ul {
-	margin-top: 60px;
-	text-align: left;
-	margin-left: 40px;
-	list-style-type: none;
-	height: 48vh;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: column;
-	flex-direction: column;
-	-ms-flex-pack: distribute;
-	justify-content: space-around;
-}
+				z-index: 0;
 
-nav ul li {
-	margin: 25px 0px;
-}
+				&::before {
+					content: "";
+					position: absolute;
+					height: 0%;
+					width: 0%;
+					bottom: 0;
+					left: 0;
+					opacity: 0;
+					z-index: -1;
+				}
 
-nav a,
-nav a:visited,
-nav a:active {
-	color: #fff;
-}
+				&.active {
+					background-color: @nav-item-backgroundcolor-active;
+					color: @nav-item-color-active;
+				}
 
-nav a {
-	text-decoration: none !important;
-	font-size: 14px;
-	letter-spacing: 0.5px;
-	-webkit-transition: color 2s, background 1s;
-	transition: color 2s, background 1s;
-	padding: 20px 30px;
-	position: relative;
-	z-index: 0;
-}
+				&:hover {
+					text-decoration: none;
+					.animation(navFillColour 0.7s forwards ease-in-out);
 
-nav a.active {
-	background-color: #fff;
-	color: #232323;
-}
+					&::before {
+						opacity: 1;
+						background-color: @nav-item-backgroundcolor-active;
+						.animation(navFillSize 0.7s forwards ease-in-out);
+					}
+				}
 
-nav a::before {
-	content: "";
-	position: absolute;
-	height: 0%;
-	width: 0%;
-	bottom: 0;
-	left: 0;
-	opacity: 1;
-	z-index: -1;
-}
-
-nav a:hover {
-	text-decoration: none;
-	-webkit-animation: fillColour 0.7s forwards ease-in-out;
-	animation: fillColour 0.7s forwards ease-in-out;
-}
-
-nav a:hover::before {
-	-webkit-animation: fill 0.7s forwards ease-in-out;
-	animation: fill 0.7s forwards ease-in-out;
-	opacity: 1;
+				span {
+					margin-left: 5px;
+					font-size: 14px;
+					letter-spacing: 0.5px;
+				}
+			}
+		}
+	}
 }

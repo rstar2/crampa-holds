@@ -1,7 +1,12 @@
+// we have to specify to the less-loader that this is CSS remote url (otherwise it should have .css extension)
+@import (css) url("//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800");
+
 @import "./variables.less";
+@import "./mixins.less";
+
+@import	'./loader.less';
 
 @import	'./animations.less';
-@import	'./loader.less';
 
 @import	'./main.less';
 @import	'./nav.less';
