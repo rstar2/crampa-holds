@@ -1,3 +1,34 @@
+.keyframes(navFillColour, {
+	0% {
+		color: @nav-item-color;
+	}
+
+	50% {
+		color: @nav-item-color;
+	}
+
+	100% {
+		color: @nav-item-color-active;
+	}
+});
+
+.keyframes(navFillSize, {
+	0% {
+		width: 0%;
+		height: 1px;
+	}
+
+	50% {
+		width: 100%;
+		height: 1px;
+	}
+
+	100% {
+		width: 100%;
+		height: 100%;
+	}
+});
+
 nav {
 	position: absolute;
 	top: @top;

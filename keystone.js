@@ -68,14 +68,18 @@ keystone.import('models');
 // for each request) should be added to ./routes/middleware.js
 keystone.set('locals', {
 	_: require('lodash'),
-	env: keystone.get('env'),
-	brand: keystone.get('brand'),
-	version: require('./package.json').version,
 	utils: keystone.utils,
-	ga: {
-		property: process.env.GOOGLE_ANALYTICS_PROPERTY,
-		domain: process.env.GOOGLE_ANALYTICS_DOMAIN,
+
+	env: keystone.get('env'),
+	version: require('./package.json').version,
+	brand: keystone.get('brand'),
+
+	GA: {
+		PROPERTY: process.env.GOOGLE_ANALYTICS_PROPERTY,
+		DOMAIN: process.env.GOOGLE_ANALYTICS_DOMAIN,
 	},
+
+	...require('./locals'),
 });
 
 

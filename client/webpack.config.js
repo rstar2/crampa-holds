@@ -122,6 +122,10 @@ const options = {
 				ignore: ['.*'],   //ignore dot-files like .gitkeep
 			},
 		]),
+
+		// common Defined props
+		new webpack.DefinePlugin({
+		}),
 	],
 	devtool: '#eval-source-map',
 };
@@ -135,10 +139,14 @@ if (process.env.NODE_ENV === 'production') {
 		// http://vue-loader.vuejs.org/en/workflow/production.html
 		// https://vuejs.org/v2/guide/deployment.html
 		// Run Vue.js in production mode - less warnings and etc...
+
+		// Note that because the plugin does a direct text replacement,
+		// the value given to it must include actual quotes inside of the string itself.
+		// Typically, this is done either with alternate quotes, such as '"production"',
+		// or by using JSON.stringify('production').
 		new webpack.DefinePlugin({
-			'process.env': {
-				NODE_ENV: '"production"',
-			},
+			'process.env.NODE_ENV': '"production"',
+			// 'process.env.NODE_ENV': JSON.stringify('production'), - the same
 		}),
 
 		// Uglify and compress

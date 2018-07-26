@@ -35,13 +35,33 @@
 					}
 				}
 			}
+
+			document.addEventListener("DOMContentLoaded", function (event) {
+			});
+			window.addEventListener("load", function (event) {
+				var preloader = document.querySelector('.preloader');
+				if (preloader) {
+            		preloader.classList.toggle('preloaded', true);
+				}
+			});
 		</script>
 	</head>
 	<body>
 		<!-- Add a simple Bootstrap loading-progress - no need for any fancy plugins/libraries -->
 		<div class="progress" style="height: 3px; width: 100%; z-index: 100;">
-  			<div id="loading" class="progress-bar" role="progressbar"></div>
+			<div id="loading" class="progress-bar" role="progressbar"></div>
 		</div>
+	
+		<div class="preloader">
+			<svg width="39" height="16" viewBox="0 0 39 16" xmlns="http://www.w3.org/2000/svg" class="preloader-seq-indicator">
+				<g fill="#F96D38">
+					<path class="preloader-seq-circle preloader-seq-circle-1" d="M3.999 12.012c2.209 0 3.999-1.791 3.999-3.999s-1.79-3.999-3.999-3.999-3.999 1.791-3.999 3.999 1.79 3.999 3.999 3.999z"/>
+					<path class="preloader-seq-circle preloader-seq-circle-2" d="M15.996 13.468c3.018 0 5.465-2.447 5.465-5.466 0-3.018-2.447-5.465-5.465-5.465-3.019 0-5.466 2.447-5.466 5.465 0 3.019 2.447 5.466 5.466 5.466z"/>
+					<path class="preloader-seq-circle preloader-seq-circle-3" d="M31.322 15.334c4.049 0 7.332-3.282 7.332-7.332 0-4.049-3.282-7.332-7.332-7.332s-7.332 3.283-7.332 7.332c0 4.05 3.283 7.332 7.332 7.332z"/>
+				</g>
+			</svg>
+		</div>
+
 		<script type="text/javascript">__loading(true);</script>
 
 		<div id="app">

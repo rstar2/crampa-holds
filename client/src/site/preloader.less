@@ -1,0 +1,63 @@
+
+.keyframes(preloader-seq, {
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+});
+
+.preloader {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 9999;
+	// height: 100vw;
+	// width: 100vh;
+
+	background: #fff;
+	opacity: 1;
+	visibility: visible;
+
+	&.preloaded {
+		opacity: 0;
+		visibility: hidden;
+		// delay the visibility transition after the opacity has finished
+		transition: opacity 1.5s, visibility 0s 1.5s;
+	}
+
+	.preloader-seq-indicator {
+		overflow: visible;
+		position: relative;
+
+		// perfectly center it
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		.preloader-seq-circle {
+			display: inline-block;
+			height: 12px;
+			width: 12px;
+			fill: #7a7a7a;
+			opacity: 0;
+			.animation(preloader-seq 1.25s infinite);
+		}
+
+		// .preloader-seq-circle-1{
+		// 	animation-delay: .0s;
+		// }
+		
+		.preloader-seq-circle-2 {
+			animation-delay: .15s;
+		}
+		
+		.preloader-seq-circle-3 {
+			animation-delay: .3s;
+		}
+	}
+}
