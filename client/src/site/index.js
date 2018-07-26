@@ -11,6 +11,7 @@ import faEuroSign from '@fortawesome/fontawesome-free-solid/faEuroSign';
 import faShoppingCart from '@fortawesome/fontawesome-free-solid/faShoppingCart';
 import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
+import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
 
 
 const icons = [
@@ -23,9 +24,10 @@ const icons = [
 	faShoppingCart,
 	faChevronLeft,
 	faChevronRight,
+	faSearch,
 ];
 fontawesome.library.add(icons);
 
 
 // import the custom site CSS/LESS
-import './index.less';
+import './styles/index.less';

@@ -3,7 +3,7 @@ const path = require('path');
 
 const keystone = require('keystone');
 
-const galleryFolder = '/uploads/gallery/main';
+const galleryFolder = '/uploads/gallery/home';
 const galleryPath = path.join(keystone.get('module root'), galleryFolder);
 let gallery = fs.readdirSync(galleryPath).filter(name => {
 	const info = fs.statSync(path.join(galleryPath, name));

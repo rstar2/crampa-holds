@@ -1,14 +1,14 @@
 .keyframes(navFillColour, {
 	0% {
-		color: @nav-item-color;
+		color: @text-color;
 	}
 
 	50% {
-		color: @nav-item-color;
+		color: @text-color;
 	}
 
 	100% {
-		color: @nav-item-color-active;
+		color: @text-color-active;
 	}
 });
 
@@ -62,7 +62,7 @@ nav {
 			a {
 				padding: 10px 20px;
 				position: relative;
-				color: @nav-item-color;
+				color: @text-color;
 
 				z-index: 0;
 
@@ -78,8 +78,8 @@ nav {
 				}
 
 				&.active {
-					background-color: @nav-item-backgroundcolor-active;
-					color: @nav-item-color-active;
+					background-color: @text-backgroundcolor-active;
+					color: @text-color-active;
 				}
 
 				&:hover {
@@ -88,7 +88,7 @@ nav {
 
 					&::before {
 						opacity: 1;
-						background-color: @nav-item-backgroundcolor-active;
+						background-color: @text-backgroundcolor-active;
 						.animation(navFillSize 0.7s forwards ease-in-out);
 					}
 				}

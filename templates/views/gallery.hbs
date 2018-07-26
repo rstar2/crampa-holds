@@ -1,9 +1,23 @@
 <div class="container-fluid">
 	<div class="row">
 		{{#each images}}
-		<div class="col col-6 col-sm-4 col-md-3 gallery-image">
-			<img src="{{imageUrl url width='300' height='300'}}" class="img-rounded">
+		<div class="col-12 col-sm-6 col-md-4 gallery">
+			<a href="{{imageUrl url}}" class="gallery-item">
+				<div class="gallery-item-thumb">
+					<img src="{{imageUrl url width='150' height='150'}}">
+				</div>
+				<div class="gallery-item-hover-effect">
+					<i class="fas fa-search"></i>
+				</div>
+			</a>
 		</div>
 		{{/each}}
 	</div>
 </div>
+
+{{#section 'head_css'}}
+	<link href="/public/styles/build.gallery.css?v={{version}}" rel="stylesheet">
+{{/section}} 
+{{#section 'body_js'}}
+	<script src="/public/js/build.gallery.js?v={{version}}"></script>
+{{/section}}

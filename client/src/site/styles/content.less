@@ -1,0 +1,57 @@
+
+.content::-webkit-scrollbar {
+	width: 5px;
+	height: 8px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+/* Add a thumb */
+.content::-webkit-scrollbar-thumb {
+	background: rgba(250, 250, 250, 0.5);
+}
+
+.slide {
+	height: 100vh;
+	width: 100vw;
+	
+	background-image: url('/public/images/background.jpg');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	// background-size: cover;
+
+	button:hover {
+		background-color: @text-backgroundcolor-active;
+		color: @text-color-active;
+	}
+
+	.content {
+		position: absolute;
+		top: @top;
+		bottom: @bottom;
+		right: 0;
+		left: 25vw;
+		
+	
+		text-align: center;
+		overflow-y: auto;
+		
+		background: rgba(0, 0, 0, 0.5);
+	}
+
+	img {
+		width: 100%;
+	}
+}
+
+@import './home.less';
+@import './about.less';
+@import './products.less';
+@import './contact.less';
+
+
+
+
+
+
+
+
+
