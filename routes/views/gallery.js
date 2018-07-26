@@ -1,17 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-
 const keystone = require('keystone');
 
-const galleryFolder = '/uploads/gallery/home';
-const galleryPath = path.join(keystone.get('module root'), galleryFolder);
-let gallery = fs.readdirSync(galleryPath).filter(name => {
-	const info = fs.statSync(path.join(galleryPath, name));
-	return info.isFile();
-});
+const { createGallery } = require('../../lib/views');
 
-gallery = gallery.map(file => ({ url: `${galleryFolder}/${file}` }));
-
+const gallery = createGallery(keystone, 'home');
 
 exports = module.exports = function (req, res) {
 
@@ -20,7 +11,7 @@ exports = module.exports = function (req, res) {
 
 	// Set locals
 	locals.section = 'gallery';
-	locals.images = gallery;
+	locals.images = gallery.images;
 
 	// Render the view
 	view.render('gallery', null, res.cache);
