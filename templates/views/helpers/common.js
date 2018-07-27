@@ -11,6 +11,14 @@ const helpers = {
 	 * ===================
 	 */
 
+	/**
+	 * Usage:
+	 * {{toJSON obj}}
+	 */
+	toJSON: function (obj) {
+		return JSON.stringify(obj);
+	},
+
 	// standard hbs equality check, pass in two values from template
 	// {{#ifeq keyToCheck data.myKey}} [requires an else blockin template regardless]
 	ifeq: function (a, b, options) {
@@ -210,9 +218,34 @@ const helpers = {
 
 	/**
 	 * Usage example:
-	 * {{ imageUrl url width=600 height=300 }}
+	 * {{ imageThumbUrl url width=600 height=300 quickthumb=true }}
 	 */
-	imageUrl: function (url, options) {
+	imageThumbUrl: function (url, options) {
+		// pick just the 'width' and 'height' kwargs
+		const params = _.pick(options.hash, ['width', 'height']);
+		const isQuickthumbFormat = _.isString(options.hash.quickthumb) && options.hash.quickthumb === 'true';
+
+		let output = url;
+
+		if (isQuickthumbFormat) {
+			output += `?dim=${params.width}x${params.height}`;
+		} else {
+			let isFirst = true;
+			Object.keys(params).forEach(key => {
+				output += (isFirst ? '?' : '&');
+				output += `${key}=${params[key]}`;
+				isFirst = false;
+			});
+		}
+
+		return new hbs.SafeString(output);
+	},
+
+	/**
+	 * Usage example:
+	 * {{ imageQuickthumbUrl url width=600 height=300 }}
+	 */
+	imageQuickthumbUrl: function (url, options) {
 		// pick just the 'width' and 'height' kwargs
 		const params = _.pick(options.hash, ['width', 'height']);
 

@@ -1,7 +1,7 @@
 <template>
   <div id="paypal-button-container">
-		<BlockUI v-show="!isEnabled"></BlockUI>
-	</div>
+	<BlockUI v-show="!isEnabled"></BlockUI>
+ </div>
 </template>
 
 
@@ -12,7 +12,11 @@ import Vue from "vue";
 import BlockUI from "vue-blockui";
 Vue.use(BlockUI);
 
-import { PAYPAL_STATE } from "./index";
+import PayPalState from '../../lib/PayPalState';
+
+// keep the styles here and not in internal Vue <styles></styles> tag as thus
+// from here they will be extracted in as CSS file from Webpack
+import  './paypal.less';
 
 export default {
   props: {
@@ -39,7 +43,7 @@ export default {
   },
   computed: {
     isEnabled: function() {
-      return this.state === PAYPAL_STATE.READY;
+      return this.state === PayPalState.READY;
     }
   },
   mounted() {
@@ -72,14 +76,14 @@ export default {
             return Promise.reject("Not enabled");
           }
 
-          vm.$emit("state-changed", { state: PAYPAL_STATE.STARTED });
+          vm.$emit("state-changed", { state: PayPalState.STARTED });
 
           // re-pass the data coming from the parent
           const params = { ...vm.createData };
 
           // Make a call to the server to set up the payment
           return paypal.request.post(vm.createUrl, params).then(function(res) {
-            vm.$emit("state-changed", { state: PAYPAL_STATE.CREATED });
+            vm.$emit("state-changed", { state: PayPalState.CREATED });
             return res.paymentID;
           });
         },
@@ -101,7 +105,7 @@ export default {
 
           // Make a call to your server to execute the payment
           return paypal.request.post(vm.executeUrl, params).then(function(res) {
-            vm.$emit("state-changed", { state: PAYPAL_STATE.SUCCESS });
+            vm.$emit("state-changed", { state: PayPalState.SUCCESS });
           });
         },
 
@@ -122,14 +126,14 @@ export default {
          * called when a buyer cancelled the payment
          */
         onCancel: function(data, actions) {
-          vm.$emit("state-changed", { state: PAYPAL_STATE.CANCELED });
+          vm.$emit("state-changed", { state: PayPalState.CANCELED });
         },
 
         /**
          * Called when an error occurred during the transaction
          */
         onError: function(error) {
-          vm.$emit("state-changed", { state: PAYPAL_STATE.FAILED, error: parseError(error.message) });
+          vm.$emit("state-changed", { state: PayPalState.FAILED, error: parseError(error.message) });
         }
       },
       "#paypal-button-container"
@@ -167,5 +171,11 @@ function parseError(error) {
 	return error;
 }
 </script>
+
+<style lang="less">
+// if styles are imported here then they will be bundled in the JS from webpack,
+// and extracted to a separate CSS bundle
+// @import "./paypal.less";
+</style>
 
 

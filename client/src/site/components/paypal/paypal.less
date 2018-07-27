@@ -1,0 +1,28 @@
+// TODO: Test this
+
+// Make the blocking only over the PayPalButton component - not over the whole page
+// #paypal-button-container .loading-container {
+// 	& .loading-backdrop {
+// 		background-color: white;
+// 		position: absolute;
+// 	}
+
+// 	& .loading {
+// 		background-color: unset;
+// 		box-shadow: unset;
+// 	}
+// }
+
+// A way to overwrite the BlockUI styles
+
+.loading-container {
+	& .loading-backdrop {
+		background-color: white !important;
+		position: absolute !important;
+	}
+
+	& .loading {
+		background-color: unset !important;
+		box-shadow: unset !important;
+	}
+}

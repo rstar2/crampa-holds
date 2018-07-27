@@ -1,28 +1,17 @@
 import Vue from 'vue';
 
-import AppPayPalButton from './AppPayPalButton';
-
-import './paypal.less';
-
-export const PAYPAL_STATE = {
-	INIT: 'init',
-	READY: 'ready',
-	STARTED: 'started',
-	CREATED: 'created',
-	SUCCESS: 'success',
-	CANCELED: 'canceled',
-	FAILED: 'failed',
-};
+import PayPalState from '../../lib/PayPalState';
+import PayPalButton from '../../components/paypal/PayPalButton.vue';
 
 // needed as it uses the BootstrapVue components
 new Vue({
 	el: '#app-shop-cart',
 	components: {
-		'app-paypal-button': AppPayPalButton,
+		'app-paypal-button': PayPalButton,
 	},
 
 	data: {
-		paypalState: PAYPAL_STATE.INIT,
+		paypalState: PayPalState.INIT,
 		paypalError: null,
 
 		// set from the server as initial values
@@ -37,9 +26,9 @@ new Vue({
 		},
 		paypalFinished () {
 			switch (this.paypalState) {
-				case PAYPAL_STATE.SUCCESS:
-				case PAYPAL_STATE.CANCELED:
-				case PAYPAL_STATE.FAILED:
+				case PayPalState.SUCCESS:
+				case PayPalState.CANCELED:
+				case PayPalState.FAILED:
 					return true;
 				default:
 					return false;
@@ -48,11 +37,11 @@ new Vue({
 		paypalFinishedText () {
 			if (!this.paypalFinished) return '';
 			switch (this.paypalState) {
-				case PAYPAL_STATE.SUCCESS:
+				case PayPalState.SUCCESS:
 					return 'Thank you for your payment. Your order will be processed as soon as possible.';
-				case PAYPAL_STATE.CANCELED:
+				case PayPalState.CANCELED:
 					return 'Payment is canceled, we are sorry.';
-				case PAYPAL_STATE.FAILED:
+				case PayPalState.FAILED:
 					return `An error occurred processing your payment${this.paypalError ? ' - ' + this.paypalError + '.' : ', try again later.'}`;
 			}
 		},
@@ -66,7 +55,7 @@ new Vue({
 		shippingZone: function (zone) {
 			// if shippingZones are defined then a valid selected one is obligatory
 			this.paypalState = !this.shippingZones || zone
-				? PAYPAL_STATE.READY : PAYPAL_STATE.INIT;
+				? PayPalState.READY : PayPalState.INIT;
 		},
 	},
 	methods: {
@@ -74,7 +63,7 @@ new Vue({
 			this.paypalState = state;
 			this.paypalError = error;
 
-			if (state === PAYPAL_STATE.SUCCESS) {
+			if (state === PayPalState.SUCCESS) {
 				// clear the cart badge
 
 				// This not the "reactive" state, but because not the whole view is managed by Vue
@@ -94,7 +83,7 @@ new Vue({
 		if (data.cartTotalPrice !== undefined) this.cartTotalPrice = +data.cartTotalPrice;
 		if (data.shippingZones !== undefined) this.shippingZones = (data.shippingZones === 'true');
 
-		if (!this.shippingZones) this.paypalState = PAYPAL_STATE.READY;
+		if (!this.shippingZones) this.paypalState = PayPalState.READY;
 	},
 });
 

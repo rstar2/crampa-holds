@@ -1,18 +1,4 @@
-<div class="container-fluid">
-	<div class="row">
-		{{#each images}}
-		<div class="col-12 col-sm-6 col-md-4 col-lg-3">
-			<a href="{{imageUrl url}}" class="d-block my-1 gallery-item">
-				<img src="{{imageUrl url width='150' height='150'}}">
-				
-				<div class="gallery-item-hover-effect">
-					<i class="fas fa-search"></i>
-				</div>
-			</a>
-		</div>
-		{{/each}}
-	</div>
-</div>
+<app-gallery :images="{{toJSON images}}"></app-gallery>
 
 {{#section 'head_css'}}
 	<link href="/public/styles/build.gallery.css?v={{version}}" rel="stylesheet">
