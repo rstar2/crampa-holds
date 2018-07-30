@@ -2,7 +2,7 @@ const keystone = require('keystone');
 
 const { createGallery } = require('../../lib/views');
 
-const gallery = createGallery(keystone, 'home');
+const gallery = createGallery(keystone, 'main');
 
 exports = module.exports = function (req, res) {
 

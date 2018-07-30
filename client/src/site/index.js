@@ -13,6 +13,9 @@ import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
 
+import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebookF';
+import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
+
 
 const icons = [
 	faHome,
@@ -25,6 +28,8 @@ const icons = [
 	faChevronLeft,
 	faChevronRight,
 	faSearch,
+	faFacebook,
+	faInstagram,
 ];
 fontawesome.library.add(icons);
 

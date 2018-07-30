@@ -2,6 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+const publicPathName = '/public';
+const outputPath = path.resolve(__dirname, '../public');
 
 const options = {
 	entry: {
@@ -23,8 +27,8 @@ const options = {
 		'shop-cart': './src/site/pages/shop-cart',
 	},
 	output: {
-		path: path.resolve(__dirname, '../public/js'),
-		publicPath: '/public/js',
+		path: path.join(outputPath, 'js'),              // path.resolve(__dirname, '../public/js'),
+		publicPath: path.join(publicPathName, 'js'),   // '/public/js',
 		filename: 'build.[name].js',
 	},
 	module: {
@@ -74,8 +78,8 @@ const options = {
 				loader: 'file-loader',
 				options: {
 					name: '[name].[ext]?[hash]',
-					outputPath: '../images',
-					publicPath: '/public/images',
+					outputPath: '../images',                      // this is relative to the JS webpack output file, e.g '../public/js'
+					publicPath: path.join(publicPathName, 'images'),    // '/public/images',
 				},
 			},
 		],
@@ -95,6 +99,10 @@ const options = {
 		hints: false,
 	},
 	plugins: [
+		// clean the output folder
+		new CleanWebpackPlugin([outputPath], { allowExternal: true, verbose: true }),
+
+
 		// extract the 'boot' entry, the one containing Vue, Bootstrap and BootstrapVue as
 		// it will be included in every page
 		new webpack.optimize.CommonsChunkPlugin({

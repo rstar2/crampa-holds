@@ -1,0 +1,34 @@
+.social-network {
+    a.icoFacebook:hover {
+		background-color: #3b5998;
+	}
+
+	a.icoInstagram:hover {
+		background-color: #33ccff;
+	}
+	a.icoEmail:hover {
+		background-color: #6108aa;
+	}
+
+	&.social-circle {
+		a {
+			display: inline-block;
+			position: relative;
+			margin: 0 auto 0 auto;
+			.border-radius(50%);
+			text-align: center;
+			width: 30px;
+			height: 30px;
+			font-size: 20px;
+			.transition(all 0.2s ease-in);
+		}
+		.svg-inline--fa {
+			color: #fff;
+			.transition(all 0.8s);
+		}
+		a:hover .svg-inline--fa {
+			.transform(rotate(360deg));
+			.transition(all 0.2s);
+		}
+	}
+}

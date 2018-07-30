@@ -61,7 +61,7 @@ const routes = {
 // Setup Route Bindings
 exports = module.exports = function (app) {
 	// Views
-	app.get('/', routes.views.index);
+	app.get('/', routes.views.home);
 	app.get('/news', routes.views.blog);
 	app.get('/news/:post', routes.views.post);
 	app.all('/contact', routes.views.contact);

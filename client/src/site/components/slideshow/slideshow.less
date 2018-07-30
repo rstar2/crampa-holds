@@ -1,0 +1,57 @@
+// import the custom site CSS/LESS
+@import '../../styles/variables.less';
+@import '../../styles/mixins.less';
+
+.gallery-item {
+	// margin: 10px;
+	// display: inline-block;
+	position: relative;
+    overflow: hidden;
+	
+	img {
+		.transform(scale3d(1, 1, 1));
+		transition: transform 0.15s ease 0s;
+	}
+
+	.gallery-item-hover-effect {
+		position: absolute;
+		bottom: 0;
+		top: 0;
+		left: 0;
+	
+		right: 0;
+		background-color: rgba(0, 0, 0, 0.1);
+		transition: background-color 0.15s ease 0s;
+
+		.svg-inline--fa {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+
+			color: #fff;
+			opacity: 0;
+			transition: opacity 0.3s ease 0s;
+		}
+	}
+
+	&:hover {
+		img {
+			.transform(scale3d(1.1, 1.1, 1.1));
+		}
+
+		.gallery-item-hover-effect {
+			background-color: rgba(0, 0, 0, 0.3);
+
+			.svg-inline--fa {
+				opacity: 1;
+			}
+		}
+	}
+}
+
+// The LuminousGallery overwrites 
+.lum-gallery-button:focus {
+	// Bootstrap adds basic outline - so remove it
+	outline: none;
+}

@@ -4,8 +4,14 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<meta name="description" content="Handmade wooden climbing holds and tools">
+  		<meta name="keywords" content="Climbing holds,Climbing tools,Wooden climbing holds,Campusboard wooden holds">
+  		<meta name="author" content="Rumen Neshev - neshev.rumen@gmail.com">
+
+
 		<title>{{brand}}</title>
-		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="/public/favicon.ico" type="image/x-icon">
 
 		{{!-- Load the Site styles - Bootstrap and custom ones --}}
 		<link href="/public/styles/build.boot.css?v={{version}}" rel="stylesheet">
@@ -66,17 +72,17 @@
 
 		<div id="app">
 
-			<nav class="header">
+			<nav class="header pt-3">
 				<a href="/">
-				 	<div class="logo d-none d-md-block">
+				 	<div class="logo d-none d-md-block mx-3">
               			<img src="/public/images/logo.png" alt="">
         			</div>
-          			<div class="logo-mini d-block d-md-none">
+          			<div class="logo-mini d-block d-md-none mx-auto">
               			<img src="/public/images/logo-mini.png" alt="">
           			</div>
 				</a>
           		
-          		<ul>
+          		<ul class="mt-3">
 					{{#each navLinks}}
 						<li><a href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}><i class="fas fa-{{ icon }}"></i> <span>{{ label }}</span></a></li>
 					{{/each}}
@@ -89,11 +95,25 @@
 				</div>
 			</div>
 			
-			<div class="footer">
-				<div class="content">
-					<p></p>Copyright &copy; 2018 Crampa. Produced By Rumen Neshev</p>
+			<dir class="footer">
+			<div class="row justify-content-center">
+				<div class="col-auto text-center">
+					Copyright &copy; 2018 Crampa.
+
+					<div class="social-network social-circle d-inline-block">
+                    	<a href="#" class="icoFacebook" title="Facebook">
+                        	<i class="fab fa-facebook-f"></i>
+                    	</a>
+						<a href="#" class="icoInstagram" title="Instagram">
+                        	<i class="fab fa-instagram"></i>
+                    	</a>
+						<a href="#" class="icoEmail" title="Email">
+                        	<i class="fa fa-envelope"></i>
+                    	</a>
+                	</div>
 				</div>
 			</div>
+			</dir>
 		</div>
 
 		<script type="text/javascript">__loading(40);</script>
