@@ -76,7 +76,7 @@ exports = module.exports = function (app) {
 
 	// Shop related pages
 	// app.get('/shop', routes.views.shop.index);
-	app.get('/shop(/category/:category)?', routes.views.shop.index);
+	app.get('/shop/products', routes.views.shop.products);
 	app.get('/shop/product/:product', routes.views.shop.product);
 	app.get('/shop/cart', routes.views.shop.cart);
 	// this is the checkout integration

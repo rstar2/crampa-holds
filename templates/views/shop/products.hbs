@@ -1,0 +1,26 @@
+<div class="container">
+	<div class="row">
+		<div class="col-sm-8 col-md-9">
+			<div class="products">
+				{{#each products.results}}
+				<div class="product">
+					<h2><a href="{{productUrl slug}}">{{{title}}}</a></h2>
+					{{#if image}}<img src="{{{cloudinaryUrl image width=160 height=160 crop='fit' }}}" class="img float-right">{{/if}}
+					<p>{{{description.brief.html}}}</p>
+					<a href="{{productUrl slug}}">Check it out</a></p>
+				</div>
+				{{/each}}
+			</div>
+		</div>
+		<app-gallery :images="{{toJSON gallery.images}}"></app-gallery>
+	</div>
+	{{!-- TODO: Fix shop pagination --}}
+	{{!-- {{>pagination}} --}}
+</div>
+
+{{#section 'head_css'}}
+	<link href="/public/styles/build.shop.css?v={{version}}" rel="stylesheet">
+{{/section}} 
+{{#section 'body_js'}}
+	<script src="/public/js/build.shop.js?v={{version}}"></script>
+{{/section}}

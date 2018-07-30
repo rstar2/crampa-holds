@@ -11,7 +11,7 @@ exports = module.exports = function (req, res) {
 
 	// Set locals
 	locals.section = 'gallery';
-	locals.images = gallery.images;
+	locals.gallery = gallery;
 
 	// Render the view
 	view.render('gallery', null, res.cache);

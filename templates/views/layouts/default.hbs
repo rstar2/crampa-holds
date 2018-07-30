@@ -84,7 +84,10 @@
           		
           		<ul class="mt-3">
 					{{#each navLinks}}
-						<li><a href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}><i class="fas fa-{{ icon }}"></i> <span>{{ label }}</span></a></li>
+						<li><a href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
+							<i class="fas fa-{{ icon }}"></i>
+							<span>{{ label }}</span>
+						</a></li>
 					{{/each}}
           		</ul>
         	</nav>
