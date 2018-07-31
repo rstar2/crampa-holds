@@ -2,17 +2,44 @@
 
 <div class="container-fluid">
 	<div class="row">
-		<carousel :paginationEnabled="false"
-					:autoplay="autoplay"
+		<!-- vue-carousel -->
+		<!-- <carousel :paginationEnabled="pagination" :navigationEnable="navigation"
+					:scrollPerPage="false"
+					:perPage="count"
+					:autoplay="autoplayTimeout > 0"
 					:autoplayTimeout="autoplayTimeout"
-					:autoplayHoverPause="autoplayHoverPause"
-					:display="5">
+					:autoplayHoverPause="autoplayHoverPause">
 			<slide v-for="(image, index) of images" :key="image.url" :index="index">
     			<div >
 					<img :src="createThumb(image.url)">
 			  	</div>
   			</slide>
-		</carousel>
+		</carousel> -->
+
+		<!-- vue-carousel-3d -->
+		<!-- <carousel-3d :controlsVisible="navigation"
+					:display="count"
+					:autoplay="autoplayTimeout > 0"
+					:autoplayTimeout="autoplayTimeout"
+					:autoplayHoverPause="autoplayHoverPause"
+					:disable3d="true">
+			<slide-3d v-for="(image, index) of images" :key="image.url" :index="index">
+    			<div >
+					<img :src="createThumb(image.url)">
+			  	</div>
+  			</slide-3d>
+		</carousel-3d> -->
+
+		<!-- vue-l-carousel -->
+		<carousel :auto="autoplayTimeout" :watch-items="images">
+        	<carousel-item v-for="image in images" :key="image.url">
+            	<div>
+					<img :src="createThumb(image.url)">
+			  	</div>
+        	</carousel-item>
+    	</carousel>
+
+
 	</div>
 </div>
 	
@@ -22,18 +49,17 @@
 // https://github.com/imgix/luminous
 import Vue from 'vue';
 
-// import { Carousel, Slide } from 'vue-carousel';
-import { Carousel3d as Carousel, Slide } from 'vue-carousel-3d';
+import { Carousel, Slide } from 'vue-carousel';
+import { Carousel3d, Slide as Slide3d  } from 'vue-carousel-3d';
+import { Carousel, CarouselItem } from 'vue-l-carousel';
+// import { Carousel as CarouselL, CarouselItem as CarouselLItem } from 'vue-l-carousel';
+
 import "./slideshow.less";
 
 export default {
   props: {
 	  images: {
 		  type: Array
-	  },
-	  autoplay: {
-		  type: Boolean,
-		  default: true
 	  },
 	  autoplayTimeout: {
 		  type: Number,
@@ -44,10 +70,26 @@ export default {
 		  default: true
 	  },
 
+	  count: {
+		  type: Number,
+		  default: 5
+	  },
+	  pagination: {
+		  type: Boolean,
+		  default: true
+	  },
+	  navigation: {
+		  type: Boolean,
+		  default: true
+	  },
+
+
   },
 
   components: {
-	   Carousel, Slide
+	   Carousel, Slide,
+	   Carousel3d, Slide3d,
+	   Carousel, CarouselItem,
   },
 
   methods: {

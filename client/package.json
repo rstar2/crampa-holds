@@ -25,6 +25,7 @@
     "vue-blockui": "^1.1.6",
     "vue-carousel": "^0.10.0",
     "vue-carousel-3d": "^0.1.23",
+    "vue-l-carousel": "^1.1.0",
     "vue-router": "^3.0.1",
     "vue-spinner-component": "^1.0.5",
     "vuex": "^3.0.1",
