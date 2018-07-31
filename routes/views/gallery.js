@@ -1,9 +1,5 @@
 const keystone = require('keystone');
 
-const { createGallery } = require('../../lib/views');
-
-const gallery = createGallery(keystone, 'main');
-
 exports = module.exports = function (req, res) {
 
 	const view = new keystone.View(req, res);
@@ -11,9 +7,8 @@ exports = module.exports = function (req, res) {
 
 	// Set locals
 	locals.section = 'gallery';
-	locals.gallery = gallery;
+	locals.gallery = keystone.getGallery('main');
 
 	// Render the view
 	view.render('gallery', null, res.cache);
-
 };

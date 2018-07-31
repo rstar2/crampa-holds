@@ -32,12 +32,7 @@ exports = module.exports = function (req, res) {
 	// Load the current product gallery
 	view.on('init', function (next) {
 
-		// load the product gallery if not already loaded
-		if (!galleries[slug]) {
-			galleries[slug] = createGallery(keystone, `products/${slug}`);
-		}
-
-		locals.gallery = galleries[slug];
+		locals.gallery = keystone.getGallery(`products/${slug}`);
 
 		next();
 	});

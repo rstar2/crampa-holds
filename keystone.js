@@ -101,5 +101,8 @@ Object.keys(initFunctions).forEach(key => initFunctions[key](keystone));
 // Load your project's Routes
 keystone.set('routes', require('./routes'));
 
+const getGallery = require('./lib/views/managerGallery');
+keystone.getGallery = getGallery.bind(null, keystone);
+
 // Start Keystone to connect to your database and initialize the web server
 keystone.start();

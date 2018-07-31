@@ -17,21 +17,26 @@
 		</carousel> -->
 
 		<!-- vue-carousel-3d -->
-		<!-- <carousel-3d :controlsVisible="navigation"
+		<carousel-3d  :controlsVisible="navigation"
 					:display="count"
 					:autoplay="autoplayTimeout > 0"
 					:autoplayTimeout="autoplayTimeout"
 					:autoplayHoverPause="autoplayHoverPause"
-					:disable3d="true">
+					:disable3d="true"
+					_dir="ltr"
+					_bias="right"
+					>
 			<slide-3d v-for="(image, index) of images" :key="image.url" :index="index">
     			<div >
 					<img :src="createThumb(image.url)">
 			  	</div>
   			</slide-3d>
-		</carousel-3d> -->
+		</carousel-3d>
 
 		<!-- vue-l-carousel -->
-		<carousel :auto="autoplayTimeout" :watch-items="images">
+		<carousel :watch-items="images" :dots="pagination" 
+					:auto="autoplayTimeout" 
+					:loop="true">
         	<carousel-item v-for="image in images" :key="image.url">
             	<div>
 					<img :src="createThumb(image.url)">
@@ -49,12 +54,12 @@
 // https://github.com/imgix/luminous
 import Vue from 'vue';
 
-import { Carousel, Slide } from 'vue-carousel';
-import { Carousel3d, Slide as Slide3d  } from 'vue-carousel-3d';
+// import { Carousel, Slide } from 'vue-carousel';
+import { Carousel3d, Slide as Slide3d } from 'vue-carousel-3d';
 import { Carousel, CarouselItem } from 'vue-l-carousel';
-// import { Carousel as CarouselL, CarouselItem as CarouselLItem } from 'vue-l-carousel';
 
-import "./slideshow.less";
+// import 'vue-l-carousel/dist/main.css';
+// import './slideshow.less';
 
 export default {
   props: {
@@ -87,7 +92,7 @@ export default {
   },
 
   components: {
-	   Carousel, Slide,
+	//    Carousel, Slide,
 	   Carousel3d, Slide3d,
 	   Carousel, CarouselItem,
   },
@@ -102,4 +107,9 @@ export default {
   }
 };
 </script>
+
+<style lang="less">
+@import '~vue-l-carousel/dist/main.css';
+</style>
+
 
