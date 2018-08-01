@@ -1,9 +1,5 @@
 const keystone = require('keystone');
 
-const { createGallery } = require('../../../lib/views');
-
-const galleries = {};
-
 exports = module.exports = function (req, res) {
 
 	const slug = req.params.product;
@@ -29,10 +25,10 @@ exports = module.exports = function (req, res) {
 
 	});
 
-	// Load the current product gallery
-	view.on('init', function (next) {
+	// Load the current product gallery (in parallel after 'init' action, e.g. product is found)
+	view.on('render', function (next) {
 
-		locals.gallery = keystone.getGallery(`products/${slug}`);
+		locals.gallery = keystone.getGallery(`product/${slug}`);
 
 		next();
 	});

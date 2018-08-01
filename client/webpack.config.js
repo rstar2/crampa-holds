@@ -24,6 +24,8 @@ const options = {
 		'gallery': './src/site/pages/gallery',
 		'blog': './src/site/pages/blog',
 		'post': './src/site/pages/post',
+		'shop-products': './src/site/pages/shop-products',
+		'shop-product': './src/site/pages/shop-product',
 		'shop-cart': './src/site/pages/shop-cart',
 	},
 	output: {

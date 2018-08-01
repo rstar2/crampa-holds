@@ -16,8 +16,7 @@ Product.add({
 	price: { type: Number, required: true, initial: true },
 	state: { type: Types.Select, options: 'draft, published, archived', default: 'draft', index: true },
 	publishedDate: { type: Types.Date, index: true, dependsOn: { state: 'published' }, default: Date.now },
-	image: { type: Types.CloudinaryImage },
-	images: { type: Types.CloudinaryImages },
+	image: { type: String },
 	description: {
 		brief: { type: Types.Markdown, wysiwyg: true, height: 150 },
 		extended: { type: Types.Markdown, wysiwyg: true, height: 400 },

@@ -12,15 +12,15 @@
 				{{/each}}
 			</div>
 		</div>
-		<app-gallery :images="{{toJSON gallery.images}}"></app-gallery>
+		{{!-- <app-gallery :images="{{toJSON gallery.images}}"></app-gallery> --}}
 	</div>
 	{{!-- TODO: Fix shop pagination --}}
 	{{!-- {{>pagination}} --}}
 </div>
 
 {{#section 'head_css'}}
-	<link href="/public/styles/build.shop.css?v={{version}}" rel="stylesheet">
+	<link href="/public/styles/build.shop-products.css?v={{version}}" rel="stylesheet">
 {{/section}} 
 {{#section 'body_js'}}
-	<script src="/public/js/build.shop.js?v={{version}}"></script>
+	<script src="/public/js/build.shop-products.js?v={{version}}"></script>
 {{/section}}

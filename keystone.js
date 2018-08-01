@@ -89,7 +89,7 @@ keystone.set('nav', {
 	pages: ['pages', 'page-categories'],
 	shop: ['products', 'product-categories', 'shipping-zones', 'orders'],
 	users: ['users', 'enquiries'],
-	files: ['gallery-clouds', 'galleries', 'file-uploads'],
+	files: ['galleries', 'file-uploads'],
 	// enquiries: 'enquiries',
 });
 

@@ -3,38 +3,38 @@
 <div class="container-fluid">
 	<div class="row">
 		<!-- vue-carousel -->
-		<!-- <carousel :paginationEnabled="pagination" :navigationEnable="navigation"
+		<carousel :paginationEnabled="pagination" :navigationEnable="navigation"
 					:scrollPerPage="false"
 					:perPage="count"
 					:autoplay="autoplayTimeout > 0"
 					:autoplayTimeout="autoplayTimeout"
-					:autoplayHoverPause="autoplayHoverPause">
+					:autoplayHoverPause="autoplayHoverPause"
+					:loop="true">
 			<slide v-for="(image, index) of images" :key="image.url" :index="index">
     			<div >
 					<img :src="createThumb(image.url)">
 			  	</div>
   			</slide>
-		</carousel> -->
+		</carousel>
 
 		<!-- vue-carousel-3d -->
-		<carousel-3d  :controlsVisible="navigation"
+		<!-- <carousel-3d  :controlsVisible="navigation"
 					:display="count"
 					:autoplay="autoplayTimeout > 0"
 					:autoplayTimeout="autoplayTimeout"
 					:autoplayHoverPause="autoplayHoverPause"
 					:disable3d="true"
-					_dir="ltr"
-					_bias="right"
+					:dir="'ltr'"
 					>
 			<slide-3d v-for="(image, index) of images" :key="image.url" :index="index">
     			<div >
 					<img :src="createThumb(image.url)">
 			  	</div>
   			</slide-3d>
-		</carousel-3d>
+		</carousel-3d> -->
 
 		<!-- vue-l-carousel -->
-		<carousel :watch-items="images" :dots="pagination" 
+		<!-- <carousel-l :watch-items="images" :dots="pagination" 
 					:auto="autoplayTimeout" 
 					:loop="true">
         	<carousel-item v-for="image in images" :key="image.url">
@@ -42,7 +42,7 @@
 					<img :src="createThumb(image.url)">
 			  	</div>
         	</carousel-item>
-    	</carousel>
+    	</carousel-l> -->
 
 
 	</div>
@@ -54,9 +54,9 @@
 // https://github.com/imgix/luminous
 import Vue from 'vue';
 
-// import { Carousel, Slide } from 'vue-carousel';
-import { Carousel3d, Slide as Slide3d } from 'vue-carousel-3d';
-import { Carousel, CarouselItem } from 'vue-l-carousel';
+import { Carousel, Slide } from 'vue-carousel';
+// import { Carousel3d, Slide as Slide3d } from 'vue-carousel-3d';
+// import { Carousel as CarouselL, CarouselItem } from 'vue-l-carousel';
 
 // import 'vue-l-carousel/dist/main.css';
 // import './slideshow.less';
@@ -81,7 +81,7 @@ export default {
 	  },
 	  pagination: {
 		  type: Boolean,
-		  default: true
+		  default: false
 	  },
 	  navigation: {
 		  type: Boolean,
@@ -92,9 +92,9 @@ export default {
   },
 
   components: {
-	//    Carousel, Slide,
-	   Carousel3d, Slide3d,
-	   Carousel, CarouselItem,
+	   Carousel, Slide,
+	//    Carousel3d, Slide3d,
+	//    CarouselL, CarouselItem,
   },
 
   methods: {
