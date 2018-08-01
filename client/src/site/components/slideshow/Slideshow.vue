@@ -10,9 +10,9 @@
 					:autoplayTimeout="autoplayTimeout"
 					:autoplayHoverPause="autoplayHoverPause"
 					:loop="true">
-			<slide v-for="(image, index) of images" :key="image.url" :index="index">
+			<slide v-for="image of images" :key="image">
     			<div >
-					<img :src="createThumb(image.url)">
+					<img :src="createThumb(image)">
 			  	</div>
   			</slide>
 		</carousel>
@@ -26,7 +26,7 @@
 					:disable3d="true"
 					:dir="'ltr'"
 					>
-			<slide-3d v-for="(image, index) of images" :key="image.url" :index="index">
+			<slide-3d v-for="(image, index) of images" :key="image.url">
     			<div >
 					<img :src="createThumb(image.url)">
 			  	</div>

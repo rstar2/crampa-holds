@@ -2,9 +2,9 @@
 
 <div class="container-fluid">
 	<div class="row">
-		<div v-for="image of images" :key="image.url" class="col-12 col-sm-6 col-md-4 col-lg-3">
+		<div v-for="image of images" :key="image" class="col-12 col-sm-6 col-md-4 col-lg-3">
 			<a :href="image.url" class="d-block my-3 gallery-item">
-				<img :src="createThumb(image.url, 150, 150)">
+				<img :src="createThumb(image, 150, 150)">
 				
 				<div class="gallery-item-hover-effect">
 					<i class="fas fa-search"></i>

@@ -5,15 +5,15 @@
 				{{#each products.results}}
 				<div class="product">
 					<h2><a href="{{productUrl slug}}">{{{title}}}</a></h2>
-					{{#if image}}<img src="{{{cloudinaryUrl image width=160 height=160 crop='fit' }}}" class="img float-right">{{/if}}
+					{{#if image}}<img src="{{{imageThumbUrl image quickthumb=true width=500}}}" class="img float-right">{{/if}}
 					<p>{{{description.brief.html}}}</p>
-					<a href="{{productUrl slug}}">Check it out</a></p>
 				</div>
 				{{/each}}
 			</div>
 		</div>
-		{{!-- <app-gallery :images="{{toJSON gallery.images}}"></app-gallery> --}}
+		<app-slideshow :images="{{toJSON gallery.images}}" :thumbs="true"></app-slideshow>
 	</div>
+
 	{{!-- TODO: Fix shop pagination --}}
 	{{!-- {{>pagination}} --}}
 </div>

@@ -1,5 +1,7 @@
 const keystone = require('keystone');
 
+const { createHeroImage } = require('../../../lib/views');
+
 exports = module.exports = function (req, res) {
 
 	const view = new keystone.View(req, res);
@@ -8,6 +10,7 @@ exports = module.exports = function (req, res) {
 	// locals.section is used to set the currently selected
 	// item in the header navigation.
 	locals.section = 'shop';
+	locals.gallery = { images: [] };
 
 	// Load the products
 	view.on('init', function (next) {
@@ -31,8 +34,15 @@ exports = module.exports = function (req, res) {
 	// finally ma all product Hero images to the correct path
 	view.on('render', function (next) {
 		locals.products.results
+			// filter only products with images
 			.filter(product => product.image)
-			.forEach(product => (product.image = `/upload/featured/${product.image}`));
+			// "fix" the products' images public/static URLs
+			.map(product => {
+				product.image = createHeroImage(product.image);
+				return product;
+			})
+			// create a dynamic 'gallery'
+			.forEach(product => locals.gallery.images.push(product.image));
 		next();
 	});
 

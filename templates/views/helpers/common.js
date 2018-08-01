@@ -175,7 +175,8 @@ const helpers = {
 	// output. 'Filed Under <a href="blog/tech">tech</a>, <a href="blog/js">js</a>'
 
 	categoryList: function (categories, options) {
-		const autolink = _.isString(options.hash.autolink) && options.hash.autolink === 'false' ? false : true;
+		// if autolink is missing by default assume it to be true
+		const autolink = (_.isBoolean(options.hash.autolink) && options.hash.autolink) || false;
 		const separator = _.isString(options.hash.separator) ? options.hash.separator : ', ';
 		const prefix = _.isString(options.hash.prefix) ? options.hash.prefix : '';
 		const suffix = _.isString(options.hash.suffix) ? options.hash.suffix : '';
@@ -223,12 +224,12 @@ const helpers = {
 	imageThumbUrl: function (url, options) {
 		// pick just the 'width' and 'height' kwargs
 		const params = _.pick(options.hash, ['width', 'height']);
-		const isQuickthumbFormat = _.isString(options.hash.quickthumb) && options.hash.quickthumb === 'true';
+		const isQuickthumbFormat = !!options.hash.quickthumb;
 
 		let output = url;
 
 		if (isQuickthumbFormat) {
-			output += `?dim=${params.width}x${params.height}`;
+			output += `?dim=${params.width || ''}x${params.height || ''}`;
 		} else {
 			let isFirst = true;
 			Object.keys(params).forEach(key => {
@@ -238,24 +239,6 @@ const helpers = {
 			});
 		}
 
-		return new hbs.SafeString(output);
-	},
-
-	/**
-	 * Usage example:
-	 * {{ imageQuickthumbUrl url width=600 height=300 }}
-	 */
-	imageQuickthumbUrl: function (url, options) {
-		// pick just the 'width' and 'height' kwargs
-		const params = _.pick(options.hash, ['width', 'height']);
-
-		let output = url;
-		let isFirst = true;
-		Object.keys(params).forEach(key => {
-			output += (isFirst ? '?' : '&');
-			output += `${key}=${params[key]}`;
-			isFirst = false;
-		});
 		return new hbs.SafeString(output);
 	},
 

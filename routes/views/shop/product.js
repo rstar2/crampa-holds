@@ -1,5 +1,7 @@
 const keystone = require('keystone');
 
+const { createHeroImage } = require('../../../lib/views');
+
 exports = module.exports = function (req, res) {
 
 	const slug = req.params.product;
@@ -12,7 +14,6 @@ exports = module.exports = function (req, res) {
 
 	// Load the current product
 	view.on('init', function (next) {
-
 		keystone.list('Product').model.findOne({
 			state: 'published',
 			slug,
@@ -22,20 +23,10 @@ exports = module.exports = function (req, res) {
 				locals.product = product;
 				next(err);
 			});
-
-	});
-
-	// Load the current product gallery (in parallel after 'init' action, e.g. product is found)
-	view.on('render', function (next) {
-
-		locals.gallery = keystone.getGallery(`product/${slug}`);
-
-		next();
 	});
 
 	// Load other products
 	// view.on('init', function (next) {
-
 	// 	keystone.list('Product').model.find()
 	// 		.where('state', 'published')
 	// 		.sort('-publishedDate')
@@ -44,8 +35,24 @@ exports = module.exports = function (req, res) {
 	// 			locals.products = products;
 	// 			next(err);
 	// 		});
-
 	// });
+
+
+	// Load the current product gallery (in parallel after 'init' action, e.g. product is found)
+	view.on('render', function (next) {
+		locals.gallery = keystone.getGallery(`product/${slug}`);
+
+		next();
+	});
+	// "Fix" current product's hero image public/static URL
+	view.on('render', function (next) {
+		if (locals.product.image) {
+			locals.product.image = createHeroImage(locals.product.image);
+		}
+
+		next();
+	});
+
 
 	// Render the view
 	view.render('shop/product');

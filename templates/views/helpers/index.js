@@ -8,7 +8,6 @@ module.exports = function () {
 		require('./flash'),
 		require('./blog'),
 		require('./blog_admin'),
-		require('./cloudinary'),
 		require('./page'),
 		require('./shop'),
 	);
