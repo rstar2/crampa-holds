@@ -12,6 +12,7 @@ import faShoppingCart from '@fortawesome/fontawesome-free-solid/faShoppingCart';
 import faChevronLeft from '@fortawesome/fontawesome-free-solid/faChevronLeft';
 import faChevronRight from '@fortawesome/fontawesome-free-solid/faChevronRight';
 import faSearch from '@fortawesome/fontawesome-free-solid/faSearch';
+import faPhone from '@fortawesome/fontawesome-free-solid/faPhone';
 
 import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebookF';
 import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
@@ -28,6 +29,7 @@ const icons = [
 	faChevronLeft,
 	faChevronRight,
 	faSearch,
+	faPhone,
 	faFacebook,
 	faInstagram,
 ];

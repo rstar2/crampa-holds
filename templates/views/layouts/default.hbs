@@ -74,19 +74,19 @@
 
 			<nav class="header pt-3">
 				<a href="/">
-				 	<div class="logo d-none d-md-block mx-3">
+				 	<div class="logo d-none d-sm-block mx-3">
               			<img src="/public/images/logo.png" alt="">
         			</div>
-          			<div class="logo-mini d-block d-md-none mx-auto">
+          			<div class="logo-mini d-block d-sm-none mx-auto">
               			<img src="/public/images/logo-mini.png" alt="">
           			</div>
 				</a>
           		
-          		<ul class="mt-3">
+          		<ul class="mt-4">
 					{{#each navLinks}}
 						<li><a href="{{ href }}" {{#ifeq ../section key}}class="active"{{else}}{{/ifeq}}>
 							<i class="fas fa-{{ icon }}"></i>
-							<span>{{ label }}</span>
+							<span class="d-none d-sm-inline-block">{{ label }}</span>
 						</a></li>
 					{{/each}}
           		</ul>
@@ -104,13 +104,13 @@
 					Copyright &copy; 2018 Crampa.
 
 					<div class="social-network social-circle d-inline-block">
-                    	<a href="#" class="icoFacebook" title="Facebook">
+                    	<a href="{{{ SOCIAL.FACEBOOK }}}" class="icoFacebook" title="Facebook">
                         	<i class="fab fa-facebook-f"></i>
                     	</a>
-						<a href="#" class="icoInstagram" title="Instagram">
+						<a href="{{{ SOCIAL.INSTAGRAM }}}" class="icoInstagram" title="Instagram">
                         	<i class="fab fa-instagram"></i>
                     	</a>
-						<a href="#" class="icoEmail" title="Email">
+						<a href="mailto:{{{ EMAIL }}}" class="icoEmail" title="Email">
                         	<i class="fa fa-envelope"></i>
                     	</a>
                 	</div>
