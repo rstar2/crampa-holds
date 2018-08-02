@@ -1,5 +1,3 @@
-import '../../styles/contact.less';
-
 import Vue from 'vue';
 
 import GoogleMap from '../../components/google-map/GoogleMap.vue';

@@ -21,9 +21,66 @@
 	font-family: "Open Sans", sans-serif;
 }
 
-html {
+body {
 	overflow: hidden;
 }
+
+button.btn-primary {
+	display: inline-block;
+	border: 2px solid #fff;
+	padding: 8px 15px;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: #fff;
+	text-decoration: none;
+	background-color: transparent;
+	border-radius: 0px;
+	transition: all 0.5s;
+
+	&:hover {
+		color: #232323;
+		background-color: #fff;
+	}
+}
+
+input.form-control,
+input.form-control:focus {
+	border-radius: 0px;
+	padding-left: 15px;
+	font-size: 13px;
+	font-weight: 300;
+	color: #fff;
+	background-color: rgba(250, 250, 250, 0.15);
+	outline: none;
+	border: none;
+	box-shadow: none;
+	line-height: 40px;
+	height: 40px;
+	width: 100%;
+	margin-bottom: 25px;
+}
+
+textarea.form-control,
+textarea.form-control:focus {
+	border-radius: 0px;
+	padding-left: 15px;
+	padding-top: 10px;
+	font-size: 13px;
+	font-weight: 300;
+	color: #fff;
+	background-color: rgba(250, 250, 250, 0.15);
+	outline: none;
+	border: none;
+	box-shadow: none;
+	height: 165px;
+	max-height: 220px;
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 25px;
+}
+
+// TODO: merge input/textarea and set placeholer color - using the mixin
 
 
 
