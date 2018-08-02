@@ -1,3 +1,5 @@
+import '../../styles/products.less';
+
 import Vue from 'vue';
 
 import Slideshow from '../../components/slideshow/Slideshow.vue';

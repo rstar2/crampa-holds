@@ -7,26 +7,32 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const publicPathName = '/public';
 const outputPath = path.resolve(__dirname, '../public');
 
+
+// dynamically map site entry pages like:
+// 'home': './src/site/pages/home',
+// 'gallery': './src/site/pages/gallery',
+const pageFiles = require('glob').sync('./src/site/pages/**/index.js');
+const sitePages = pageFiles.reduce((acc, indexFile) => {
+	const name = path.basename(path.dirname(indexFile));
+	acc[name] = indexFile;
+	return acc;
+}, {});
+
+
 const options = {
 	entry: {
 		// this is for bundling only Vue, Bootstrap and BootstrapVue
-		'boot': './src/boot.js',
+		boot: './src/boot.js',
 
 		// this is bundle for the custom admin SPA pages
-		'admin': './src/admin',
+		admin: './src/admin',
 
 		// this is the common bundle for all main/client site pages
 		// mainly CSS/LESS files for the main site and also registering common  Vue components
-		'site': './src/site',
+		site: './src/site',
 
 		// these are bundles for a specific main/client site pages
-		'home': './src/site/pages/home',
-		'gallery': './src/site/pages/gallery',
-		'blog': './src/site/pages/blog',
-		'post': './src/site/pages/post',
-		'shop-products': './src/site/pages/shop-products',
-		'shop-product': './src/site/pages/shop-product',
-		'shop-cart': './src/site/pages/shop-cart',
+		...sitePages,
 	},
 	output: {
 		path: path.join(outputPath, 'js'),              // path.resolve(__dirname, '../public/js'),

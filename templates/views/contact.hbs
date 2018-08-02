@@ -1,32 +1,28 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col col-12 col-md-6">
-			<div class="card">
-				65 Evlogi & Hristo Georgievi Blvd., Sofia, Bulgaria
-				<br><i class="fa fa-phone"></i> +359 898 664 990
-				<br><i class="fa fa-phone"></i> +359 899 155 680
+	<div class="row my-4">
+		<div class="col-12 col-md-6 px-4 pr-md-3">
+			<div>
+				<span>65 Evlogi & Hristo Georgievi Blvd., Sofia, Bulgaria</span><br>
+				<span><i class="fa fa-phone"></i>+359 898 664 990</span><br>
+				<span><i class="fa fa-phone"></i>+359 899 155 680</span>
 			</div>
 
-			<div class="card">
-				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3647.3030413476204!2d100.5641230193719!3d13.757206847615207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xf51ce6427b7918fc!2sG+Tower!5e0!3m2!1sen!2sth!4v1510722015945"
-				width="100%" height="200px" frameborder="0" style="border:0" scrolling="no"
-				aria-label="Google Maps" title="Google Maps" allowfullscreen>
-				</iframe>
-			</div>
+			<app-google-map location="42.686650, 23.329280" width="100%" height="50%" class="my-4"></app-google-map>
 		</div>
 
-		<div class="col col-12 col-md-6">
+		<div class="col-12 col-md-6 px-4 pl-md-2">
 			{{#if enquirySubmitted}}
 				<h3>Thanks for getting in touch.</h3>
 			{{else}}
 				<div class="card">
 					Write to us or give us a call now, we’re always happy to provide a consultation and help out with any questions you may ask.
 				</div>
-				<form method="post" class="card">
+				<form method="post">
 					<input type="hidden" name="action" value="contact">
+					
 					<div class="form-group {{#if validationErrors.name}}has-error{{/if}}">
 						<label>Name</label>
-						<input type="text" name="name.full"  class="form-control" value="{{formData.[name.full]}}">
+						<input type="text" name="name.full" class="form-control" value="{{formData.[name.full]}}">
 					</div>
 					<div class="form-group {{#if validationErrors.email}}has-error{{/if}}">
 						<label>Email</label>
@@ -39,7 +35,7 @@
 					<div class="form-group {{#if validationErrors.message}}has-error{{/if}} ">
 						<label>Message</label>
 						<textarea name="message" placeholder="Leave us a message..." rows="4" class="form-control">{{formData.message}}</textarea>
-					</div>
+					</div>	
 					<div class="form-actions">
 						<button type="submit" class="btn btn-primary">Send</button>
 					</div>
@@ -48,3 +44,11 @@
 		</div>
 	</div>
 </div>
+
+{{#section 'head_css'}}
+	<link href="/public/styles/build.contact.css?v={{version}}" rel="stylesheet">
+{{/section}} 
+{{#section 'body_js'}}
+	<script src="/public/js/build.contact.js?v={{version}}"></script>
+{{/section}}
+
