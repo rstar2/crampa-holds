@@ -1,43 +1,35 @@
+
+const fs = require('fs');
+const path = require('path');
+const readline = require('readline');
 const keystone = require('keystone');
 
-module.exports = function (done) {
-	const importPromises = importData
-		.map(({ name, category }) => createPost({ name, category }));
+const readData = (dataFile) => {
+	return new Promise((resolve, reject) => {
+		const data = [];
+		const rl = readline.createInterface({ input: fs.createReadStream(dataFile) });
+		rl.on('line', (line) => {
+			line = JSON.parse(line);
+			data.push({ ...line, _id: line._id.$oid });
+		});
+		rl.on('close', () => resolve(data));
+	});
+};
 
-	Promise.all(importPromises)
-		.then(() => done())
-		.catch(error => done(error));
+const ProductCategory = keystone.list('ProductCategory');
+const Product = keystone.list('Product');
+
+module.exports = async function (done) {
+	try {
+		const productsCategoriesData = await readData(path.resolve(__dirname, '0.0.2-data-productcategories.json'));
+		await ProductCategory.model.insertMany(productsCategoriesData);
+
+		const productsData = await readData(path.resolve(__dirname, '0.0.2-data-products.json'));
+		await Product.model.insertMany(productsData);
+		done();
+	} catch (error) {
+		done(error);
+	}
 };
 // this __defer__ prop will defer/skip this update
 module.exports.__defer__ = true;
-
-const ProductCategory = keystone.list('PostCategory');
-const Product = keystone.list('Post');
-
-const importData = [
-	{ name: 'A draft product 1', category: 'Temporary 1' },
-	{ name: 'A draft product 2', category: 'Temporary 2' },
-	{ name: 'A draft product 3', category: 'Temporary 1' },
-];
-
-
-const categories = {};
-
-const createPost = ({ name, category }) => {
-	let productCategory;
-	if (categories[category]) {
-		productCategory = categories[category];
-	} else {
-		productCategory = new ProductCategory.model({ category });
-		categories[category] = productCategory;
-	}
-
-	const product = new Product.model({ name });
-	product.category = productCategory._id.toString();
-
-	// save both (no matter any more the sequence , no matter that)
-	return Promise.all([
-		product.save(),
-		productCategory.save(),
-	]);
-}
