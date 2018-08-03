@@ -33,18 +33,27 @@
 	border-radius: @arguments;
 }
 
-// TODO:
-.placeholder(@arguments) {
-	::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-		color: red;
-		opacity: 1; /* Firefox */
+.placeholder(@rules) {
+	&::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+		@rules();
+	}
+
+	&::-webkit-input-placeholder {
+        @rules();
 	}
 	
-	:-ms-input-placeholder { /* Internet Explorer 10-11 */
-		color: red;
+	&::-moz-placeholder {
+        @rules();
+    }
+    &:-moz-placeholder {
+        @rules();
+    }
+	
+	&:-ms-input-placeholder { /* Internet Explorer 10-11 */
+		@rules();
 	}
 	
-	::-ms-input-placeholder { /* Microsoft Edge */
-		color: red;
+	&::-ms-input-placeholder { /* Microsoft Edge */
+		@rules();
 	}
 }
