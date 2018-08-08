@@ -157,7 +157,7 @@ const helpers = {
 	//	@undescoremethod: string - name of underscore method to call
 	//
 	//  *Usage example:*
-	//  `{{underscoreFormat enquiry 'enquiryType'}}
+	//  `{{underscoreFormat enquiry 'subject'}}
 	underscoreFormat: function (obj, underscoreMethod) {
 		return obj._[underscoreMethod].format();
 	},

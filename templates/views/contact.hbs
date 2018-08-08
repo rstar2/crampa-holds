@@ -21,11 +21,11 @@
 					<input type="hidden" name="action" value="contact">
 					<input type="text" name="name.full" class="form-control {{#if validationErrors.name}}has-error{{/if}}"
 							value="{{formData.[name.full]}}" placeholder="Name*">
-					<input type="email" name="email" class="form-control {{#if validationErrors.name}}has-error{{/if}}" value="{{formData.email}}"
+					<input type="email" name="email" class="form-control {{#if validationErrors.email}}has-error{{/if}}" value="{{formData.email}}"
 							placeholder="Email*">
-					<input type="text" name="subject" class="form-control {{#if validationErrors.name}}has-error{{/if}}" value="{{formData.subject}}"
+					<input type="text" name="subject" class="form-control {{#if validationErrors.subject}}has-error{{/if}}" value="{{formData.subject}}"
 							placeholder="Subject">
-					<textarea name="message" class="form-control {{#if validationErrors.name}}has-error{{/if}}"
+					<textarea name="message" class="form-control {{#if validationErrors.message}}has-error{{/if}}"
 							placeholder="Leave us a message...*" rows="6">{{formData.message}}</textarea>
 					<button type="submit" class="btn btn-primary w-100">Send</button>
 				</form>

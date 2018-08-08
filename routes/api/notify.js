@@ -26,7 +26,7 @@ function forEnquiry (req, res) {
 		name: req.body.name, // firstName and LastName
 		email: req.body.email,
 		phone: req.body.phone,
-		enquiryType: 'message',
+		subject: 'message',
 		message: { md: req.body.message },
 	});
 

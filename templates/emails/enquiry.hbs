@@ -2,14 +2,17 @@
 
 <p class="text-larger">An enquiry was just submitted to {{brand}}:</p>
 
-<p class="text-larger">From {{#if enquiry.name.full}}<strong>{{enquiry.name.full}}</strong>{{/if}}
-   {{#if enquiry.email}} (<a href="mailto:{{enquiry.email}}">{{enquiry.email}}</a>) {{/if}}
+<p class="text-larger"
+   From <strong>{{enquiry.name.full}}</strong>
+   <a href="mailto:{{enquiry.email}}">{{enquiry.email}}</a>)
 </p>
 
 {{#if enquiry.phone}}
 <p class="text-larger">Phone: {{enquiry.phone}}</p>
-{{/if}} {{#if enquiry.enquiryType}}
-<p class="text-larger">{{underscoreFormat enquiry 'enquiryType'}}</p>
-{{/if}} {{#if enquiry.message}} {{{enquiry.message.html}}} {{/if}}
+{{/if}}
+{{#if enquiry.subject}}
+<p class="text-larger">{{underscoreFormat enquiry 'subject'}}</p>
+{{/if}}
+{{{enquiry.message.html}}}
 
 <p class="text-muted">Sent {{underscoreFormat enquiry 'createdAt'}}</p>
