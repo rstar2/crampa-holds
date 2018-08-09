@@ -69,8 +69,15 @@ exports = module.exports = function (app) {
 	app.get('/shipping', routes.views.shipping);
 
 	// these pages are just plain static text
-	const pages = ['about', 'terms', 'privacy-policy', 'return-policy'];
-	pages.forEach(page => app.get(`/${page}`, createPageView(keystone, page)));
+	// maps section -> pages
+	const pages = {
+		// eslint-disable-next-line
+		'about' : ['about', 'terms', 'privacy-policy', 'return-policy'],
+	};
+	Object.keys(pages).forEach(section => {
+		const pgs = pages[section];
+		pgs.forEach(page => app.get(`/${page}`, createPageView(keystone, page, section)));
+	});
 
 	// allow to render custom dynamic pages (e.g. from the DB)
 	app.get('/page/:page?', routes.views.page);
