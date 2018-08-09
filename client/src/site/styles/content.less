@@ -44,16 +44,30 @@
 		left: 25vw;
 
 		color: @text-color;
-		
 	
-		text-align: center;
+		text-align: left;
 		overflow-y: auto;
 		
 		background: rgba(0, 0, 0, 0.5);
+
+		h1, h2, h3 {
+			text-transform: uppercase;
+			font-weight: 700;
+			color: @text-color;
+			letter-spacing: 0.5px;
+			border-bottom: 2px solid @text-color;
+			padding-bottom: 10px;
+			margin-bottom: 20px;
+			margin-top: 0px;
+		}
 	}
 
 	img {
 		width: 100%;
+	}
+
+	ul {
+		margin-left: 2em;
 	}
 }
 

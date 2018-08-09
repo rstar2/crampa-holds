@@ -2,12 +2,7 @@
 	<h1>The Story Behind</h1>
 
 	<div class="row">
-		<div class="col col-md-3">
-			<img src="/uploads/files/_5gcHqKDy9DAOzKz.JPG" alt="CRAMPA creator">
-
-		</div>
-
-		<div class="col col-md-9">
+		<div class="col-12 col-md-8">
 			<p>
 				<b>CRAMPA</b> is a small Bulgarian company for design and production of climbing holds, wooden fingerboards and campus board
 				rungs.
@@ -28,9 +23,31 @@
 				We hope you will find your CRAMPA made with lots of love and a little bit of science.
 			</p>
 		</div>
+		<div class="col-12 col-md-4 order-md-first">
+			<img src="/uploads/images/P1230021.jpg" class="d-none d-md-inline" style="filter: url(#orca-filter);" alt="CRAMPA creator">
+
+			<h4>Learn more:</h4>
+			<ul>
+				<li><a href="/privacy-policy">Privacy and Data Protection Policy</a></li>
+				<li><a href="/terms">General Terms and Conditions of Sale and Delivery</a></li>
+				<li><a href="/return-policy">Return Policy</a></li>
+				<li><a href="/shipping">Shipping</a></li>
+			</ul>
+		</div>
 	</div>
 </div>
 
-{{#section 'head_css'}}
-	<link href="/public/styles/build.about.css?v={{version}}" rel="stylesheet">
+{{#section 'body_js'}}
+	{{!--
+	This is not JavaScript but still this section is rendered last,
+	This is actually a CSS filter. Usage : "filter: url(#orca-filter);"
+	--}}
+	{{!-- <svg id="orca-filter-svg" version="1.1"
+		style="width: 0px; height: 0px; left: 0px; top: 0px; overflow: hidden; position: absolute;">
+		<defs><filter id="orca-filter" color-interpolation="sRGB" color-interpolation-filters="sRGB"><feComponentTransfer result="srcRGB"></feComponentTransfer><feColorMatrix type="saturate" values="0.2"></feColorMatrix>
+			<feComponentTransfer><feFuncR type="linear" slope="0.85" intercept="0.08"></feFuncR><feFuncG type="linear" slope="0.85" intercept="0.08"></feFuncG><feFuncB type="linear" slope="0.85" intercept="0.08"></feFuncB></feComponentTransfer>
+			<feComponentTransfer><feFuncR type="linear" slope="0.9"></feFuncR><feFuncG type="linear" slope="0.9"></feFuncG><feFuncB type="linear" slope="0.9"></feFuncB></feComponentTransfer>
+			<feColorMatrix type="matrix" values="0.8313725490196078 0 0 0 0.16862745098039217 0.6784313725490196 0 0 0 0.3215686274509804 0.7019607843137254 0 0 0 0.2980392156862745 0 0 0 1 0"></feColorMatrix><feComponentTransfer></feComponentTransfer></filter>
+		</defs>
+	</svg> --}}
 {{/section}} 

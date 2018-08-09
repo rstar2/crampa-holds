@@ -1,6 +1,8 @@
 import Vue from 'vue';
 
 // import the Bootstrap/BootstrapVue
+// TODO: optimize and load only common/basic components/directives used globally
+// and let different pages build upon that
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 

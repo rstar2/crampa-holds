@@ -7,27 +7,43 @@
  * module.exports = function(done) { ... }
  */
 
+const admins = [
+	{
+		'isAdmin': true,
+		'password': process.env.FIRST_ADMIN_PASSWORD,
+		'email': process.env.FIRST_ADMIN_EMAIL,
+
+		// possible name keys:
+		// 1:
+		// name: {
+		// 	first: 'First',
+		// 	last: 'Last',
+		// },
+		// 2:
+		// 'name.first': 'First',
+		// 'name.last': 'Last',
+		// 3:
+		'name.full': process.env.FIRST_ADMIN_NAME,
+	},
+];
+
+// var admins = [
+// 	{ email: 'user@keystonejs.com', password: 'admin', name: { first: 'Admin', last: 'User' } }
+// ];
 exports.create = {
-	User: [
-		{ 'name.first': 'Admin', 'name.last': 'User', 'email': 'admin@admin.com', 'password': 'admin', 'isAdmin': true },
-	],
+	User: admins,
 };
 
 /*
 
 // This is the long-hand version of the functionality above:
 
-var keystone = require('keystone');
-var async = require('async');
-var User = keystone.list('User');
-
-var admins = [
-	{ email: 'user@keystonejs.com', password: 'admin', name: { first: 'Admin', last: 'User' } }
-];
-
+const keystone = require('keystone');
+const async = require('async');
+const User = keystone.list('User');
 function createAdmin (admin, done) {
 
-	var newAdmin = new User.model(admin);
+	const newAdmin = new User.model(admin);
 
 	newAdmin.isAdmin = true;
 	newAdmin.save(function (err) {

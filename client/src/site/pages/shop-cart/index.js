@@ -3,7 +3,7 @@ import Vue from 'vue';
 import PayPalState from '../../lib/PayPalState';
 import PayPalButton from '../../components/paypal/PayPalButton.vue';
 
-// needed as it uses the BootstrapVue components
+// eslint-disable-next-line
 new Vue({
 	el: '#app-shop-cart',
 	components: {
