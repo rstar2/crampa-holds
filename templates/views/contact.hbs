@@ -21,13 +21,13 @@
 				</div>
 				<form method="post" class="mt-4">
 					<input type="hidden" name="action" value="contact">
-					<input type="text" name="name.full" class="form-control {{#if validationErrors.name}}has-error{{/if}}"
+					<input type="text" name="name.full" class="form-control {{#if validationErrors.name}}is-invalid{{/if}}"
 							value="{{formData.[name.full]}}" placeholder="Name*" required>
-					<input type="email" name="email" class="form-control {{#if validationErrors.email}}has-error{{/if}}" value="{{formData.email}}"
+					<input type="email" name="email" class="form-control {{#if validationErrors.email}}is-invalid{{/if}}" value="{{formData.email}}"
 							placeholder="Email*" required>
-					<input type="text" name="subject" class="form-control {{#if validationErrors.subject}}has-error{{/if}}" value="{{formData.subject}}"
+					<input type="text" name="subject" class="form-control {{#if validationErrors.subject}}is-invalid{{/if}}" value="{{formData.subject}}"
 							placeholder="Subject">
-					<textarea name="message" class="form-control {{#if validationErrors.message}}has-error{{/if}}"
+					<textarea name="message" class="form-control {{#if validationErrors.message}}is-invalid{{/if}}"
 							placeholder="Leave us a message...*" rows="6" required>{{formData.message}}</textarea>
 					<button type="submit" class="btn btn-primary w-100">Send</button>
 				</form>
@@ -36,11 +36,6 @@
 	</div>
 </div>
 
-{{!--
-{{#section 'head_css'}}
-	<link href="/public/styles/build.contact.css?v={{version}}" rel="stylesheet">
-{{/section}} 
---}}
 {{#section 'body_js'}}
 	<script src="/public/js/build.contact.js?v={{version}}"></script>
 {{/section}}

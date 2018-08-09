@@ -1,16 +1,19 @@
 const keystone = require('keystone');
 const Types = keystone.Field.Types;
 
+const countryMap = require('../../lib/utils/countries');
+
 /**
  * ShippingZone Model
  * =============
  */
 
 const ShippingZone = new keystone.List('ShippingZone', {
+	autokey: { path: 'key', from: 'name', unique: true },
 });
 
 ShippingZone.add({
-	name: { type: Types.Key, required: true, index: true, unique: true },
+	name: { type: String, required: true, unique: true },
 	shipping: { type: Types.Number, required: true, initial: true },
 	description: { type: Types.Textarea },
 	tax: { type: Types.Number, default: 0 },
@@ -23,8 +26,7 @@ ShippingZone.add({
 // 		// emptyOption: false, // will allow empty selection value - this will be the "All-Others" counties
 
 // 		// countries is arrays of type [{'name': 'Bulgaria', 'code': 'BG'}, ...] so have to map it to {value, label}
-// 		options: require('../../lib/utils/countries')
-// 			.map(country => ({ value: country.code, label: country.name })),
+// 		options: countryMap.map(country => ({ value: country.code, label: country.name })),
 // 	},
 // });
 
@@ -38,6 +40,19 @@ ShippingZone.add({
 // 	// the same as:
 // 	// countries: [{ type: String }],
 // });
+
+ShippingZone.schema.pre('save', function (next) {
+	if (!this.description) {
+		this.description = this.countries
+			.map(code => {
+				const country = countryMap.find(country => country.code === code);
+				return country && country.name;
+			})
+			.filter(name => !!name)
+			.join(', ');
+	}
+	next();
+});
 
 ShippingZone.defaultSort = 'shipping';
 ShippingZone.defaultColumns = 'name, shipping';
