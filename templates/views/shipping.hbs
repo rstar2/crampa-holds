@@ -15,16 +15,15 @@
 		or import duties.
 	</p>
 
+	
+	{{#if shippingZones}}
 	<h3>Shipping charges for products up to 5 kg.</h3>
-	<ul>
-		<li>Zone 1 - Germany, Austria and Hungary - 15 €</li>
-		<li>Zone 2 - Croatia (local name: Hrvatska), Denmark, Luxembourg, Poland, Slovakia (Slovak Republic), Slovenia - 28 €</li>
-		<li>Zone 3 - Belgium, Czech Republic, France, Italy, Netherlands, United Kingdom - 21 €</li>
-		<li>Zone 4 - Estonia, Finland, Ireland, Latvia, Lithuania, Portugal, Sweden - 39 €</li>
-		<li>Zone 5 - Spain - 28 €</li>
-		<li>Zone 6 - Greece, Romania - 7 €</li>
-		<li>Zone 7 - Macedonia - 15 €</li>
-	</ul>
+	{{#each shippingZones}}	
+		<ul>
+			<li>{{name}} - {{description}} - {{shipping}} €</li>
+	  	</ul>
+	{{/each}}
+	{{/if}}
 
 	<p>
 		Delivery time between 3 - 7 working days.

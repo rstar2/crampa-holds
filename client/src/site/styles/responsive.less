@@ -1,7 +1,41 @@
 
-
-@media (max-width: 749px) {
+// on smaller devices than 'Medium' (by Bootstrap medium brakpoint is 720px)
+@media (max-width: 720px) {
 	.slide .content {
 		left: 20vw;
+	}
+
+	nav {
+		width: 15vw;
+
+		// hide the nav link labels
+		ul li span {
+			display: none;
+		}
+	}
+}
+
+@media (max-height: 600px) {
+	nav ul li {
+		margin: 3vh 0px;
+	}
+}
+
+
+@media (max-height: 460px) {
+	nav ul li {
+		margin: 2.5vh 0px;
+	}
+}
+
+@media (max-height: 400px) {
+	nav ul li {
+		margin: 2vh 0px;
+	}
+}
+
+@media (max-height: 360px) {
+	nav ul li {
+		margin: 1vh 0px;
 	}
 }

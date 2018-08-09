@@ -66,9 +66,10 @@ exports = module.exports = function (app) {
 	app.get('/news/:post', routes.views.post);
 	app.all('/contact', routes.views.contact);
 	app.get('/gallery', routes.views.gallery);
+	app.get('/shipping', routes.views.shipping);
 
 	// these pages are just plain static text
-	const pages = ['about', 'terms', 'shipping', 'privacy-policy', 'return-policy'];
+	const pages = ['about', 'terms', 'privacy-policy', 'return-policy'];
 	pages.forEach(page => app.get(`/${page}`, createPageView(keystone, page)));
 
 	// allow to render custom dynamic pages (e.g. from the DB)
