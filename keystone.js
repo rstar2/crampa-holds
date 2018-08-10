@@ -85,12 +85,12 @@ keystone.set('locals', {
 
 // Configure the navigation bar in Keystone's Admin UI
 keystone.set('nav', {
+	shop: ['products', 'product-categories', 'shipping-zones', 'orders'],
+	users: ['users'],
+	enquiries: 'enquiries',
 	posts: ['posts', 'post-categories', 'post-comments'],
 	pages: ['pages', 'page-categories'],
-	shop: ['products', 'product-categories', 'shipping-zones', 'orders'],
-	users: ['users', 'enquiries'],
 	files: ['galleries', 'file-uploads'],
-	// enquiries: 'enquiries',
 });
 
 // import/require all the files in the 'lib/init' directory and call them

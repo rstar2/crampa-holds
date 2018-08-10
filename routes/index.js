@@ -62,8 +62,8 @@ const routes = {
 exports = module.exports = function (app) {
 	// Views
 	app.get('/', routes.views.home);
-	app.get('/news', routes.views.blog);
-	app.get('/news/:post', routes.views.post);
+	app.get('/blog', routes.views.blog);
+	app.get('/blog/:post', routes.views.post);
 	app.all('/contact', routes.views.contact);
 	app.get('/gallery', routes.views.gallery);
 	app.get('/shipping', routes.views.shipping);
@@ -71,10 +71,12 @@ exports = module.exports = function (app) {
 	// these pages are just plain static text
 	// maps section -> pages
 	const pages = {
-		// eslint-disable-next-line
+		/* eslint-disable */
 		'about' : ['about', 'terms', 'privacy-policy', 'return-policy'],
+		'news' : ['news'],
+		/* eslint-enable */
 	};
-	Object.keys(pages).forEach(section => {
+	Object.keys(pages ).forEach(section => {
 		const pgs = pages[section];
 		pgs.forEach(page => app.get(`/${page}`, createPageView(keystone, page, section)));
 	});

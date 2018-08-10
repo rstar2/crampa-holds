@@ -1,8 +1,9 @@
 
 // on smaller devices than 'Medium' (by Bootstrap medium brakpoint is 720px)
-@media (max-width: 720px) {
+@media (max-width: 768px) {
 	.slide .content {
 		left: 20vw;
+		left: calc(20vw + @offset + @offset);
 	}
 
 	nav {

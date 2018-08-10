@@ -24,7 +24,7 @@ exports.initLocals = function (req, res, next) {
 		{ label: req.__('Products'), key: 'shop', href: '/shop/products', icon: 'euro-sign' },
 		{ label: req.__('About'), key: 'about', href: '/about', icon: 'info' },
 		{ label: req.__('Gallery'), key: 'gallery', href: '/gallery', icon: 'image' },
-		{ label: req.__('News'), key: 'blog', href: '/news', icon: 'pencil-alt' },
+		{ label: req.__('News'), key: 'news', href: '/news', icon: 'pencil-alt' },
 		{ label: req.__('Contact'), key: 'contact', href: '/contact', icon: 'envelope' },
 		// { label: req.__('Cart'), key: 'shopping-cart', href: '/shop/cart', icon: 'shopping-cart' },
 	];

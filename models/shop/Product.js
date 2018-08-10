@@ -42,5 +42,5 @@ Product.schema.methods.isPublished = function () {
 // });
 
 Product.defaultSort = '-publishedDate';
-Product.defaultColumns = 'name, state, publishedDate, canBeBought';
+Product.defaultColumns = 'title, state, publishedDate, canBeBought';
 Product.register();

@@ -1,2 +1,1 @@
 { "_id" : { "$oid" : "5a8ab9ba3589df1df43536b6" }, "slug" : "training", "name" : "Training", "__v" : 0 }
-{ "_id" : { "$oid" : "5a9e5dcd01ab2828b89daaa8" }, "slug" : "volume", "name" : "Volume", "__v" : 0 }

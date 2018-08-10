@@ -1,6 +1,10 @@
-<app-slideshow :images="{{toJSON gallery.images}}"></app-slideshow>
+<div class="container-fluid">
 
-<div>Inspired by a natural beauty of wood we have created a work of art for you</div>
+	<h1>Inspired by the natural beauty of the wood we have created a work of art for you</h1>
+
+	<app-slideshow :images="{{toJSON gallery.images}}"></app-slideshow>
+
+</div>
 
 {{#section 'head_css'}}
 	<link href="/public/styles/build.home.css?v={{version}}" rel="stylesheet">

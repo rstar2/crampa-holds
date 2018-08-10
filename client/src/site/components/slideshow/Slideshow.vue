@@ -6,7 +6,7 @@
 		<carousel :paginationEnabled="pagination" :navigationEnable="navigation"
 					:scrollPerPage="false"
 					:perPage="count"
-					:autoplay="autoplayTimeout > 0"
+					:autoplay="false && autoplayTimeout > 0"
 					:autoplayTimeout="autoplayTimeout"
 					:autoplayHoverPause="autoplayHoverPause"
 					:loop="true">
@@ -51,15 +51,17 @@
 </template>
 
 <script>
-// https://github.com/imgix/luminous
 import Vue from 'vue';
 
 import { Carousel, Slide } from 'vue-carousel';
-// import { Carousel3d, Slide as Slide3d } from 'vue-carousel-3d';
-// import { Carousel as CarouselL, CarouselItem } from 'vue-l-carousel';
 
+// import { Carousel3d, Slide as Slide3d } from 'vue-carousel-3d';
+
+// import { Carousel as CarouselL, CarouselItem } from 'vue-l-carousel';
 // import 'vue-l-carousel/dist/main.css';
-// import './slideshow.less';
+
+
+import './slideshow.less';
 
 export default {
   props: {
@@ -109,7 +111,8 @@ export default {
 </script>
 
 <style lang="less">
-@import '~vue-l-carousel/dist/main.css';
+// @import '~vue-l-carousel/dist/main.css';
+// @import './slideshow.less';
 </style>
 
 
