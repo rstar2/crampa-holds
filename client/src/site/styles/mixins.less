@@ -57,3 +57,15 @@
 		@rules();
 	}
 }
+
+// on smaller devices than 'Medium' (by Bootstrap medium brakpoint is 768px)
+@bootstrap-xs: ~"only screen and (max-width: 576px)";
+@bootstrap-sm: ~"only screen and (max-width: 768px)";
+@bootstrap-md: ~"only screen and (max-width: 992px)";
+@bootstrap-lg: ~"only screen and (max-width: 1200px)";
+
+@device-width-600: ~"only screen and (max-width: 600px)";
+@device-width-460: ~"only screen and (max-width: 460px)";
+@device-width-400: ~"only screen and (max-width: 400px)";
+@device-width-360: ~"only screen and (max-width: 360px)";
+

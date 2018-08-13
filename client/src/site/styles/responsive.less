@@ -1,6 +1,4 @@
-
-// on smaller devices than 'Medium' (by Bootstrap medium brakpoint is 720px)
-@media (max-width: 768px) {
+@media  @bootstrap-sm {
 	.slide .content {
 		left: 20vw;
 		left: calc(20vw + @offset + @offset);
@@ -16,26 +14,26 @@
 	}
 }
 
-@media (max-height: 600px) {
+@media @device-width-600 {
 	nav ul li {
 		margin: 3vh 0px;
 	}
 }
 
 
-@media (max-height: 460px) {
+@media @device-width-460 {
 	nav ul li {
 		margin: 2.5vh 0px;
 	}
 }
 
-@media (max-height: 400px) {
+@media @device-width-400 {
 	nav ul li {
 		margin: 2vh 0px;
 	}
 }
 
-@media (max-height: 360px) {
+@media @device-width-360 {
 	nav ul li {
 		margin: 1vh 0px;
 	}
