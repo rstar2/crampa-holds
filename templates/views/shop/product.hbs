@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="row">
-		<div class="col col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+		<div class="col-sm-8 col-md-9">
 			<article>
 				<header>
 					<h1>{{product.title}}</h1>
@@ -16,10 +16,9 @@
 				<a href="{{cartAddUrl product.id}}">Add to cart</a>
 			</article>
 		</div>
+		<app-slideshow :images="{{toJSON gallery.images}}" :thumbs="true"></app-slideshow>
 	</div>
-	<div class="row">
-		<app-gallery :images="{{toJSON gallery.images}}"></app-gallery>
-	</div>
+	
 </div>
 
 {{#section 'head_css'}}

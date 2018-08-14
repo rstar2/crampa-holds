@@ -1,35 +1,37 @@
 <template>
-	<swiper :options="{
-          //slidesPerView: 3,
-		  slidesPerView: 'auto',
-		  centeredSlides: true,
-		  autoHeight: true,
-		  breakpoints: {
-            1024: {
-              //slidesPerView: 3,
-			  //spaceBetween: 10
-            },
-            768: {
-              //slidesPerView: 2,
-            },
-            640: {
-              //slidesPerView: 1,
-            },
-            320: {
-              //slidesPerView: 1,
-            }
-          },
-		  freeMode: true,
-		  loop: true,
-		  autoplay: {
-            delay: autoplayTimeout > 0 ? autoplayTimeout : undefined,
-            disableOnInteraction: false
-          }
-        }" ref="swiper" @resize="onResize">
-    		<swiper-slide-responsive v-for="image of images" :key="image.url"
-				:image="image" :size="size" :createThumbForSize="createThumbForSize">
-    		</swiper-slide-responsive>
-  	</swiper>
+	<div>
+		<swiper v-if="view" class="slideshowView" :options="{
+    	      //slidesPerView: 3,
+			  slidesPerView: count,
+			  centeredSlides: true,
+			  autoHeight: true,
+			  freeMode: true,
+			  loop: true,
+			  autoplay: {
+    	        delay: autoplayTimeout > 0 ? autoplayTimeout : undefined,
+    	        disableOnInteraction: false
+    	      }
+    	    }" ref="swiperView" @resize="onResize">
+    			<swiper-slide-responsive v-for="image of images" :key="image.url"
+					:image="image" :size="size" :createThumbForSize="createThumbForSize">
+    			</swiper-slide-responsive>
+  		</swiper>
+		  
+		<swiper v-if="thumbs" class="slideshowThumbs" :options="{
+          spaceBetween: 10,
+          slidesPerView: 4,
+          touchRatio: 0.2,
+          loop: true,
+          loopedSlides: 5, //looped slides should be the same
+          slideToClickedSlide: true,
+        }" ref="swiperThumbs">
+    			<swiper-slide v-for="image of images" :key="image.url">
+					<img :src="createThumb(image, '', 150)">
+    			</swiper-slide>
+  		</swiper>
+
+
+	</div>
 
 
 </template>
@@ -52,14 +54,22 @@ export default {
       default: 3000
     },
     count: {
-      type: Number,
-      default: 5
+      default: 1
     },
     pagination: {
       type: Boolean,
       default: false
     },
     navigation: {
+      type: Boolean,
+      default: true
+	},
+	
+    thumbs: {
+      type: Boolean,
+      default: false
+    },
+    view: {
       type: Boolean,
       default: true
     }
@@ -80,15 +90,14 @@ export default {
       template: '<swiper-slide><img :src="thumbUrl"></swiper-slide>',
       computed: {
         thumbUrl() {
-            return this.createThumbForSize(this.image, this.size);
+          return this.createThumbForSize(this.image, this.size);
         }
       },
       watch: {
         // size(newValue, oldValue) {
         //   console.log(newValue, oldValue);
-		// },
-		
-		// thumbUrl(newValue, oldValue) {
+        // },
+        // thumbUrl(newValue, oldValue) {
         //   console.log(newValue, oldValue);
         // }
       }
@@ -116,6 +125,16 @@ export default {
   },
 
   mounted() {
+	  // if thumbs are needed create a Two-Way controlling between the two swipers
+    if (this.thumbs) {
+      this.$nextTick(() => {
+        const swiperTop = this.$refs.swiperView.swiper;
+        const swiperThumbs = this.$refs.swiperThumbs.swiper;
+        swiperTop.controller.control = swiperThumbs;
+        swiperThumbs.controller.control = swiperTop;
+      });
+    }
+
     this.onResize();
   }
 };

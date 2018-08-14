@@ -1,11 +1,12 @@
 import Vue from 'vue';
 
-import Gallery from '../../components/gallery/Gallery.vue';
+import Slideshow from '../../components/slideshow/Slideshow.vue';
 
 // eslint-disable-next-line
 new Vue({
 	el: '#app',
 	components: {
-		'app-gallery': Gallery,
+		'app-slideshow': Slideshow,
 	},
 });
+
