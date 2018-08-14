@@ -6,26 +6,34 @@
 			  centeredSlides: true,
 			  autoHeight: true,
 			  freeMode: true,
-			  loop: true,
+			  loop: loop,
+			  loopedSlides: 0,
 			  autoplay: {
-    	        delay: autoplayTimeout > 0 ? autoplayTimeout : undefined,
+    	        delay: autoplay > 0 ? autoplay : undefined,
     	        disableOnInteraction: false
-    	      }
-    	    }" ref="swiperView" @resize="onResize">
+    	      },
+			  navigation: navigation ? {
+    	        nextEl: '.swiper-button-next',
+	            prevEl: '.swiper-button-prev'
+        	  } : {},
+    	    }" ref="swiperView" @resize="onResize">	
     			<swiper-slide-responsive v-for="image of images" :key="image.url"
 					:image="image" :size="size" :createThumbForSize="createThumbForSize">
     			</swiper-slide-responsive>
+
+				<div v-if="navigation" class="swiper-button-next swiper-button-white" slot="button-next"></div>
+        		<div v-if="navigation" class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
   		</swiper>
 		  
-		<swiper v-if="thumbs" class="slideshowThumbs" :options="{
+		<swiper v-if="thumbs" class="slideshowThumbs" :class="view ? 'mt-2' : ''" :options="{
           spaceBetween: 10,
-          slidesPerView: 4,
-          touchRatio: 0.2,
-          loop: true,
-          loopedSlides: 5, //looped slides should be the same
+          //slidesPerView: 4,
+          //touchRatio: 0.2,
+          loop: loop,
+          //loopedSlides: 5, //looped slides should be the same
           slideToClickedSlide: true,
         }" ref="swiperThumbs">
-    			<swiper-slide v-for="image of images" :key="image.url">
+    			<swiper-slide v-for="image of images" :key="image">
 					<img :src="createThumb(image, '', 150)">
     			</swiper-slide>
   		</swiper>
@@ -49,12 +57,22 @@ export default {
     images: {
       type: Array
     },
-    autoplayTimeout: {
+    autoplay: {
       type: Number,
-      default: 3000
+      default: 0
     },
     count: {
-      default: 1
+	  type: [String, Number],
+	  default: 1,
+	  validator: function (value) {
+        const valid = typeof value === "string" ? value === 'auto' : true;
+        return valid;
+      }
+	},
+	loop:{
+	  type: Boolean,
+	  // TODO: make it wokr with true and responsive slides/images
+      default: false
     },
     pagination: {
       type: Boolean,
@@ -106,7 +124,6 @@ export default {
 
   methods: {
     createThumbForSize(url, size) {
-      size = size || this.size;
       let height = 300;
 
       if (size > 400) height = 400;

@@ -1,17 +1,20 @@
-<div class="container">
-	<div class="row">
-		<div class="col-sm-8 col-md-9">
+<div class="container-fluid">
+	<div class="row my-4">
+		<div class="col-12 col-sm-6 col-md-8">
+			<app-slideshow :images="{{toJSON gallery.images}}" :thumbs="true"></app-slideshow>
+		</div>
+		<div class="col-sm-6 col-md-4">
 			<div class="products">
 				{{#each products.results}}
 				<div class="product">
-					<h2><a href="{{productUrl slug}}">{{{title}}}</a></h2>
-					{{#if image}}<img src="{{{imageThumbUrl image quickthumb=true width=500}}}" class="img float-right">{{/if}}
+					<h3><a href="{{productUrl slug}}">{{{title}}}</a></h3>
+					{{!-- {{#if image}}<img src="{{{imageThumbUrl image quickthumb=true width=500}}}" class="img float-right">{{/if}} --}}
 					<p>{{{description.brief.html}}}</p>
 				</div>
 				{{/each}}
 			</div>
 		</div>
-		<app-slideshow :images="{{toJSON gallery.images}}" :thumbs="true"></app-slideshow>
+		
 	</div>
 
 	{{!-- TODO: Fix shop pagination --}}

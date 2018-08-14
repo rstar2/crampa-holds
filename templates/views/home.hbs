@@ -2,8 +2,7 @@
 
 	<h1>Inspired by the natural beauty of the wood we have created a work of art for you</h1>
 
-	<app-slideshow :images="{{toJSON gallery.images}}" :count="'auto'" class="mb-3"></app-slideshow>
-
+	<app-slideshow :images="{{toJSON gallery.images}}" :count="'auto'" :autoplay="3000"></app-slideshow>
 </div>
 
 {{#section 'head_css'}}
