@@ -1,48 +1,5 @@
 <template>
-
-		<!-- vue-carousel -->
-		<!-- <carousel :paginationEnabled="pagination" :navigationEnable="navigation"
-					:scrollPerPage="false"
-					:perPage="count"
-					:autoplay="false && autoplayTimeout > 0"
-					:autoplayTimeout="autoplayTimeout"
-					:autoplayHoverPause="autoplayHoverPause"
-					:loop="true">
-			<slide v-for="image of images" :key="image">
-    			<div >
-					<img :src="createThumb(image)">
-			  	</div>
-  			</slide>
-		</carousel> -->
-
-		<!-- vue-carousel-3d -->
-		<!-- <carousel-3d  :controlsVisible="navigation"
-					:display="count"
-					:autoplay="autoplayTimeout > 0"
-					:autoplayTimeout="autoplayTimeout"
-					:autoplayHoverPause="autoplayHoverPause"
-					:disable3d="true"
-					:dir="'ltr'"
-					>
-			<slide-3d v-for="(image, index) of images" :key="image.url">
-    			<div >
-					<img :src="createThumb(image.url)">
-			  	</div>
-  			</slide-3d>
-		</carousel-3d> -->
-
-		<!-- vue-l-carousel -->
-		<!-- <carousel-l :watch-items="images" :dots="pagination" 
-					:auto="autoplayTimeout" 
-					:loop="true">
-        	<carousel-item v-for="image in images" :key="image.url">
-            	<div>
-					<img :src="createThumb(image.url)">
-			  	</div>
-        	</carousel-item>
-    	</carousel-l> -->
-
-		<swiper :options="{
+	<swiper :options="{
           //slidesPerView: 3,
 		  slidesPerView: 'auto',
 		  centeredSlides: true,
@@ -67,27 +24,18 @@
 		  autoplay: {
             delay: autoplayTimeout > 0 ? autoplayTimeout : undefined,
             disableOnInteraction: false
-          },
-        }" ref="mySwiper" @resize="onResize">
-    		<swiper-slide v-for="image of images" :key="image.url">
-				<div class="slide-img">
-					<img :src="createThumb(image, '', 600)">
-			  	</div>
-			</swiper-slide>
-  		</swiper>
+          }
+        }" ref="swiper" @resize="onResize">
+    		<swiper-slide-responsive v-for="image of images" :key="image.url"
+				:image="image" :size="size" :createThumbForSize="createThumbForSize">
+    		</swiper-slide-responsive>
+  	</swiper>
 
 
 </template>
 
 <script>
 import Vue from "vue";
-
-// import { Carousel, Slide } from 'vue-carousel';
-
-// import { Carousel3d, Slide as Slide3d } from 'vue-carousel-3d';
-
-// import { Carousel as CarouselL, CarouselItem } from 'vue-l-carousel';
-// import 'vue-l-carousel/dist/main.css';
 
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import "swiper/dist/css/swiper.css";
@@ -103,11 +51,6 @@ export default {
       type: Number,
       default: 3000
     },
-    autoplayHoverPause: {
-      type: Boolean,
-      default: true
-    },
-
     count: {
       type: Number,
       default: 5
@@ -122,27 +65,59 @@ export default {
     }
   },
 
+  data() {
+    return {
+      size: 0
+    };
+  },
+
   components: {
-    //    Carousel, Slide,
-
-    //    Carousel3d, Slide3d,
-    //    CarouselL, CarouselItem,
-
     swiper,
-    swiperSlide
+    swiperSlide,
+    swiperSlideResponsive: {
+      components: { swiperSlide },
+      props: ["image", "size", "createThumbForSize"],
+      template: '<swiper-slide><img :src="thumbUrl"></swiper-slide>',
+      computed: {
+        thumbUrl() {
+            return this.createThumbForSize(this.image, this.size);
+        }
+      },
+      watch: {
+        // size(newValue, oldValue) {
+        //   console.log(newValue, oldValue);
+		// },
+		
+		// thumbUrl(newValue, oldValue) {
+        //   console.log(newValue, oldValue);
+        // }
+      }
+    }
   },
 
   methods: {
+    createThumbForSize(url, size) {
+      size = size || this.size;
+      let height = 300;
+
+      if (size > 400) height = 400;
+      if (size > 500) height = 500;
+
+      return this.createThumb(url, "", height);
+    },
+
     createThumb(url, width, height) {
       return `${url}?dim=${width}x${height}`;
-	},
-	
-	onResize(event) {
-		console.log("On swiper event", event)
-	},
+    },
+
+    onResize() {
+      this.size = this.$el.clientHeight;
+    }
   },
 
-  mounted() {}
+  mounted() {
+    this.onResize();
+  }
 };
 </script>
 
