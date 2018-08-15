@@ -90,6 +90,16 @@ const options = {
 					publicPath: path.join(publicPathName, 'images'),    // '/public/images',
 				},
 			},
+
+			{
+				test: /\.(woff|woff2|eot|ttf)$/,
+				loader: 'file-loader',
+				options: {
+					name: '[name].[ext]?[hash]',
+					outputPath: '../fonts',                      // this is relative to the JS webpack output file, e.g '../public/js'
+					publicPath: path.join(publicPathName, 'images'),    // '/public/images',
+				},
+			},
 		],
 	},
 	resolve: {

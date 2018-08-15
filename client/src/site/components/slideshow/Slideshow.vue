@@ -4,14 +4,14 @@
     	      //slidesPerView: 3,
 			  slidesPerView: count,
 			  centeredSlides: true,
-			  autoHeight: true,
+			  //autoHeight: true,
 			  freeMode: true,
 			  loop: loop,
 			  loopedSlides: 0,
-			  autoplay: {
-    	        delay: autoplay > 0 ? autoplay : undefined,
+			  autoplay: autoplay > 0 ? {
+    	        delay: autoplay,
     	        disableOnInteraction: false
-    	      },
+    	      } : false,
 			  navigation: navigation ? {
     	        nextEl: '.swiper-button-next',
 	            prevEl: '.swiper-button-prev'
@@ -27,8 +27,7 @@
 		  
 		<swiper v-if="thumbs" class="slideshowThumbs" :class="view ? 'mt-2' : ''" :options="{
           spaceBetween: 10,
-          //slidesPerView: 4,
-          //touchRatio: 0.2,
+          slidesPerView: 'auto',
           loop: loop,
           //loopedSlides: 5, //looped slides should be the same
           slideToClickedSlide: true,

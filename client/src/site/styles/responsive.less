@@ -1,11 +1,15 @@
+@nav-width-small: 10vw;
+
+@slide-width-small: @nav-width-small + 5vw;
+
 @media  @bootstrap-sm {
 	.slide .content {
-		left: 20vw;
-		left: calc(20vw + @offset + @offset);
+		left: @slide-width-small;
+		left: calc(@slide-width-small + @offset + @offset);
 	}
 
 	nav {
-		width: 15vw;
+		width: @nav-width-small;
 
 		// hide the nav link labels
 		ul li span {
