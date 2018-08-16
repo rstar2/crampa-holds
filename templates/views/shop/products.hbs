@@ -1,16 +1,12 @@
 <div class="container-fluid">
 	<div class="row my-4">
-		<div class="col">
+		<div class="col-8 d-none d-md-block">
 			<app-slideshow :images="{{toJSON gallery.images}}" :thumbs="true"></app-slideshow>
 		</div>
-		<div v-if="false" class="col-sm-6 col-md-4">
+		<div class="col">
 			<div class="products">
 				{{#each products.results}}
-				<div class="product">
-					<h3><a href="{{productUrl slug}}">{{{title}}}</a></h3>
-					{{!-- {{#if image}}<img src="{{{imageThumbUrl image quickthumb=true width=500}}}" class="img float-right">{{/if}} --}}
-					<p>{{{description.brief.html}}}</p>
-				</div>
+					<button class="btn btn-primary d-block my-3"><a href="{{productUrl slug}}">{{{title}}}</a></button>
 				{{/each}}
 			</div>
 		</div>

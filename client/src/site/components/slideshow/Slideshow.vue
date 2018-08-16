@@ -18,7 +18,7 @@
         	  } : {},
     	    }" ref="swiperView" @resize="onResize">	
     			<swiper-slide-responsive v-for="image of images" :key="image.url"
-					:image="image" :size="size" :createThumbForSize="createThumbForSize">
+					:image="image" :size="size" :createThumbForSize="createThumbForSize" :lightbox="lightbox">
     			</swiper-slide-responsive>
 
 				<div v-if="navigation" class="swiper-button-next swiper-button-white" slot="button-next"></div>
@@ -51,6 +51,9 @@ import "swiper/dist/css/swiper.css";
 
 import "./slideshow.less";
 
+import { LuminousGallery } from "luminous-lightbox";
+import "luminous-lightbox/dist/luminous-basic.min.css";
+
 export default {
   props: {
     images: {
@@ -61,16 +64,16 @@ export default {
       default: 0
     },
     count: {
-	  type: [String, Number],
-	  default: 1,
-	  validator: function (value) {
-        const valid = typeof value === "string" ? value === 'auto' : true;
+      type: [String, Number],
+      default: 1,
+      validator: function(value) {
+        const valid = typeof value === "string" ? value === "auto" : true;
         return valid;
       }
-	},
-	loop:{
-	  type: Boolean,
-	  // TODO: make it wokr with true and responsive slides/images
+    },
+    loop: {
+      type: Boolean,
+      // TODO: make it wokr with true and responsive slides/images
       default: false
     },
     pagination: {
@@ -80,13 +83,18 @@ export default {
     navigation: {
       type: Boolean,
       default: true
-	},
-	
+    },
+
     thumbs: {
       type: Boolean,
       default: false
     },
     view: {
+      type: Boolean,
+      default: true
+    },
+
+    lightbox: {
       type: Boolean,
       default: true
     }
@@ -103,8 +111,8 @@ export default {
     swiperSlide,
     swiperSlideResponsive: {
       components: { swiperSlide },
-      props: ["image", "size", "createThumbForSize"],
-      template: '<swiper-slide><img :src="thumbUrl"></swiper-slide>',
+      props: ["image", "size", "createThumbForSize", "lightbox"],
+      template: '<swiper-slide> <a :href="image"><img :src="thumbUrl"></a> </swiper-slide>',
       computed: {
         thumbUrl() {
           return this.createThumbForSize(this.image, this.size);
@@ -141,7 +149,7 @@ export default {
   },
 
   mounted() {
-	  // if thumbs are needed create a Two-Way controlling between the two swipers
+    // if thumbs are needed create a Two-Way controlling between the two swipers
     if (this.thumbs) {
       this.$nextTick(() => {
         const swiperTop = this.$refs.swiperView.swiper;
@@ -152,6 +160,12 @@ export default {
     }
 
     this.onResize();
+
+    if (this.lightbox) {
+      new LuminousGallery(this.$el.querySelectorAll(".slideshowView a"), {
+        arrowNavigation: true
+      });
+    }
   }
 };
 </script>
