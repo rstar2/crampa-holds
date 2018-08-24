@@ -104,5 +104,8 @@ keystone.set('routes', require('./routes'));
 const getGallery = require('./lib/views/managerGallery');
 keystone.getGallery = getGallery.bind(null, keystone);
 
+// set custom properties
+keystone.set('thumbnails-quickthumb', process.env.THUMBNAILS_QUICKTHUMB === 'true')
+
 // Start Keystone to connect to your database and initialize the web server
 keystone.start();
