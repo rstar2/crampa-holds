@@ -174,7 +174,7 @@ function parseError(error) {
 
 <style lang="less">
 // if styles are imported here then they will be bundled in the JS from webpack,
-// and extracted to a separate CSS bundle
+// and NOT extracted to a separate CSS bundle
 // @import "./paypal.less";
 </style>
 

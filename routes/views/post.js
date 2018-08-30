@@ -16,7 +16,11 @@ exports = module.exports = function (req, res) {
 			state: 'published',
 			slug: req.params.post,
 		})
+			// populate the ref-related 'author' and 'categories' fields
 			.populate('author categories')
+			// it is different from when we want to select specific field  from the ref-related field
+			// populate('author', 'name') // only return the User's name
+
 			.exec(function (err, post) {
 				locals.post = post;
 				next(err);

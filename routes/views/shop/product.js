@@ -19,10 +19,21 @@ exports = module.exports = function (req, res) {
 			slug,
 		})
 			.populate('categories')
+			// .populate('parentProduct')
+			// .populate('subProducts')
 			.exec(function (err, product) {
 				locals.product = product;
+				// product.getSubProducts();
 				next(err);
 			});
+	});
+
+	// load all "sub products"
+	view.on('init', function (next) {
+		locals.product.getSubProductsAll(function (err, subProducts) {
+			locals.subProducts = subProducts;
+			next(err);
+		});
 	});
 
 	// Load other products

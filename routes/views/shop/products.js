@@ -20,6 +20,7 @@ exports = module.exports = function (req, res) {
 			maxPages: 10,
 			filters: {
 				state: 'published',
+				parentProduct: null,
 			},
 		})
 			.sort('-publishedDate')
