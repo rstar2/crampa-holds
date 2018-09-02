@@ -22,12 +22,20 @@ const keystone = require('keystone');
 const middleware = require('./middleware');
 
 const checkCache = require('../lib/middleware/renderCacheRedis');
+const checkCrawlersSSO = require('../lib/middleware/renderCrawlersSSO');
 const { createPageView } = require('../lib/views');
+
+// do this only for pages needing SSO (e.g. prerendered already)
+keystone.pre('routes', checkCrawlersSSO(keystone));
 
 // the cache middleware is the first one
 keystone.pre('routes', checkCache(keystone));
 
-// Common Middleware
+
+// Common Middlewares:
+// 'pre:routes' Keystone hook is called first before passing to request to the router middleware
+//                 (which is in fact this module's export)
+// 'pre:render' is Keystone hook that is called firstly in the Keystone.View 'render' queue
 keystone.pre('routes', middleware.initLocals);
 keystone.pre('routes', middleware.initErrorHandlers);
 keystone.pre('render', middleware.flashMessages);

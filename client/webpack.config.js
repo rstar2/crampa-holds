@@ -4,6 +4,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
+const PrerenderSPAPlugin = require('prerender-spa-plugin');
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
+
 const publicPathName = '/public';
 const outputPath = path.resolve(__dirname, '../public');
 
@@ -187,6 +190,35 @@ if (process.env.NODE_ENV === 'production') {
 		// it is built for migration from webpack 1 to 2
 		new webpack.LoaderOptionsPlugin({
 			minimize: true,
+		}),
+
+		new PrerenderSPAPlugin({
+			// Required - The path to the webpack-outputted app to prerender.
+			staticDir: path.join(__dirname, 'dist'),
+
+			// Optional - The path your rendered app should be output to.
+			// (Defaults to staticDir.)
+			outputDir: path.join(__dirname, 'public_prerendered'),
+
+			// Required - Routes to render.
+			routes: ['/', '/about', '/contact'],
+
+			renderer: new Renderer({
+				// Optional - The name of the property to add to the window object with the contents of `inject`.
+				// injectProperty: '__PRERENDER_INJECTED',
+				// // Optional - Any values you'd like your app to have access to via `window.injectProperty`.
+				// inject: {
+				//   foo: 'bar'
+				// },
+
+				headless: false,
+
+				// Optional - Wait to render until the specified event is dispatched on the document.
+				// eg, with `document.dispatchEvent(new Event('render-event'))`
+				renderAfterDocumentEvent: 'render-event',
+
+				renderAfterTime: 5000, // Wait 5 seconds.
+			}),
 		}),
 	]);
 }

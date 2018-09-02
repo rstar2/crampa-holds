@@ -23,5 +23,6 @@
     ],
     "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
     "javascript.format.insertSpaceAfterConstructor": true,
+    "svn.ignoreMissingSvnWarning": true,
     
 }
