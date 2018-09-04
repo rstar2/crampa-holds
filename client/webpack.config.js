@@ -103,6 +103,14 @@ const options = {
 					publicPath: path.join(publicPathName, 'images'),    // '/public/images',
 				},
 			},
+
+			// Wow.js in not exporting anything - so a plugin should be used
+			{
+				test: require.resolve('wowjs'),
+				loader: 'exports-loader?this.WOW',
+				// adds the following code to the 'wowjs' source:
+				//  module.exports = this.WOW;
+			},
 		],
 	},
 	resolve: {
@@ -192,6 +200,7 @@ if (process.env.NODE_ENV === 'production') {
 			minimize: true,
 		}),
 
+		// TODO: Fix - it needs index.html to serve it - have to find a way to integrate it with the Keystone server
 		new PrerenderSPAPlugin({
 			// Required - The path to the webpack-outputted app to prerender.
 			staticDir: path.join(__dirname, 'dist'),

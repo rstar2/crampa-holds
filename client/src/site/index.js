@@ -1,7 +1,7 @@
 // import all used FontAwesome icons (using SVG with JS)
 import fontawesome from '@fortawesome/fontawesome';
 
-// NOTE - explicitly enumerating all used FontAwsome icons greately reduces the JS size
+// NOTE - explicitly enumerating all used FontAwesome icons greatly reduces the JS size
 import faHome from '@fortawesome/fontawesome-free-solid/faHome';
 import faInfo from '@fortawesome/fontawesome-free-solid/faInfo';
 import faPencilAlt from '@fortawesome/fontawesome-free-solid/faPencilAlt';
@@ -38,3 +38,4 @@ fontawesome.library.add(icons);
 
 // import the custom site CSS/LESS
 import './styles/index.less';
+

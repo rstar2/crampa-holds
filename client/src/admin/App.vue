@@ -61,6 +61,31 @@ export default {
       default: function() {
         return {};
       }
+    },
+
+    // vue-meta properties
+    metaInfo: {
+      // if no subcomponents specify a metaInfo.title, this title will be used
+      title: "Admin Rumen",
+      // all titles will be injected into this template
+      titleTemplate: "%s | My Awesome Webapp",
+
+      htmlAttrs: {
+        foo: "bar",
+        amp: undefined
+      }, // renders as:  <html foo="bar" amp></html>
+
+      bodyAttrs: {
+        bar: "baz"
+      }, // renders as: <body bar="baz"></body>
+
+      base: { target: "_blank", href: "/" }, // renders as <base target="_blank" href="/">
+
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" }
+      ]
+      // renders as: <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1">
     }
   },
   components: {

@@ -18,6 +18,9 @@ import router from './router';
 import BlockUI from 'vue-blockui';
 Vue.use(BlockUI);
 
+import Meta from 'vue-meta';
+Vue.use(Meta);
+
 import Spinner from 'vue-spinner-component/src/Spinner';
 Vue.component('spinner', Spinner);
 
@@ -31,6 +34,7 @@ import { registerBusEvents } from './bus';
 
 import { blockUIDefaults as blockUI } from './services/blockui';
 
+// eslint-disable-next-line
 new Vue({
 	el: '#app',
 	data: {

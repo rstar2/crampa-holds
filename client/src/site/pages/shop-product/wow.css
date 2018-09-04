@@ -1,0 +1,6 @@
+/* Needed for the Wow.js plugin to hide the elements
+ before they are animated when they get shown in the vieport
+ */
+.wow {
+	visibility: hidden;
+}
