@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 const { resize } = require('./utils/imageResize');
-const mkdirSync = require('./utils/mkdirRecursive');
+const { mkdirSync, getExtension, getFileName } = require('./utils/fs');
 
 const input = process.argv[2];
 if (!fs.existsSync(input)) {
@@ -10,14 +10,19 @@ if (!fs.existsSync(input)) {
 	process.exit(1);
 }
 
-const extension = path.extname(input);
-const fileName = path.basename(input).replace(extension, '');
+let quality = process.argv[3];
+if (quality) {
+	// convert String to Number
+	quality = +quality;
+}
 
-const outputDir = path.resolve(__dirname, '..', 'uploads/images/thumbs/sharp/ad/asd');
+const extension = getExtension(input);
+const fileName = getFileName(input);
+const outputDir = path.resolve(__dirname, '..', 'uploads/images/thumbs/sharp');
 mkdirSync(outputDir);
 
 
-const size = [200, 200];
-const output = path.join(outputDir, `${fileName} - ${size.join('x')}${extension}`);
+const sizes = [[null, 150], [null, 500]];
+const output = path.join(outputDir, `${fileName}-%size%${extension}`);
 
-resize(input, output, size);
+resize(input, output, sizes, quality);

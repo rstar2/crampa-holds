@@ -2,6 +2,7 @@ SSO (https://backlinko.com/link-building)
   Sitemap - https://github.com/40818419/vue-router-sitemap
   Prerender (integrate with Keystone server, it's not a real SPA this app, but is still VueJS)
   Metatags - vue-meta
+  Thumb middleware with Sharp
 
 Client
   Wow ? - replace with https://github.com/dirkgroenen/jQuery-viewport-checker/blob/master/src/jquery.viewportchecker.js   
