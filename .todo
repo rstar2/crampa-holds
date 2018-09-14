@@ -1,8 +1,16 @@
 SSO (https://backlinko.com/link-building)
-  Sitemap - https://github.com/40818419/vue-router-sitemap
-  Prerender (integrate with Keystone server, it's not a real SPA this app, but is still VueJS)
-  Metatags - vue-meta
-  Thumb middleware with Sharp
+  - Sitemap (https://github.com/40818419/vue-router-sitemap)
+  - Prerender (integrate with Keystone server, it's not a real SPA this app, but is still VueJS)
+  - Metatags (vue-meta)
+
+Server  
+  - Thumb middleware with Sharp
+  - SSL (Let's encrypt) https://www.digitalocean.com/community/tutorials/how-to-set-up-let-s-encrypt-with-nginx-server-blocks-on-ubuntu-16-04
+  - Search functionality (Algolia, ElasticSearch)
+  - Load tests
+  - Cloudinary images, if not serving from the site is too slow
 
 Client
-  Wow ? - replace with https://github.com/dirkgroenen/jQuery-viewport-checker/blob/master/src/jquery.viewportchecker.js   
+  - Wow ? (replace with https://github.com/dirkgroenen/jQuery-viewport-checker/blob/master/src/jquery.viewportchecker.js)
+  - Google-Maps Vue Component
+  - Optimize BootstrapVue (use only yhe needed components form the library, not the whole)
